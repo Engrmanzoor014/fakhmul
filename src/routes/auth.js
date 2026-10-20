@@ -24,12 +24,13 @@ router.post('/auth/login', (req, res) => {
     id: 'admin',
     name: 'Administrator',
     role: 'admin',
-    email: 'admin@fakhmul.local',
+    email: env.ADMIN_EMAIL,
   };
 
   req.app.locals.sessions.set(sessionId, {
     user,
     issuedAt: Date.now(),
+    expiresAt: Date.now() + env.sessionTtlMs,
   });
 
   res.cookie(env.sessionCookieName, sessionId, {

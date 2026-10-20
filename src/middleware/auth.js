@@ -4,7 +4,18 @@ export function getSession(req) {
   const sessionId = req.cookies?.[env.sessionCookieName];
   if (!sessionId) return null;
 
-  const session = req.app.locals.sessions?.get(sessionId) ?? null;
+  const sessions = req.app?.locals?.sessions;
+  const session = sessions?.get?.(sessionId) ?? null;
+  if (!session || typeof session !== 'object') return null;
+
+  const expiryMs = Number(session.expiresAt ?? session.issuedAt ?? 0) + Number(env.sessionTtlMs || 0);
+  const isExpired = session.expiresAt ? Date.now() > Number(session.expiresAt) : Date.now() > expiryMs;
+
+  if (isExpired) {
+    sessions?.delete?.(sessionId);
+    return null;
+  }
+
   return session;
 }
 

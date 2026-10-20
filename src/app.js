@@ -10,6 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { env } from './config/env.js';
 import { authRouter } from './routes/auth.js';
 import { adminRouter } from './routes/admin.js';
+import { getSession } from './middleware/auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,9 +40,7 @@ app.use(rateLimit({
 }));
 
 app.use((req, res, next) => {
-  const sessionId = req.cookies?.[env.sessionCookieName];
-  const session = sessionId ? sessions.get(sessionId) : null;
-  req.session = session || null;
+  req.session = getSession(req) || null;
   next();
 });
 
