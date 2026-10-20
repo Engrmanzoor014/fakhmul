@@ -1,0 +1,40 @@
+import { randomUUID } from 'node:crypto';
+
+const loginAttempts = new Map();
+
+export function registerFailedAttempt(key) {
+  const count = (loginAttempts.get(key) || 0) + 1;
+  loginAttempts.set(key, count);
+  return count;
+}
+
+export function clearFailedAttempts(key) {
+  loginAttempts.delete(key);
+}
+
+export function getFailedAttempts(key) {
+  return loginAttempts.get(key) || 0;
+}
+
+export function isLocked(key, maxAttempts = 5, lockDurationMs = 30_000) {
+  const attempts = getFailedAttempts(key);
+  if (attempts < maxAttempts) return false;
+  const stored = loginAttempts.get(`${key}:lockedAt`);
+  if (!stored) {
+    loginAttempts.set(`${key}:lockedAt`, Date.now());
+    return true;
+  }
+
+  const elapsed = Date.now() - stored;
+  if (elapsed > lockDurationMs) {
+    loginAttempts.delete(key);
+    loginAttempts.delete(`${key}:lockedAt`);
+    return false;
+  }
+
+  return true;
+}
+
+export function generateSecureRandomToken() {
+  return randomUUID();
+}

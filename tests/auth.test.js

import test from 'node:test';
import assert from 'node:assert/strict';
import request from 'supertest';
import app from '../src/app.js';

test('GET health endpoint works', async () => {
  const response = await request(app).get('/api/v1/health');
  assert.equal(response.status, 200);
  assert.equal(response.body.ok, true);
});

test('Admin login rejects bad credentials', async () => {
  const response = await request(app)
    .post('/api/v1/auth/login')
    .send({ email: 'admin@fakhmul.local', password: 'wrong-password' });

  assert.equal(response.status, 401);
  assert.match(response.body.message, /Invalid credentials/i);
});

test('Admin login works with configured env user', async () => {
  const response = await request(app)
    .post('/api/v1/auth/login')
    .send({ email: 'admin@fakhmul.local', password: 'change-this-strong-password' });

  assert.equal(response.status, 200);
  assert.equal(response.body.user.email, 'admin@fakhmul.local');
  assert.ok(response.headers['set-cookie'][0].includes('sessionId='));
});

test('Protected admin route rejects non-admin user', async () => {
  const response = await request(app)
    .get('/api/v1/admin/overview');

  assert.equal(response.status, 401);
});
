@@ -1,0 +1,53 @@
+import express from 'express';
+import { z } from 'zod';
+import { requireAuth, requireRole } from '../middleware/auth.js';
+
+const router = express.Router();
+
+router.get('/overview', requireAuth, requireRole('ADMIN'), (req, res) => {
+  return res.json({
+    overview: {
+      totalRevenue: 0,
+      ordersToday: 0,
+      activeProducts: 3,
+      lowStockItems: 1,
+    },
+    alerts: [
+      { level: 'warning', message: 'Low-stock alert: Dried Mulberry is running low.' }
+    ]
+  });
+});
+
+router.post('/products', requireAuth, requireRole('ADMIN'), (req, res) => {
+  const schema = z.object({
+    name: z.string().min(2),
+    category: z.string().min(2),
+    price: z.number().positive(),
+    stock: z.number().int().min(0),
+    description: z.string().min(10),
+    imageUrl: z.string().url().optional()
+  });
+
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: 'Invalid product data.' });
+  }
+
+  return res.status(201).json({ message: 'Product created successfully.', product: parsed.data });
+});
+
+router.patch('/products/:id', requireAuth, requireRole('ADMIN'), (req, res) => {
+  return res.json({ message: 'Product updated successfully.' });
+});
+
+router.patch('/orders/:id/status', requireAuth, requireRole('ADMIN'), (req, res) => {
+  const schema = z.object({ status: z.enum(['PENDING', 'CONFIRMED', 'PACKED', 'SHIPPED', 'DELIVERED', 'CANCELLED']) });
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: 'Invalid order status.' });
+  }
+
+  return res.json({ message: 'Order status updated.', status: parsed.data.status });
+});
+
+export default router;
