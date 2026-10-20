@@ -44,6 +44,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/api/v1/health', (req, res) => {
+  return res.json({ ok: true, status: 'ok' });
+});
+
 app.use('/api/v1', authRouter);
 app.use('/api/v1/admin', adminRouter);
 
