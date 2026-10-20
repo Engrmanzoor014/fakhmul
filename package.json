@@ -1,0 +1,38 @@
+{
+  "name": "fakhmul",
+  "version": "1.0.0",
+  "description": "FAKHMUL e-commerce backend and admin security foundation",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "test": "node --test",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:seed": "node prisma/seed.js"
+  },
+  "keywords": [
+    "fakhmul",
+    "ecommerce",
+    "express",
+    "prisma",
+    "security"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/client": "^5.17.0",
+    "argon2": "^0.41.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "prisma": "^5.17.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

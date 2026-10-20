@@ -1,0 +1,75 @@
+import express from 'express';
+import { z } from 'zod';
+import { getProducts, getProductById, createProduct, updateProductById } from '../db/index.js';
+
+const router = express.Router();
+
+const productQuerySchema = z.object({
+  category: z.string().optional(),
+  search: z.string().optional(),
+});
+
+router.get('/', (req, res) => {
+  const query = productQuerySchema.safeParse(req.query);
+  let products = getProducts();
+
+  if (query.success && query.data.category) {
+    products = products.filter((p) => p.category === query.data.category);
+  }
+
+  if (query.success && query.data.search) {
+    const term = query.data.search.toLowerCase();
+    products = products.filter((p) => p.name.toLowerCase().includes(term));
+  }
+
+  return res.json({ products });
+});
+
+router.get('/:id', (req, res) => {
+  const product = getProductById(req.params.id);
+  if (!product) return res.status(404).json({ message: 'Product not found.' });
+  return res.json({ product });
+});
+
+router.post('/', (req, res) => {
+  const payload = z.object({
+    name: z.string().min(2),
+    description: z.string().min(10),
+    imageUrl: z.string().url().optional(),
+    category: z.string().min(2),
+    price: z.number().positive(),
+    weightLabel: z.string().min(2),
+    stock: z.number().int().min(0)
+  }).safeParse(req.body);
+
+  if (!payload.success) {
+    return res.status(400).json({ message: 'Invalid product payload.' });
+  }
+
+  const product = createProduct({
+    ...payload.data,
+    slug: `${payload.data.name.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+    price: Number(payload.data.price),
+  });
+
+  return res.status(201).json({ product });
+});
+
+router.patch('/:id', (req, res) => {
+  const patch = z.object({
+    name: z.string().min(2).optional(),
+    price: z.number().positive().optional(),
+    stock: z.number().int().min(0).optional(),
+    category: z.string().optional(),
+    description: z.string().optional()
+  }).safeParse(req.body);
+
+  if (!patch.success) return res.status(400).json({ message: 'Invalid update payload.' });
+
+  const product = updateProductById(req.params.id, patch.data);
+  if (!product) return res.status(404).json({ message: 'Product not found.' });
+
+  return res.json({ product });
+});
+
+export default router;

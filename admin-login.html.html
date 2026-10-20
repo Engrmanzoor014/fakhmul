@@ -1,0 +1,36 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import request from 'supertest';
+import app from '../src/app.js';
+
+test('Products endpoint returns list', async () => {
+  const response = await request(app).get('/api/v1/products');
+  assert.equal(response.status, 200);
+  assert.ok(Array.isArray(response.body.products));
+  assert.ok(response.body.products.length > 0);
+});
+
+test('Products request validation catches invalid payloads', async () => {
+  const response = await request(app)
+    .post('/api/v1/products')
+    .send({ name: 'X' });
+
+  assert.equal(response.status, 400);
+});
+
+test('Customer order creation requires auth', async () => {
+  const response = await request(app)
+    .post('/api/v1/orders')
+    .send({
+      items: [{ productId: 'prod-1', quantity: 1 }],
+      shippingAddress: {
+        fullName: 'Test User',
+        phone: '03001234567',
+        city: 'Gilgit',
+        address: 'Main bazaar road'
+      },
+      paymentMethod: 'COD'
+    });
+
+  assert.equal(response.status, 401);
+});

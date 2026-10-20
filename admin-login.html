@@ -1,791 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAKHMUL — Admin Login</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --gold: #c0810d;
-            --gold-light: #efd190;
-            --gold-dark: #8B6520;
-            --forest: #074807;
-            --forest-mid: #0a5c0a;
-            --forest-light: #084f08;
-            --cream: #FAF6F0;
-            --warm-white: #FFFDF9;
-            --text-dark: #1A1A0F;
-            --text-mid: #4A4A3A;
-            --text-light: #888870;
-            --border: rgba(200, 151, 58, 0.25);
-            --error: #c0392b;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--forest);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Atmospheric background */
-        body::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(7, 72, 7, 0.9) 0%, transparent 70%),
-                radial-gradient(ellipse 60% 80% at 80% 30%, rgba(4, 40, 4, 0.8) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 40% at 60% 80%, rgba(192, 129, 13, 0.08) 0%, transparent 50%);
-        }
-
-        /* Decorative mountain silhouette lines */
-        body::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 220px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath d='M0 220L0 140 120 60 240 100 360 20 480 80 600 10 720 70 840 30 960 90 1080 40 1200 100 1320 50 1440 80 1440 220Z' fill='rgba(4,36,4,0.6)'/%3E%3Cpath d='M0 220L0 170 180 110 320 140 440 70 560 120 680 50 800 100 920 60 1040 110 1160 70 1280 120 1440 90 1440 220Z' fill='rgba(3,28,3,0.5)'/%3E%3C/svg%3E") bottom/cover no-repeat;
-            pointer-events: none;
-        }
-
-        /* Floating particles */
-        .particles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--gold-light);
-            border-radius: 50%;
-            opacity: 0;
-            animation: float-up var(--dur, 8s) var(--delay, 0s) infinite ease-in;
-        }
-
-        @keyframes float-up {
-            0% {
-                opacity: 0;
-                transform: translateY(0) scale(1);
-            }
-
-            10% {
-                opacity: 0.6;
-            }
-
-            90% {
-                opacity: 0.2;
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-100px) scale(0.5);
-            }
-        }
-
-        /* Card */
-        .login-wrapper {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 420px;
-            padding: 1.5rem;
-            animation: fade-in 0.6s ease both;
-        }
-
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-card {
-            background: var(--warm-white);
-            border-radius: 20px;
-            padding: 2.5rem 2.25rem;
-            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(192, 129, 13, 0.15);
-        }
-
-        /* Logo area */
-        .logo-area {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .logo-mark {
-            width: 80px;
-            height: 80px;
-            background: transparent; /* remove gradient */
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            box-shadow: 0 8px 24px rgba(7, 72, 7, 0.2);
-            position: relative;
-        }
-        .logo-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        .logo-mark::after {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 19px;
-            border: 1px solid rgba(192, 129, 13, 0.3);
-        }
-
-        .brand-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: var(--forest);
-            letter-spacing: 2px;
-        }
-
-        .brand-subtitle {
-            font-size: 0.72rem;
-            color: var(--gold-dark);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-top: 3px;
-        }
-
-        .admin-badge {
-            display: inline-block;
-            background: var(--forest);
-            color: var(--gold-light);
-            font-size: 0.65rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            padding: 4px 12px;
-            border-radius: 50px;
-            margin-top: 0.75rem;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: var(--border);
-            margin: 1.5rem 0;
-            position: relative;
-        }
-
-        .divider::after {
-            content: '🔒';
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--warm-white);
-            padding: 0 10px;
-            font-size: 0.85rem;
-        }
-
-        /* Form */
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--text-mid);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
-        }
-
-        .input-wrap {
-            position: relative;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 42px 12px 16px;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            color: var(--text-dark);
-            background: var(--cream);
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-        }
-
-        .form-input:focus {
-            border-color: var(--forest);
-            background: white;
-            box-shadow: 0 0 0 3px rgba(7, 72, 7, 0.08);
-        }
-
-        .form-input.error {
-            border-color: var(--error);
-            box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.08);
-        }
-
-        .input-icon {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-light);
-            cursor: pointer;
-            font-size: 1rem;
-            user-select: none;
-            transition: color 0.2s;
-        }
-
-        .input-icon:hover {
-            color: var(--forest);
-        }
-
-        /* Error message */
-        .error-msg {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #fdf0ef;
-            border: 1px solid #f5c6c2;
-            border-radius: 8px;
-            padding: 10px 14px;
-            font-size: 0.82rem;
-            color: var(--error);
-            margin-bottom: 1.25rem;
-            opacity: 0;
-            transform: translateY(-6px);
-            transition: all 0.25s ease;
-            pointer-events: none;
-        }
-
-        .error-msg.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        /* Attempts warning */
-        .attempts-bar {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 1.25rem;
-        }
-
-        .attempt-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #e0d6c8;
-            transition: background 0.3s;
-        }
-
-        .attempt-dot.used {
-            background: var(--error);
-        }
-
-        /* Submit button */
-        .login-btn {
-            width: 100%;
-            background: var(--forest);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 14px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.06));
-        }
-
-        .login-btn:hover {
-            background: var(--forest-mid);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 20px rgba(7, 72, 7, 0.3);
-        }
-
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .login-btn .btn-text {
-            transition: opacity 0.2s;
-        }
-
-        .login-btn .btn-spinner {
-            display: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .login-btn.loading .btn-text {
-            display: none;
-        }
-
-        .login-btn.loading .btn-spinner {
-            display: block;
-        }
-
-        /* Footer info */
-        .card-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.25rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .card-footer p {
-            font-size: 0.78rem;
-            color: var(--text-light);
-            line-height: 1.6;
-        }
-
-        .card-footer a {
-            color: var(--gold-dark);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        /* Lockout screen */
-        .lockout-overlay {
-            display: none;
-            text-align: center;
-            padding: 1rem 0;
-        }
-
-        .lockout-overlay.show {
-            display: block;
-        }
-
-        .login-form-area.hidden {
-            display: none;
-        }
-
-        .lockout-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .lockout-overlay h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--error);
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .lockout-overlay p {
-            font-size: 0.85rem;
-            color: var(--text-mid);
-            line-height: 1.6;
-        }
-
-        .countdown {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--forest);
-            font-family: 'Playfair Display', serif;
-            margin: 1rem 0;
-        }
-
-        /* Success flash */
-        .success-overlay {
-            display: none;
-            text-align: center;
-            padding: 1rem 0;
-            animation: fade-in 0.3s ease;
-        }
-
-        .success-overlay.show {
-            display: block;
-        }
-
-        .success-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .success-overlay h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--forest);
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .success-overlay p {
-            font-size: 0.85rem;
-            color: var(--text-mid);
-        }
-
-        .progress-bar {
-            height: 3px;
-            background: var(--border);
-            border-radius: 2px;
-            margin-top: 1rem;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--forest);
-            border-radius: 2px;
-            width: 0%;
-            transition: width 1.5s linear;
-        }
-
-        /* Shake animation for wrong password */
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            20%,
-            60% {
-                transform: translateX(-8px);
-            }
-
-            40%,
-            80% {
-                transform: translateX(8px);
-            }
-        }
-
-        .shake {
-            animation: shake 0.4s ease;
-        }
-
-        /* Security tip */
-        .security-tip {
-            font-size: 0.72rem;
-            color: var(--text-light);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            margin-top: 0.6rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 2rem 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAKHMUL — Admin Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c0810d;
+      --gold-light: #efd190;
+      --gold-dark: #8b6520;
+      --forest: #074807;
+      --forest-mid: #0a5c0a;
+      --cream: #faf6f0;
+      --warm-white: #fffdf9;
+      --text-dark: #1a1a0f;
+      --text-mid: #4a4a3a;
+      --text-light: #888870;
+      --border: rgba(200, 151, 58, 0.2);
+      --error: #c0392b;
+      --shadow: 0 32px 80px rgba(0,0,0,.38);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--forest);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      color: var(--text-dark);
+    }
+    body::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(7,72,7,.9), transparent 55%), radial-gradient(circle at 75% 25%, rgba(4,40,4,.8), transparent 50%);
+    }
+    body::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0; height: 220px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath d='M0 220L0 140 120 60 240 100 360 20 480 80 600 10 720 70 840 30 960 90 1080 52 1200 110 1320 70 1440 120L1440 220Z' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E") center/cover no-repeat;
+      pointer-events: none;
+    }
+    .login-wrapper { position: relative; z-index: 2; width: min(420px, calc(100vw - 32px)); }
+    .login-card {
+      background: var(--warm-white);
+      border-radius: 20px;
+      padding: 2.3rem 2rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(192,129,13,.2);
+    }
+    .brand { text-align: center; margin-bottom: 1.5rem; }
+    .logo-mark {
+      width: 80px; height: 80px; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center;
+      border-radius: 18px; background: linear-gradient(135deg, rgba(7,72,7,.1), rgba(192,129,13,.1));
+      border: 1px solid rgba(192,129,13,.3);
+    }
+    .logo-mark img { width: 100%; height: 100%; object-fit: contain; }
+    .brand-title {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; letter-spacing: .08em; color: var(--forest);
+    }
+    .brand-subtitle {
+      text-transform: uppercase; letter-spacing: .25em; font-size: .68rem; font-weight: 700; color: var(--gold-dark);
+      margin-top: .35rem;
+    }
+    .admin-badge {
+      display: inline-block; margin-top: .8rem; background: var(--forest); color: #f9f3ea; padding: .4rem .75rem;
+      border-radius: 999px; font-size: .62rem; letter-spacing: .18em; text-transform: uppercase; font-weight: 700;
+    }
+    .divider { height: 1px; background: var(--border); margin: 1.5rem 0; position: relative; }
+    .divider::after { content: '🔒'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: var(--warm-white); padding: 0 .5rem; }
+    form { display: block; }
+    label {
+      display: block; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-mid); margin-bottom: .45rem;
+    }
+    .field { position: relative; }
+    input {
+      width: 100%; border: 1.5px solid var(--border); background: var(--cream); border-radius: 10px; padding: .9rem 2.7rem .9rem 1rem;
+      font: inherit; color: var(--text-dark); outline: none; transition: border-color .2s, box-shadow .2s, background .2s;
+    }
+    input:focus {
+      border-color: var(--forest); background: white; box-shadow: 0 0 0 3px rgba(7,72,7,.08);
+    }
+    input.error { border-color: var(--error); box-shadow: 0 0 0 3px rgba(192,57,43,.08); }
+    .toggle-password {
+      position: absolute; right: .85rem; top: 50%; transform: translateY(-50%); border: 0; background: transparent; font-size: 1rem; cursor: pointer; color: var(--text-light);
+    }
+    .error-box {
+      display: none; background: #fdf0ef; border: 1px solid #f5c6c2; color: var(--error); border-radius: 8px; padding: .7rem .9rem; font-size: .82rem; margin-bottom: 1rem;
+    }
+    .error-box.show { display: block; }
+    .status-box {
+      margin-top: 1rem; opacity: 0; max-height: 0; overflow: hidden; transition: all .2s ease;
+      color: var(--text-mid); font-size: .8rem;
+    }
+    .status-box.show { opacity: 1; max-height: 64px; }
+    button {
+      width: 100%; margin-top: 1rem; border: 0; border-radius: 10px; padding: 1rem; font: inherit; font-weight: 700; cursor: pointer;
+      background: var(--forest); color: white; transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(7,72,7,.25); }
+    button:disabled { opacity: .7; cursor: wait; }
+    .card-footer { text-align: center; margin-top: 1.5rem; font-size: .8rem; color: var(--text-light); }
+    .card-footer a { color: var(--gold-dark); text-decoration: none; }
+  </style>
 </head>
-
 <body>
-
-    <!-- Particles -->
-    <div class="particles" id="particles"></div>
-
-    <div class="login-wrapper">
-        <div class="login-card" id="loginCard">
-<!------------------------------------------------------------------------------------------------->
-            <!-- Logo -->
-            <div class="logo-area">
-                <div class="logo-mark">
-                    <img src="/images/logo.png" alt="FAKHMUL Logo" class="logo-img">
-                </div>
-                <div class="brand-title">FAKHMUL</div>
-                <div class="brand-subtitle">Gilgit Baltistan</div>
-                <div class="admin-badge">Admin Portal</div>
-            </div>
-
-            <div class="divider"></div>
-
-            <!-- Error message -->
-            <div class="error-msg" id="errorMsg">
-                <span>⚠️</span>
-                <span id="errorText">Incorrect password. Please try again.</span>
-            </div>
-
-            <!-- Attempt dots (shown after 1st failure) -->
-            <div class="attempts-bar" id="attemptsBar" style="display:none;">
-                <div class="attempt-dot" id="dot1"></div>
-                <div class="attempt-dot" id="dot2"></div>
-                <div class="attempt-dot" id="dot3"></div>
-                <span style="font-size:0.72rem;color:var(--text-light);margin-left:4px;" id="attemptsLabel"></span>
-            </div>
-
-            <!-- Login form -->
-            <div class="login-form-area" id="loginFormArea">
-                <div class="form-group">
-                    <label class="form-label" for="adminPassword">Admin Password</label>
-                    <div class="input-wrap">
-                        <input type="password" id="adminPassword" class="form-input"
-                            placeholder="Enter your admin password" autocomplete="current-password"
-                            onkeydown="if(event.key==='Enter') attemptLogin()">
-                        <span class="input-icon" id="togglePwd" onclick="togglePassword()"
-                            title="Show/hide password">👁️</span>
-                    </div>
-                    <div class="security-tip">🔒 Your session expires when you close the browser</div>
-                </div>
-
-                <button class="login-btn" id="loginBtn" onclick="attemptLogin()">
-                    <span class="btn-text">Sign In to Admin Panel</span>
-                    <div class="btn-spinner"></div>
-                </button>
-            </div>
-
-            <!-- Lockout screen -->
-            <div class="lockout-overlay" id="lockoutOverlay">
-                <div class="lockout-icon">🔐</div>
-                <h3>Account Locked</h3>
-                <p>Too many failed attempts. Please wait before trying again.</p>
-                <div class="countdown" id="lockoutCountdown">30</div>
-                <p style="font-size:0.78rem;color:var(--text-light);">seconds remaining</p>
-            </div>
-
-            <!-- Success screen -->
-            <div class="success-overlay" id="successOverlay">
-                <div class="success-icon">✅</div>
-                <h3>Welcome back!</h3>
-                <p>Redirecting to dashboard…</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-            </div>
-
-            <div class="card-footer">
-                <p>Restricted area — authorised personnel only.<br>
-                    <a href="index.html">← Back to passward store</a>
-                </p>
-            </div>
-
+  <div class="login-wrapper">
+    <div class="login-card">
+      <div class="brand">
+        <div class="logo-mark">
+          <img src="/images/logo.png" alt="FAKHMUL logo" />
         </div>
+        <div class="brand-title">FAKHMUL</div>
+        <div class="brand-subtitle">Gilgit Baltistan</div>
+        <div class="admin-badge">Admin Portal</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="errorBox" class="error-box" aria-live="polite"></div>
+
+      <form id="adminLoginForm" novalidate>
+        <label for="adminPassword">Admin Password</label>
+        <div class="field">
+          <input id="adminPassword" name="password" type="password" autocomplete="current-password" placeholder="Enter your admin password" />
+          <button type="button" class="toggle-password" id="togglePassword" aria-label="Show or hide password">👁️</button>
+        </div>
+        <div id="statusBox" class="status-box">Checking credentials…</div>
+        <button id="loginButton" type="submit">Sign In to Admin Panel</button>
+      </form>
+
+      <div class="card-footer">
+        Restricted area — authorised personnel only.<br />
+        <a href="index.html">← Back to storefront</a>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // ── CONFIG ── Change this password ──
-        const ADMIN_PASSWORD = 'fakhmul2024';
-        const MAX_ATTEMPTS = 5;
-        const LOCKOUT_SECS = 30;
+  <script>
+    const form = document.getElementById('adminLoginForm');
+    const passwordInput = document.getElementById('adminPassword');
+    const errorBox = document.getElementById('errorBox');
+    const statusBox = document.getElementById('statusBox');
+    const loginButton = document.getElementById('loginButton');
 
-        let attempts = 0;
-        let locked = false;
-        let lockTimer = null;
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.classList.add('show');
+    }
 
-        // ── Particles ──
-        (function spawnParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 18; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.style.cssText = `
-          left: ${Math.random() * 100}%;
-          bottom: ${Math.random() * 40}%;
-          --dur: ${6 + Math.random() * 8}s;
-          --delay: ${Math.random() * 8}s;
-          width: ${1 + Math.random() * 2}px;
-          height: ${1 + Math.random() * 2}px;
-          opacity: 0;
-        `;
-                container.appendChild(p);
-            }
-        })();
+    function clearError() {
+      errorBox.textContent = '';
+      errorBox.classList.remove('show');
+    }
 
-        // ── Toggle password visibility ──
-        function togglePassword() {
-            const inp = document.getElementById('adminPassword');
-            const ico = document.getElementById('togglePwd');
-            if (inp.type === 'password') {
-                inp.type = 'text';
-                ico.textContent = '🙈';
-            } else {
-                inp.type = 'password';
-                ico.textContent = '👁️';
-            }
+    function setStatus(message, visible = true) {
+      statusBox.textContent = message;
+      statusBox.classList.toggle('show', visible);
+    }
+
+    async function checkExistingSession() {
+      try {
+        const response = await fetch('/api/v1/auth/me', { credentials: 'same-origin' });
+        if (response.ok) {
+          window.location.href = 'admin-dashboard.html';
         }
+      } catch (_) {
+        // Ignore; the user can still sign in manually.
+      }
+    }
 
-        // ── Attempt login ──
-        function attemptLogin() {
-            if (locked) return;
+    document.getElementById('togglePassword').addEventListener('click', () => {
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      document.getElementById('togglePassword').textContent = isPassword ? '🙈' : '👁️';
+    });
 
-            const btn = document.getElementById('loginBtn');
-            const input = document.getElementById('adminPassword');
-            const pass = input.value;
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearError();
+      const password = passwordInput.value.trim();
 
-            if (!pass) {
-                showError('Please enter your password.');
-                input.focus();
-                return;
-            }
+      if (!password) {
+        showError('Please enter your password.');
+        passwordInput.classList.add('error');
+        passwordInput.focus();
+        return;
+      }
 
-            // Loading state
-            btn.classList.add('loading');
-            btn.disabled = true;
-            hideError();
+      passwordInput.classList.remove('error');
+      loginButton.disabled = true;
+      setStatus('Authenticating…');
 
-            setTimeout(() => {
-                btn.classList.remove('loading');
-                btn.disabled = false;
-
-                if (pass === ADMIN_PASSWORD) {
-                    loginSuccess();
-                } else {
-                    loginFail();
-                }
-            }, 900); // Simulated check delay (keeps brute-force slower)
-        }
-
-        function loginSuccess() {
-            // Save session
-            sessionStorage.setItem('fakhmul_admin', 'true');
-            sessionStorage.setItem('fakhmul_admin_time', Date.now().toString());
-
-            // Show success UI
-            document.getElementById('loginFormArea').classList.add('hidden');
-            document.getElementById('errorMsg').classList.remove('show');
-            document.getElementById('attemptsBar').style.display = 'none';
-            document.getElementById('successOverlay').classList.add('show');
-
-            // Animate progress bar
-            setTimeout(() => {
-                document.getElementById('progressFill').style.width = '100%';
-            }, 100);
-
-            // Redirect after 1.6 seconds
-            setTimeout(() => {
-                window.location.href = 'admin-dashboard.html';
-            }, 1700);
-        }
-
-        function loginFail() {
-            attempts++;
-            const input = document.getElementById('adminPassword');
-
-            // Shake input
-            input.classList.add('error', 'shake');
-            setTimeout(() => input.classList.remove('shake'), 400);
-
-            // Show attempts bar
-            const bar = document.getElementById('attemptsBar');
-            bar.style.display = 'flex';
-            updateAttemptDots();
-
-            if (attempts >= MAX_ATTEMPTS) {
-                startLockout();
-            } else {
-                const remaining = MAX_ATTEMPTS - attempts;
-                showError(`Incorrect password. ${remaining} attempt${remaining > 1 ? 's' : ''} remaining.`);
-                input.value = '';
-                input.focus();
-            }
-        }
-
-        function updateAttemptDots() {
-            for (let i = 1; i <= MAX_ATTEMPTS; i++) {
-                const dot = document.getElementById('dot' + i);
-                if (dot) dot.classList.toggle('used', i <= attempts);
-            }
-            const label = document.getElementById('attemptsLabel');
-            if (label) label.textContent = `${attempts}/${MAX_ATTEMPTS} failed`;
-        }
-
-        function startLockout() {
-            locked = true;
-            document.getElementById('loginFormArea').classList.add('hidden');
-            document.getElementById('errorMsg').classList.remove('show');
-            document.getElementById('lockoutOverlay').classList.add('show');
-
-            let secs = LOCKOUT_SECS;
-            document.getElementById('lockoutCountdown').textContent = secs;
-
-            lockTimer = setInterval(() => {
-                secs--;
-                document.getElementById('lockoutCountdown').textContent = secs;
-                if (secs <= 0) {
-                    clearInterval(lockTimer);
-                    resetLockout();
-                }
-            }, 1000);
-        }
-
-        function resetLockout() {
-            locked = false;
-            attempts = 0;
-            document.getElementById('loginFormArea').classList.remove('hidden');
-            document.getElementById('lockoutOverlay').classList.remove('show');
-            document.getElementById('attemptsBar').style.display = 'none';
-            updateAttemptDots();
-            const input = document.getElementById('adminPassword');
-            input.classList.remove('error');
-            input.value = '';
-            input.focus();
-        }
-
-        function showError(msg) {
-            document.getElementById('errorText').textContent = msg;
-            document.getElementById('errorMsg').classList.add('show');
-        }
-
-        function hideError() {
-            document.getElementById('errorMsg').classList.remove('show');
-        }
-
-        // Focus input on load
-        window.addEventListener('load', () => {
-            document.getElementById('adminPassword').focus();
+      try {
+        const response = await fetch('/api/v1/auth/login', {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
         });
-    </script>
-</body>
 
+        const payload = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(payload.message || 'Invalid credentials.');
+        }
+
+        setStatus('Signed in successfully. Redirecting…');
+        window.location.href = 'admin-dashboard.html';
+      } catch (error) {
+        showError(error.message || 'Login failed. Please try again.');
+        passwordInput.classList.add('error');
+        passwordInput.value = '';
+        passwordInput.focus();
+      } finally {
+        loginButton.disabled = false;
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      passwordInput.focus();
+      checkExistingSession();
+    });
+  </script>
+</body>
 </html>
