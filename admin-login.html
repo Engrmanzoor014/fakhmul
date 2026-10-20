@@ -42,7 +42,6 @@
             overflow: hidden;
         }
 
-        /* Atmospheric background */
         body::before {
             content: '';
             position: absolute;
@@ -53,7 +52,6 @@
                 radial-gradient(ellipse 40% 40% at 60% 80%, rgba(192, 129, 13, 0.08) 0%, transparent 50%);
         }
 
-        /* Decorative mountain silhouette lines */
         body::after {
             content: '';
             position: absolute;
@@ -61,11 +59,10 @@
             left: 0;
             right: 0;
             height: 220px;
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath d='M0 220L0 140 120 60 240 100 360 20 480 80 600 10 720 70 840 30 960 90 1080 40 1200 100 1320 50 1440 80 1440 220Z' fill='rgba(4,36,4,0.6)'/%3E%3Cpath d='M0 220L0 170 180 110 320 140 440 70 560 120 680 50 800 100 920 60 1040 110 1160 70 1280 120 1440 90 1440 220Z' fill='rgba(3,28,3,0.5)'/%3E%3C/svg%3E") bottom/cover no-repeat;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 220'%3E%3Cpath d='M0 220L0 140 120 60 240 100 360 20 480 80 600 10 720 70 840 30 960 90 1080 60 1200 110 1320 40 1440 120 1440 220Z' fill='rgba(255,255,255,0.04)'/%3E%3C/svg%3E");
             pointer-events: none;
         }
 
-        /* Floating particles */
         .particles {
             position: absolute;
             inset: 0;
@@ -103,7 +100,6 @@
             }
         }
 
-        /* Card */
         .login-wrapper {
             position: relative;
             z-index: 10;
@@ -132,15 +128,15 @@
             box-shadow: 0 32px 80px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(192, 129, 13, 0.15);
         }
 
-        /* Logo area */
         .logo-area {
             text-align: center;
             margin-bottom: 2rem;
         }
+
         .logo-mark {
             width: 80px;
             height: 80px;
-            background: transparent; /* remove gradient */
+            background: transparent;
             border-radius: 16px;
             display: flex;
             align-items: center;
@@ -149,6 +145,7 @@
             box-shadow: 0 8px 24px rgba(7, 72, 7, 0.2);
             position: relative;
         }
+
         .logo-img {
             width: 100%;
             height: 100%;
@@ -192,7 +189,6 @@
             margin-top: 0.75rem;
         }
 
-        /* Divider */
         .divider {
             height: 1px;
             background: var(--border);
@@ -211,7 +207,6 @@
             font-size: 0.85rem;
         }
 
-        /* Form */
         .form-group {
             margin-bottom: 1.25rem;
         }
@@ -270,7 +265,6 @@
             color: var(--forest);
         }
 
-        /* Error message */
         .error-msg {
             display: flex;
             align-items: center;
@@ -294,7 +288,6 @@
             pointer-events: auto;
         }
 
-        /* Attempts warning */
         .attempts-bar {
             display: flex;
             gap: 5px;
@@ -313,7 +306,6 @@
             background: var(--error);
         }
 
-        /* Submit button */
         .login-btn {
             width: 100%;
             background: var(--forest);
@@ -383,7 +375,6 @@
             display: block;
         }
 
-        /* Footer info */
         .card-footer {
             text-align: center;
             margin-top: 1.5rem;
@@ -403,7 +394,6 @@
             font-weight: 500;
         }
 
-        /* Lockout screen */
         .lockout-overlay {
             display: none;
             text-align: center;
@@ -444,7 +434,6 @@
             margin: 1rem 0;
         }
 
-        /* Success flash */
         .success-overlay {
             display: none;
             text-align: center;
@@ -489,7 +478,6 @@
             transition: width 1.5s linear;
         }
 
-        /* Shake animation for wrong password */
         @keyframes shake {
 
             0%,
@@ -512,7 +500,6 @@
             animation: shake 0.4s ease;
         }
 
-        /* Security tip */
         .security-tip {
             font-size: 0.72rem;
             color: var(--text-light);
@@ -522,7 +509,6 @@
             margin-top: 0.6rem;
         }
 
-        /* Responsive */
         @media (max-width: 480px) {
             .login-card {
                 padding: 2rem 1.5rem;
@@ -532,14 +518,10 @@
 </head>
 
 <body>
-
-    <!-- Particles -->
     <div class="particles" id="particles"></div>
 
     <div class="login-wrapper">
         <div class="login-card" id="loginCard">
-<!------------------------------------------------------------------------------------------------->
-            <!-- Logo -->
             <div class="logo-area">
                 <div class="logo-mark">
                     <img src="/images/logo.png" alt="FAKHMUL Logo" class="logo-img">
@@ -551,13 +533,11 @@
 
             <div class="divider"></div>
 
-            <!-- Error message -->
             <div class="error-msg" id="errorMsg">
                 <span>⚠️</span>
                 <span id="errorText">Incorrect password. Please try again.</span>
             </div>
 
-            <!-- Attempt dots (shown after 1st failure) -->
             <div class="attempts-bar" id="attemptsBar" style="display:none;">
                 <div class="attempt-dot" id="dot1"></div>
                 <div class="attempt-dot" id="dot2"></div>
@@ -565,8 +545,15 @@
                 <span style="font-size:0.72rem;color:var(--text-light);margin-left:4px;" id="attemptsLabel"></span>
             </div>
 
-            <!-- Login form -->
             <div class="login-form-area" id="loginFormArea">
+                <div class="form-group">
+                    <label class="form-label" for="adminEmail">Admin Email</label>
+                    <div class="input-wrap">
+                        <input type="email" id="adminEmail" class="form-input"
+                            placeholder="admin@fakhmul.com" autocomplete="email" value="admin@fakhmul.local">
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label" for="adminPassword">Admin Password</label>
                     <div class="input-wrap">
@@ -576,7 +563,7 @@
                         <span class="input-icon" id="togglePwd" onclick="togglePassword()"
                             title="Show/hide password">👁️</span>
                     </div>
-                    <div class="security-tip">🔒 Your session expires when you close the browser</div>
+                    <div class="security-tip">🔒 Server-side session is required for all admin actions</div>
                 </div>
 
                 <button class="login-btn" id="loginBtn" onclick="attemptLogin()">
@@ -585,7 +572,6 @@
                 </button>
             </div>
 
-            <!-- Lockout screen -->
             <div class="lockout-overlay" id="lockoutOverlay">
                 <div class="lockout-icon">🔐</div>
                 <h3>Account Locked</h3>
@@ -594,7 +580,6 @@
                 <p style="font-size:0.78rem;color:var(--text-light);">seconds remaining</p>
             </div>
 
-            <!-- Success screen -->
             <div class="success-overlay" id="successOverlay">
                 <div class="success-icon">✅</div>
                 <h3>Welcome back!</h3>
@@ -606,16 +591,13 @@
 
             <div class="card-footer">
                 <p>Restricted area — authorised personnel only.<br>
-                    <a href="index.html">← Back to passward store</a>
+                    <a href="index.html">← Back to password store</a>
                 </p>
             </div>
-
         </div>
     </div>
 
     <script>
-        // ── CONFIG ── Change this password ──
-        const ADMIN_PASSWORD = 'fakhmul2024';
         const MAX_ATTEMPTS = 5;
         const LOCKOUT_SECS = 30;
 
@@ -623,26 +605,24 @@
         let locked = false;
         let lockTimer = null;
 
-        // ── Particles ──
         (function spawnParticles() {
             const container = document.getElementById('particles');
             for (let i = 0; i < 18; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.style.cssText = `
-          left: ${Math.random() * 100}%;
-          bottom: ${Math.random() * 40}%;
-          --dur: ${6 + Math.random() * 8}s;
-          --delay: ${Math.random() * 8}s;
-          width: ${1 + Math.random() * 2}px;
-          height: ${1 + Math.random() * 2}px;
-          opacity: 0;
-        `;
+                    left: ${Math.random() * 100}%;
+                    bottom: ${Math.random() * 40}%;
+                    --dur: ${6 + Math.random() * 8}s;
+                    --delay: ${Math.random() * 8}s;
+                    width: ${1 + Math.random() * 2}px;
+                    height: ${1 + Math.random() * 2}px;
+                    opacity: 0;
+                `;
                 container.appendChild(p);
             }
         })();
 
-        // ── Toggle password visibility ──
         function togglePassword() {
             const inp = document.getElementById('adminPassword');
             const ico = document.getElementById('togglePwd');
@@ -655,68 +635,69 @@
             }
         }
 
-        // ── Attempt login ──
-        function attemptLogin() {
+        async function attemptLogin() {
             if (locked) return;
 
             const btn = document.getElementById('loginBtn');
             const input = document.getElementById('adminPassword');
-            const pass = input.value;
+            const emailInput = document.getElementById('adminEmail');
+            const email = emailInput.value.trim();
+            const password = input.value;
 
-            if (!pass) {
-                showError('Please enter your password.');
-                input.focus();
+            if (!email || !password) {
+                showError('Please enter your admin email and password.');
+                if (!email) emailInput.focus();
+                else input.focus();
                 return;
             }
 
-            // Loading state
             btn.classList.add('loading');
             btn.disabled = true;
             hideError();
 
-            setTimeout(() => {
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(data.message || 'Login failed.');
+                }
+
+                loginSuccess();
+            } catch (error) {
                 btn.classList.remove('loading');
                 btn.disabled = false;
-
-                if (pass === ADMIN_PASSWORD) {
-                    loginSuccess();
-                } else {
-                    loginFail();
-                }
-            }, 900); // Simulated check delay (keeps brute-force slower)
+                loginFail(error.message || 'Unable to sign in. Please try again.');
+            }
         }
 
         function loginSuccess() {
-            // Save session
-            sessionStorage.setItem('fakhmul_admin', 'true');
-            sessionStorage.setItem('fakhmul_admin_time', Date.now().toString());
-
-            // Show success UI
             document.getElementById('loginFormArea').classList.add('hidden');
             document.getElementById('errorMsg').classList.remove('show');
             document.getElementById('attemptsBar').style.display = 'none';
             document.getElementById('successOverlay').classList.add('show');
 
-            // Animate progress bar
             setTimeout(() => {
                 document.getElementById('progressFill').style.width = '100%';
             }, 100);
 
-            // Redirect after 1.6 seconds
             setTimeout(() => {
                 window.location.href = 'admin-dashboard.html';
             }, 1700);
         }
 
-        function loginFail() {
+        function loginFail(message) {
             attempts++;
             const input = document.getElementById('adminPassword');
-
-            // Shake input
             input.classList.add('error', 'shake');
             setTimeout(() => input.classList.remove('shake'), 400);
 
-            // Show attempts bar
             const bar = document.getElementById('attemptsBar');
             bar.style.display = 'flex';
             updateAttemptDots();
@@ -725,7 +706,7 @@
                 startLockout();
             } else {
                 const remaining = MAX_ATTEMPTS - attempts;
-                showError(`Incorrect password. ${remaining} attempt${remaining > 1 ? 's' : ''} remaining.`);
+                showError(`${message} ${remaining} attempt${remaining > 1 ? 's' : ''} remaining.`);
                 input.value = '';
                 input.focus();
             }
@@ -781,9 +762,23 @@
             document.getElementById('errorMsg').classList.remove('show');
         }
 
-        // Focus input on load
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/v1/auth/me', { credentials: 'same-origin' });
+                if (response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    if (data.user && data.user.role === 'ADMIN') {
+                        window.location.href = 'admin-dashboard.html';
+                    }
+                }
+            } catch (error) {
+                // no active session; allow login page to show
+            }
+        }
+
         window.addEventListener('load', () => {
-            document.getElementById('adminPassword').focus();
+            document.getElementById('adminEmail').focus();
+            checkSession();
         });
     </script>
 </body>
