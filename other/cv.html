@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manzoor Hussain — Graphic Designer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --ink: #1a1a2e;
+            --gold: #c9a84c;
+            --gold-light: #e8c97a;
+            --cream: #faf8f3;
+            --muted: #6b6672;
+            --accent: #7c5cbf;
+            --rule: #e0d9cc;
+            --sidebar-bg: #1a1a2e;
+            --sidebar-text: #faf8f3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #e8e4dc;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page {
+            width: 794px;
+            min-height: 1123px;
+            background: var(--cream);
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 240px;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gold), var(--gold-light), var(--gold));
+            z-index: 10;
+        }
+
+        .sidebar {
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 40px 24px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+            position: relative;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--accent), var(--gold));
+        }
+
+        .avatar-ring {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            padding: 3px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-inner {
+            width: 94px;
+            height: 94px;
+            border-radius: 50%;
+            background: var(--sidebar-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--gold);
+            letter-spacing: -2px;
+            overflow: hidden;
+            padding: 0;
+        }
+
+        .s-name {
+            text-align: center;
+        }
+
+        .s-name h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .s-name .tagline {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-top: 4px;
+        }
+
+        .s-section-title {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .contact-list li {
+            font-size: 10.5px;
+            color: rgba(250, 248, 243, 0.8);
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            line-height: 1.4;
+        }
+
+        .contact-list li .icon {
+            color: var(--gold);
+            font-size: 11px;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .skill-block {
+            margin-bottom: 6px;
+        }
+
+        .skill-label {
+            font-size: 10px;
+            color: rgba(250, 248, 243, 0.9);
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .skill-bar {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            border-radius: 2px;
+        }
+
+        .tool-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .pill {
+            background: rgba(201, 168, 76, 0.12);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            color: var(--gold-light);
+            font-size: 9px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .lang-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .lang-name {
+            font-size: 10.5px;
+            color: rgba(250, 248, 243, 0.9);
+        }
+
+        .lang-level {
+            font-size: 9px;
+            color: var(--gold);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .main {
+            padding: 36px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .main-header .role {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .main-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--ink);
+            line-height: 1;
+            letter-spacing: -1px;
+        }
+
+        .main-header h2 span {
+            color: var(--gold);
+        }
+
+        .gold-rule {
+            width: 48px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--accent));
+            margin: 8px 0;
+            border-radius: 2px;
+        }
+
+        .summary {
+            font-size: 10.5px;
+            color: var(--muted);
+            line-height: 1.65;
+            max-width: 420px;
+        }
+
+        .sec-head {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .sec-head h3 {
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--ink);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .sec-line {
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+
+        .exp-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 4px 12px;
+            margin-bottom: 14px;
+            position: relative;
+            padding-left: 14px;
+        }
+
+        .exp-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        .exp-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .exp-date {
+            font-size: 9px;
+            color: var(--muted);
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .exp-company {
+            font-size: 10px;
+            color: var(--accent);
+            font-weight: 500;
+            grid-column: 1;
+        }
+
+        .exp-desc {
+            font-size: 10px;
+            color: var(--muted);
+            line-height: 1.55;
+            grid-column: 1 / -1;
+            margin-top: 3px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .port-card {
+            background: white;
+            border: 1px solid var(--rule);
+            border-radius: 6px;
+            padding: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .port-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--accent));
+        }
+
+        .port-category {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .port-name {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 2px;
+            line-height: 1.3;
+        }
+
+        .port-desc {
+            font-size: 9px;
+            color: var(--muted);
+            line-height: 1.45;
+        }
+
+        .cert-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .cert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+
+        .cert-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--gold);
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .edu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .edu-degree {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .edu-school {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .edu-gpa {
+            background: linear-gradient(135deg, var(--gold), var(--accent));
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            align-self: flex-start;
+        }
+
+        @media print {
+            body {
+                background: none;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            <div class="avatar-ring">
+                <div class="avatar-inner">
+                    <img src="/me.png"
+                        style="width:94px; height:94px; border-radius:50%; object-fit:cover; object-position:center top; display:block;" />
+                </div>
+            </div>
+            <div class="s-name">
+                <h1>Manzoor<br>Hussain</h1>
+                <div class="tagline">Graphic Designer · AI Specialist</div>
+            </div>
+            <div>
+                <div class="s-section-title">Contact</div>
+                <ul class="contact-list">
+                    <li><span class="icon">✦</span>(+92) 3488811543</li>
+                    <li><span class="icon">✦</span>engrmanzoor014@gmail.com</li>
+                    <li><span class="icon">✦</span>Lahore, Punjab, Pakistan</li>
+                    <li><span class="icon">✦</span>github.com/Engrmanzoor014</li>
+                    <li><span class="icon">✦</span>linkedin.com/in/manzoor-hussain</li>
+                    <li><span class="icon">✦</span>fiverr.com/engrmanzoor014</li>
+                </ul>
+            </div>
+            <div>
+                <div class="s-section-title">Design Skills</div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Product Label Design</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:95%"></div>
+                    </div>
+                </div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Brand Identity</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:90%"></div>
+                    </div>
+                </div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Packaging Design</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:92%"></div>
+                    </div>
+                </div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Social Media Graphics</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:90%"></div>
+                    </div>
+                </div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Event Posters / Flyers</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:88%"></div>
+                    </div>
+                </div>
+                <div class="skill-block">
+                    <div class="skill-label"><span>Certificate Design</span></div>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width:85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="s-section-title">Tools & Platforms</div>
+                <div class="tool-pills">
+                    <span class="pill">Canva Pro</span><span class="pill">AI Image Gen</span><span
+                        class="pill">ChatGPT</span>
+                    <span class="pill">Gemini AI</span><span class="pill">Adobe PS</span><span class="pill">Figma</span>
+                    <span class="pill">Python</span><span class="pill">LangChain</span><span class="pill">n8n</span>
+                </div>
+            </div>
+            <div>
+                <div class="s-section-title">Languages</div>
+                <div class="lang-item"><span class="lang-name">English</span><span
+                        class="lang-level">Professional</span></div>
+                <div class="lang-item"><span class="lang-name">Urdu</span><span class="lang-level">Native</span></div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <div class="main-header">
+                <div class="role">Graphic Designer · Label & Packaging Specialist</div>
+                <h2>Creative <span>Portfolio</span></h2>
+                <div class="gold-rule"></div>
+                <p class="summary">Versatile graphic designer and AI Engineering student (GPA 3.49/4.0) specialising in
+                    premium product label design, luxury packaging, and brand identity — powered by Canva Pro and AI
+                    image generation. Delivered polished designs for supplements, food, skincare, and event clients
+                    across local and international markets.</p>
+            </div>
+
+            <div>
+                <div class="sec-head">
+                    <h3>Experience</h3>
+                    <div class="sec-line"></div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-title">Freelance Graphic Designer</div>
+                    <div class="exp-date">2024 – Present</div>
+                    <div class="exp-company">Self-Employed · Fiverr / Direct Clients</div>
+                    <div class="exp-desc">Designed 20+ premium product labels and packaging for supplement, food &
+                        skincare brands (Peak Nutrition, Fakhmul, Landleben, GB Booster, NaturVita, Alphora). Created
+                        social media ad creatives, event flyers, and YouTube thumbnails using Canva Pro with
+                        AI-generated imagery.</div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-title">Graphic Designer — Women Development Center</div>
+                    <div class="exp-date">2025 – Present</div>
+                    <div class="exp-company">The Islamia University of Bahawalpur (IUB)</div>
+                    <div class="exp-desc">Produced official event posters, certificates of appreciation, seminar
+                        promotional graphics, and digital campaign creatives for the CM Female Ambassador Program and
+                        WDC-UBSSS.</div>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-title">AI Automation Intern</div>
+                    <div class="exp-date">2024 · 1 Month</div>
+                    <div class="exp-company">Bit n Byte</div>
+                    <div class="exp-desc">Built AI automation workflows and RAG-based chatbots; also contributed
+                        AI-generated visual assets to support marketing deliverables.</div>
+                </div>
+            </div>
+
+            <div>
+                <div class="sec-head">
+                    <h3>Portfolio Highlights</h3>
+                    <div class="sec-line"></div>
+                </div>
+                <div class="portfolio-grid">
+                    <div class="port-card">
+                        <div class="port-category">Supplements</div>
+                        <div class="port-name">Peak Nutrition Whey Protein</div>
+                        <div class="port-desc">Full ad campaign — wide banner & product hero shots in bold black/neon
+                            green.</div>
+                    </div>
+                    <div class="port-card">
+                        <div class="port-category">Supplements</div>
+                        <div class="port-name">GB Organic Booster</div>
+                        <div class="port-desc">Shilajeet jar label + promotional banner; mountain lifestyle aesthetic.
+                        </div>
+                    </div>
+                    <div class="port-card">
+                        <div class="port-category">Food / FMCG</div>
+                        <div class="port-name">Fakhmul Dry Fruits</div>
+                        <div class="port-desc">Luxury stand-up pouch designs for Alu Bukhara & Dried Apricot lines.
+                        </div>
+                    </div>
+                    <div class="port-card">
+                        <div class="port-category">Skincare</div>
+                        <div class="port-name">Luxury Skincare Range</div>
+                        <div class="port-desc">Élévation, Azurea, Lumière & Luxélia — serum, cream & gift box packaging.
+                        </div>
+                    </div>
+                    <div class="port-card">
+                        <div class="port-category">Event Design</div>
+                        <div class="port-name">IUB Mother's Day Poster</div>
+                        <div class="port-desc">Official digital campaign artwork for "Luminaries of Love" — WDC 2026.
+                        </div>
+                    </div>
+                    <div class="port-card">
+                        <div class="port-category">Food (German)</div>
+                        <div class="port-name">Landleben Rindergulasch</div>
+                        <div class="port-desc">Premium rustic jar label — German market, full nutrition facts & barcode.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; align-items:start;">
+                <div>
+                    <div class="sec-head">
+                        <h3>Certifications</h3>
+                        <div class="sec-line"></div>
+                    </div>
+                    <div class="cert-list">
+                        <div class="cert-item">
+                            <div class="cert-dot"></div>Graphic Designer — IUB / WDC
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-dot"></div>Generative AI — Aspire Pakistan
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-dot"></div>Computer Vision — Coursera
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-dot"></div>IoT — NAVTTC (Jun 2024)
+                        </div>
+                        <div class="cert-item">
+                            <div class="cert-dot"></div>30 Days of Code — HackerRank
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="sec-head">
+                        <h3>Education</h3>
+                        <div class="sec-line"></div>
+                    </div>
+                    <div class="edu-item">
+                        <div>
+                            <div class="edu-degree">BS Artificial Intelligence</div>
+                            <div class="edu-school">The Islamia University of Bahawalpur</div>
+                            <div class="edu-school" style="margin-top:2px; color:#a0a0b0;">2023 – Present</div>
+                        </div>
+                        <div class="edu-gpa">3.49 GPA</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

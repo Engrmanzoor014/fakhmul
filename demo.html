@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAKHMUL – Gilgit Baltistan's Finest</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c0810d;
+      --gold-light: #efd190;
+      --gold-dark: #8B6520;
+      --forest: #074807;
+      --forest-light: #084f08;
+      --forest-pale: #E8F0E8;
+      --cream: #FAF6F0;
+      --warm-white: #FFFDF9;
+      --text-dark: #1A1A0F;
+      --text-mid: #4A4A3A;
+      --text-light: #888870;
+      --border: rgba(200, 151, 58, 0.2);
+      --shadow: 0 4px 24px rgba(45, 74, 45, 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      scroll-behavior: smooth;
+    }
+
+    /* NAV */
+    nav {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      padding: 0 1.5rem;
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--forest), var(--gold));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      color: var(--gold-dark);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--forest);
+      background: var(--forest-pale);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .cart-btn {
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .cart-btn:hover {
+      background: var(--forest-light);
+    }
+
+    .cart-count {
+      background: var(--gold);
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    .wa-btn {
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .wa-btn:hover {
+      background: #128C7E;
+    }
+
+    /* SEARCH BAR in nav */
+    .nav-search {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      max-width: 260px;
+      position: relative;
+    }
+
+    .nav-search input {
+      width: 100%;
+      padding: 8px 36px 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      outline: none;
+      background: var(--cream);
+      transition: border-color 0.2s;
+    }
+
+    .nav-search input:focus {
+      border-color: var(--forest);
+      background: white;
+    }
+
+    .nav-search .search-icon {
+      position: absolute;
+      right: 10px;
+      color: var(--text-light);
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    /* SEARCH DROPDOWN */
+    .search-results {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      z-index: 9999;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .search-results.open {
+      display: block;
+    }
+
+    .search-result-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .search-result-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-result-item:hover {
+      background: var(--forest-pale);
+    }
+
+    .sri-icon {
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      background: var(--forest-pale);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sri-info {
+      flex: 1;
+    }
+
+    .sri-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-dark);
+    }
+
+    .sri-cat {
+      font-size: 0.72rem;
+      color: var(--text-light);
+    }
+
+    .sri-price {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--forest);
+    }
+
+    .search-no-results {
+      padding: 1rem 14px;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--forest) 0%, #1a3020 60%, #3d6b3d 100%);
+      color: white;
+      padding: 5rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 45%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Ccircle cx='200' cy='200' r='180' fill='rgba(200,151,58,0.06)'/%3E%3Ccircle cx='200' cy='200' r='120' fill='rgba(200,151,58,0.06)'/%3E%3Ccircle cx='200' cy='200' r='60' fill='rgba(200,151,58,0.08)'/%3E%3C/svg%3E") center/cover;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(200, 151, 58, 0.2);
+      border: 1px solid rgba(200, 151, 58, 0.4);
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 50px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 span {
+      color: var(--gold);
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.8);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--text-dark);
+      border: none;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .btn-outline:hover {
+      border-color: white;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 2px;
+    }
+
+    /* TRUST BAR */
+    .trust-bar {
+      background: var(--gold);
+      padding: 0.9rem 1.5rem;
+    }
+
+    .trust-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--forest);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 4rem 1.5rem;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      color: var(--gold-dark);
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      color: var(--forest);
+    }
+
+    /* CATEGORIES */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+    }
+
+    .cat-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .cat-card:hover,
+    .cat-card.active {
+      border-color: var(--gold);
+      background: var(--gold-light);
+      box-shadow: var(--shadow);
+    }
+
+    .cat-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cat-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--forest);
+    }
+
+    .cat-count {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      margin-top: 2px;
+    }
+
+    /* PRODUCTS */
+    .products-section {
+      background: var(--warm-white);
+    }
+
+    .products-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .results-count {
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .product-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(45, 74, 45, 0.12);
+    }
+
+    .product-img {
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--forest-pale);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .product-card:hover .product-img img {
+      transform: scale(1.05);
+    }
+
+    .product-img .emoji-fallback {
+      font-size: 4.5rem;
+    }
+
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--gold);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 50px;
+      z-index: 1;
+    }
+
+    .product-body {
+      padding: 1rem 1.1rem;
+    }
+
+    .product-origin {
+      font-size: 0.72rem;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .product-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-dark);
+      margin-bottom: 4px;
+    }
+
+    .product-desc {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      line-height: 1.5;
+      margin-bottom: 0.75rem;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    .product-price span {
+      font-size: 0.75rem;
+      color: var(--text-light);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+    }
+
+    .add-btn {
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .add-btn:hover {
+      background: var(--forest-light);
+    }
+
+    /* ABOUT SECTION */
+    .about-section {
+      background: var(--cream);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .about-img-box {
+      border-radius: 12px;
+      overflow: hidden;
+      height: 160px;
+      background: var(--forest-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .about-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-img-box.tall {
+      height: 200px;
+    }
+
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--forest);
+      margin-bottom: 1rem;
+    }
+
+    .about-text p {
+      color: var(--text-mid);
+      line-height: 1.8;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .about-hi {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .about-hi-icon {
+      font-size: 1.2rem;
+      margin-top: 2px;
+    }
+
+    .about-hi-text {
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    .about-hi-title {
+      font-weight: 700;
+      color: var(--forest);
+    }
+
+    /* FEATURES */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .feature-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--forest);
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-desc {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* TESTIMONIALS */
+    .testimonials-section {
+      background: var(--forest);
+      padding: 4rem 1.5rem;
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .testi-card {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+
+    .testi-stars {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .testi-text {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .testi-author {
+      font-weight: 600;
+      color: var(--gold-light);
+      font-size: 0.85rem;
+    }
+
+    .testi-loc {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.78rem;
+    }
+
+    .section-title.light {
+      color: white;
+    }
+
+    .section-tag.light {
+      color: var(--gold-light);
+    }
+
+    /* NEWSLETTER */
+    .newsletter {
+      background: var(--gold-light);
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+
+    .newsletter h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--forest);
+      margin-bottom: 0.5rem;
+    }
+
+    .newsletter p {
+      color: var(--gold-dark);
+      margin-bottom: 1.5rem;
+    }
+
+    .nl-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 420px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .nl-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .nl-input:focus {
+      border-color: var(--forest);
+    }
+
+    .nl-btn {
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+    }
+
+    /* CONTACT SECTION */
+    .contact-section {
+      background: var(--cream);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .contact-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--forest);
+      margin-bottom: 1rem;
+    }
+
+    .contact-info p {
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .contact-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-item-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--forest-pale);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-item-text {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+    }
+
+    .contact-item-label {
+      font-weight: 700;
+      color: var(--forest);
+      font-size: 0.82rem;
+    }
+
+    .contact-form {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+    }
+
+    .contact-form h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--forest);
+      margin-bottom: 1.25rem;
+    }
+
+    .cf-group {
+      margin-bottom: 1rem;
+    }
+
+    .cf-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .cf-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .cf-input:focus {
+      border-color: var(--forest);
+    }
+
+    textarea.cf-input {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .cf-btn {
+      width: 100%;
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .cf-btn:hover {
+      background: var(--forest-light);
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--text-dark);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 3rem 1.5rem 1.5rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      color: white;
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand-desc {
+      font-size: 0.85rem;
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .social-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    .social-btn:hover {
+      background: var(--gold);
+    }
+
+    .footer-col h4 {
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul {
+      list-style: none;
+    }
+
+    .footer-col li {
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-col li:hover {
+      color: var(--gold-light);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .payment-icons {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .pay-icon {
+      background: white;
+      color: var(--text-dark);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    /* CART SIDEBAR */
+    .cart-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      display: none;
+    }
+
+    .cart-overlay.open {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .cart-sidebar {
+      background: var(--warm-white);
+      width: min(420px, 100vw);
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      box-shadow: -4px 0 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .cart-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--forest);
+      color: white;
+    }
+
+    .cart-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .cart-items {
+      flex: 1;
+      padding: 1rem 1.5rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 12px;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+
+    .cart-item-icon {
+      font-size: 1.6rem;
+      width: 48px;
+      height: 48px;
+      background: var(--forest-pale);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .cart-item-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .cart-item-price {
+      font-size: 0.82rem;
+      color: var(--gold-dark);
+      margin-top: 2px;
+    }
+
+    .qty-ctrl {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      background: var(--forest-pale);
+      border: none;
+      border-radius: 4px;
+      width: 26px;
+      height: 26px;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--forest);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-num {
+      font-weight: 600;
+      font-size: 0.9rem;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .cart-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--forest);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      margin-bottom: 0.75rem;
+      transition: background 0.2s;
+    }
+
+    .checkout-btn:hover {
+      background: var(--forest-light);
+    }
+
+    .wa-checkout {
+      width: 100%;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .wa-checkout:hover {
+      background: #128C7E;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-light);
+    }
+
+    .empty-cart-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    /* CHECKOUT MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 16px;
+      width: min(520px, 96vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--forest);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--text-mid);
+      padding: 4px 8px;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-mid);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--forest);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .payment-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .pay-tab {
+      flex: 1;
+      min-width: 80px;
+      padding: 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-align: center;
+      transition: all 0.2s;
+      color: var(--text-mid);
+    }
+
+    .pay-tab.active {
+      border-color: var(--forest);
+      background: var(--forest-pale);
+      color: var(--forest);
+    }
+
+    .pay-tab-icon {
+      font-size: 1.2rem;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .payment-panel {
+      display: none;
+    }
+
+    .payment-panel.active {
+      display: block;
+    }
+
+    .order-summary {
+      background: var(--forest-pale);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .order-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 4px;
+    }
+
+    .order-row.total {
+      font-weight: 700;
+      font-size: 1rem;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      margin-top: 8px;
+    }
+
+    .submit-order {
+      width: 100%;
+      background: var(--gold);
+      color: var(--text-dark);
+      border: none;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .submit-order:hover {
+      background: var(--gold-dark);
+      color: white;
+    }
+
+    .success-msg {
+      text-align: center;
+      padding: 2rem 0;
+      display: none;
+    }
+
+    .success-msg.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .success-msg h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--forest);
+      margin-bottom: 0.5rem;
+    }
+
+    .success-msg p {
+      color: var(--text-mid);
+      font-size: 0.9rem;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--forest);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-search {
+        display: none;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="brand" onclick="goToSection('hero')">
+        <!-- <div class="brand-logo">FK</div> -->
+        <div class="brand-logo" style="background: transparent;">
+          <img src="/images/logo.png" alt="FAKHMUL Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+        </div>
+        <div>
+          <div class="brand-name">FAKHMUL</div>
+          <div class="brand-sub">Gilgit Baltistan</div>
+        </div>
+      </a>
+      <ul class="nav-links">
+        <li><a onclick="goToSection('products')">Shop</a></li>
+        <li><a onclick="goToSection('about')">About</a></li>
+        <li><a onclick="goToSection('contact')">Contact</a></li>
+      </ul>
+      <div class="nav-search" style="position:relative;">
+        <input type="text" id="navSearch" placeholder="Search products..." autocomplete="off"
+          oninput="handleNavSearch()" onfocus="handleNavSearch()" onblur="setTimeout(closeNavSearch,200)">
+        <span class="search-icon">🔍</span>
+        <div class="search-results" id="searchDropdown"></div>
+      </div>
+      <div class="nav-actions">
+        <a class="wa-btn"
+          href="https://wa.me/+923151416996?text=Hello%20FAKHMUL!%20I%27d%20like%20to%20inquire%20about%20your%20products."
+          target="_blank">💬 WhatsApp</a>
+        <button class="cart-btn" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">✦ 100% Natural from the Mountains</div>
+      <h1>Nature's <span>Finest Treasures</span><br>from Gilgit Baltistan</h1>
+      <p>Handpicked dried fruits, nuts, and herbal teas from the pristine valleys of the Karakoram — delivered fresh to
+        your door.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="goToSection('products')">🛍️ Shop Now</button>
+        <a class="btn-outline" href="https://wa.me/+923151416996?text=Hello%20FAKHMUL!" target="_blank">💬 Chat with
+          Us</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">50+</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2K+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Natural & Pure</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar">
+    <div class="trust-inner">
+      <div class="trust-item">🚚 Free Delivery on orders over Rs.5000</div>
+      <div class="trust-item">🌿 100% Pure & Natural</div>
+      <div class="trust-item">✓ Quality Certified</div>
+      <div class="trust-item">↩ Easy Returns</div>
+      <div class="trust-item">🔒 Secure Payment</div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Browse by Category</div>
+        <div class="section-title">Our Natural Collections</div>
+      </div>
+      <div class="categories">
+        <div class="cat-card active" onclick="filterCategory('all',this)">
+          <!-- <div class="cat-icon">🌟</div> -->
+          <div class="cat-name">All Products</div>
+          <div class="cat-count">18 items</div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('dried-fruit',this)">
+          <!-- <div class="cat-icon">🫐</div> -->
+          <div class="cat-name">Dried Fruits</div>
+          <div class="cat-count">8 items</div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('nuts',this)">
+          <!-- <div class="cat-icon">🌰</div> -->
+          <div class="cat-name">Nuts & Seeds</div>
+          <div class="cat-count">5 items</div>
+        </div>
+        <div class="cat-card" onclick="filterCategory('herbal',this)">
+          <!-- <div class="cat-icon">🌿</div> -->
+          <div class="cat-name">Herbal Teas</div>
+          <div class="cat-count">5 items</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="section products-section" id="products">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Fresh from the Valley</div>
+        <div class="section-title">Our Products</div>
+      </div>
+      <div class="products-toolbar">
+        <div class="results-count" id="resultsCount">Showing all 18 products</div>
+      </div>
+      <div class="products-grid" id="productsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="section about-section" id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="about-img-grid">
+          <div class="about-img-box tall">
+            <img src="https://images.unsplash.com/photo-1574570173583-e0f4b3c94f98?w=400&q=80" alt="Hunza Valley"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span style="display:none;font-size:3rem;">🏔️</span>
+          </div>
+          <div class="about-img-box">
+            <img src="https://images.unsplash.com/photo-1509358271058-acd22cc93eff?w=400&q=80" alt="Dried fruits"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span style="display:none;font-size:3rem;">🫐</span>
+          </div>
+          <div class="about-img-box">
+            <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400&q=80" alt="Walnuts"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span style="display:none;font-size:3rem;">🌰</span>
+          </div>
+          <div class="about-img-box tall">
+            <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&q=80" alt="Herbs"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span style="display:none;font-size:3rem;">🌿</span>
+          </div>
+        </div>
+        <div class="about-text">
+          <div class="section-tag">Our Story</div>
+          <h2>Pure Nature from the Roof of the World</h2>
+          <p>FAKHMUL was born from a deep love for the pristine mountains of Gilgit Baltistan — a land where nature
+            thrives untouched at altitudes above 2,000 metres.</p>
+          <p>We work directly with local farmers and foragers to bring you the most authentic dried fruits, wild nuts,
+            and mountain-grown herbs — no middlemen, no additives, just pure goodness.</p>
+          <div class="about-highlights">
+            <div class="about-hi">
+              <div class="about-hi-text">
+                <div class="about-hi-title">Mountain Sourced</div>Every product comes from the high-altitude valleys of
+                Hunza, Skardu, Nagar and Gilgit.
+              </div>
+            </div>
+            <div class="about-hi">
+              <div class="about-hi-text">
+                <div class="about-hi-title">Farmer Direct</div>We partner with local families, ensuring fair trade and
+                authentic products.
+              </div>
+            </div>
+            <div class="about-hi">
+              <div class="about-hi-text">
+                <div class="about-hi-title">Zero Additives</div>No preservatives, no chemicals — just naturally dried,
+                naturally good.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" style="background:var(--warm-white);">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Why Choose FAKHMUL</div>
+        <div class="section-title">Pure. Fresh. Delivered.</div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-title">Mountain Sourced</div>
+          <div class="feature-desc">Directly from the pure, unpolluted valleys of Gilgit Baltistan at altitudes over
+            2000m.</div>
+        </div>
+        <div class="feature-card">
+
+          <div class="feature-title">Farmer Direct</div>
+          <div class="feature-desc">We work hand-in-hand with local farmers, ensuring fair prices and authentic
+            products.</div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">No Additives</div>
+          <div class="feature-desc">Zero preservatives, zero chemicals. Just nature's goodness, naturally preserved.
+          </div>
+        </div>
+        <div class="feature-card">
+          <div class="feature-title">Fresh Packaging</div>
+          <div class="feature-desc">Vacuum-sealed packaging ensures freshness and shelf life without compromise.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag light">Customer Reviews</div>
+        <div class="section-title light">What Our Customers Say</div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"The mulberries are incredible — unlike anything I've tasted from the market. Truly
+            wild and natural."</div>
+          <div class="testi-author">Fatima Malik</div>
+          <div class="testi-loc">Lahore, Pakistan</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"Best apricots I've ever had. The seabuckthorn herbal tea is a game changer — so
+            refreshing and healthy."</div>
+          <div class="testi-author">Ahmad Raza</div>
+          <div class="testi-loc">Karachi, Pakistan</div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <div class="testi-text">"Fast delivery, excellent packaging. The walnuts are fresh and have an amazing natural
+            flavour."</div>
+          <div class="testi-author">Sara Hussain</div>
+          <div class="testi-loc">Islamabad, Pakistan</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="newsletter">
+    <h2>Stay in the Know</h2>
+    <p>Get seasonal offers, new arrivals & health tips straight to your inbox.</p>
+    <div class="nl-form">
+      <input class="nl-input" type="email" id="nlEmail" placeholder="Your email address">
+      <button class="nl-btn" onclick="subscribeNL()">Subscribe</button>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact-section" id="contact">
+    <div class="section-inner">
+      <div class="section-header">
+        <div class="section-tag">Get in Touch</div>
+        <div class="section-title">Contact Us</div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>We'd love to hear from you</h3>
+          <p>Have a question about our products, want to place a bulk order, or just want to know more about Gilgit
+            Baltistan's finest? Reach out to us anytime.</p>
+          <div class="contact-items">
+            <div class="contact-item">
+              <div class="contact-item-icon">📞</div>
+              <div>
+                <div class="contact-item-label">Phone / WhatsApp</div>
+                <div class="contact-item-text">+923151416996</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📧</div>
+              <div>
+                <div class="contact-item-label">Email</div>
+                <div class="contact-item-text">fakhmul.14@gmail.com</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div>
+                <div class="contact-item-label">Location</div>
+                <div class="contact-item-text">Gilgit Baltistan, Pakistan</div>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🕐</div>
+              <div>
+                <div class="contact-item-label">Hours</div>
+                <div class="contact-item-text">Mon – Sat, 9AM – 6PM PKT</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;">
+            <a href="https://wa.me/+923151416996?text=Hello%20FAKHMUL!" target="_blank"
+              style="display:inline-flex;align-items:center;gap:8px;background:#059c3d;color:white;padding:12px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.9rem;">💬
+              Chat on WhatsApp</a>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Send a Message</h3>
+          <div class="cf-group"><label class="cf-label">Your Name</label><input class="cf-input" type="text" id="cfName"
+              placeholder="Full name"></div>
+          <div class="cf-group"><label class="cf-label">Email or Phone</label><input class="cf-input" type="text"
+              id="cfContact" placeholder="Email or WhatsApp number"></div>
+          <div class="cf-group"><label class="cf-label">Message</label><textarea class="cf-input" id="cfMsg"
+              placeholder="Write your message here..."></textarea></div>
+          <button class="cf-btn" onclick="sendContactMsg()">Send Message 📨</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">FAKHMUL</div>
+          <div class="footer-brand-desc">Bringing the authentic flavours and healing herbs of Gilgit Baltistan to your
+            home. Naturally sourced, carefully packed.</div>
+          <div class="footer-social">
+            <a class="social-btn" href="https://wa.me/+923151416996" target="_blank">💬</a>
+            <a class="social-btn" href="#" target="_blank">📘</a>
+            <a class="social-btn" href="#" target="_blank">📸</a>
+            <a class="social-btn" href="#" target="_blank">▶️</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <ul>
+            <li
+              onclick="filterCategory('dried-fruit', document.querySelectorAll('.cat-card')[1]); goToSection('products')">
+              Dried Fruits</li>
+            <li onclick="filterCategory('nuts', document.querySelectorAll('.cat-card')[2]); goToSection('products')">
+              Nuts & Seeds</li>
+            <li onclick="filterCategory('herbal', document.querySelectorAll('.cat-card')[3]); goToSection('products')">
+              Herbal Teas</li>
+            <li onclick="goToSection('products')">Gift Boxes</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <ul>
+            <li>Track Order</li>
+            <li>Returns Policy</li>
+            <li>Shipping Info</li>
+            <li>FAQ</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li>📞 +923151416996</li>
+            <li>📧 info@fakhmul.pk</li>
+            <li>📍 Gilgit Baltistan, PK</li>
+            <li>🕐 Mon–Sat 9AM–6PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <!--  change  -->
+        <!-- <span>© 2025 FAKHMUL. All rights reserved.</span> -->
+        <span>© 2025 FAKHMUL. All rights reserved. &nbsp;·&nbsp; <a href="admin-login.html"
+            style="color:rgba(255,255,255,0.3);font-size:0.75rem;text-decoration:none;">Admin</a></span>
+        <div class="payment-icons">
+          <span style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Payments:</span>
+          <span class="pay-icon">VISA</span>
+          <span class="pay-icon">MC</span>
+          <span class="pay-icon">EasyP</span>
+          <span class="pay-icon">JazzC</span>
+          <span class="pay-icon">COD</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCartOutside(event)">
+    <div class="cart-sidebar">
+      <div class="cart-header">
+        <h3>🛒 Your Cart</h3>
+        <button class="close-btn" onclick="closeCart()">✕</button>
+      </div>
+      <div class="cart-items" id="cartItems">
+        <div class="empty-cart">
+          <div class="empty-cart-icon">🛒</div>
+          <p>Your cart is empty</p>
+        </div>
+      </div>
+      <div class="cart-footer" id="cartFooter" style="display:none;">
+        <div class="cart-total"><span>Total</span><span id="cartTotal">Rs. 0</span></div>
+        <button class="checkout-btn" onclick="openCheckout()">💳 Checkout</button>
+        <button class="wa-checkout" onclick="orderViaWhatsApp()">💬 Order via WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal">
+      <div id="checkoutForm">
+        <div class="modal-header">
+          <div class="modal-title">Complete Your Order</div>
+          <button class="close-modal" onclick="closeCheckout()">✕</button>
+        </div>
+        <div class="order-summary" id="orderSummary"></div>
+        <div class="form-group"><label class="form-label">Full Name *</label><input class="form-input" id="custName"
+            type="text" placeholder="Your full name"></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">Phone *</label><input class="form-input" id="custPhone"
+              type="tel" placeholder="+92 300 0000000"></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="custEmail"
+              type="email" placeholder="email@example.com"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Delivery Address *</label><input class="form-input"
+            id="custAddr" type="text" placeholder="Street, City, Province"></div>
+        <div class="form-group">
+          <label class="form-label">Payment Method</label>
+          <div class="payment-tabs">
+            <button class="pay-tab active" onclick="selectPayment('cod',this)"><span class="pay-tab-icon">💵</span>Cash
+              on Delivery</button>
+            <button class="pay-tab" onclick="selectPayment('easypaisa',this)"><span
+                class="pay-tab-icon">📱</span>Easypaisa</button>
+            <button class="pay-tab" onclick="selectPayment('jazzcash',this)"><span
+                class="pay-tab-icon">📲</span>JazzCash</button>
+            <button class="pay-tab" onclick="selectPayment('bank',this)"><span
+                class="pay-tab-icon">🏦</span>Bank</button>
+            <button class="pay-tab" onclick="selectPayment('card',this)"><span
+                class="pay-tab-icon">💳</span>Card</button>
+          </div>
+        </div>
+        <div class="payment-panel active" id="panel-cod">
+          <p
+            style="font-size:0.85rem;color:var(--text-mid);background:var(--forest-pale);padding:10px 14px;border-radius:8px;">
+            💵 Pay cash when your order arrives!</p>
+        </div>
+        <div class="payment-panel" id="panel-easypaisa">
+          <p
+            style="font-size:0.85rem;color:var(--text-mid);background:var(--forest-pale);padding:10px 14px;border-radius:8px;">
+            📱 Send to <strong>0315-1416996</strong> via Easypaisa, enter Transaction ID below.</p>
+          <div class="form-group" style="margin-top:0.75rem;"><label class="form-label">Transaction ID</label><input
+              class="form-input" type="text" placeholder="e.g. EP123456789"></div>
+        </div>
+        <div class="payment-panel" id="panel-jazzcash">
+          <p
+            style="font-size:0.85rem;color:var(--text-mid);background:var(--forest-pale);padding:10px 14px;border-radius:8px;">
+            📲 Send to <strong>0315-1416996</strong> via JazzCash, enter Transaction ID below.</p>
+          <div class="form-group" style="margin-top:0.75rem;"><label class="form-label">Transaction ID</label><input
+              class="form-input" type="text" placeholder="e.g. JC987654321"></div>
+        </div>
+        <div class="payment-panel" id="panel-bank">
+          <div
+            style="font-size:0.85rem;color:var(--text-mid);background:var(--forest-pale);padding:12px 14px;border-radius:8px;line-height:1.8;">
+            🏦 <strong>HBL Bank Transfer</strong><br>Account: <strong>1234-5678-9012-3456</strong><br>Name: FAKHMUL
+            Enterprise</div>
+          <div class="form-group" style="margin-top:0.75rem;"><label class="form-label">Transfer Reference
+              No.</label><input class="form-input" type="text" placeholder="Reference number"></div>
+        </div>
+        <div class="payment-panel" id="panel-card">
+          <div class="form-group"><label class="form-label">Card Number</label><input class="form-input" type="text"
+              placeholder="1234 5678 9012 3456" maxlength="19"></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Expiry</label><input class="form-input" type="text"
+                placeholder="MM/YY" maxlength="5"></div>
+            <div class="form-group"><label class="form-label">CVV</label><input class="form-input" type="text"
+                placeholder="123" maxlength="3"></div>
+          </div>
+        </div>
+        <button class="submit-order" onclick="placeOrder()" style="margin-top:1.25rem;">Place Order 🎉</button>
+      </div>
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">✅</div>
+        <h3>Order Placed Successfully!</h3>
+        <p>Thank you! We'll contact you on <span id="orderPhone"></span> to confirm your order.</p>
+        <p style="margin-top:0.5rem;color:var(--gold-dark);">Expected delivery: 3–5 business days</p>
+        <a href="https://wa.me/+923151416996?text=Hello%20FAKHMUL!%20I%20just%20placed%20an%20order." target="_blank"
+          style="display:inline-block;margin-top:1.5rem;background:#25D366;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">💬
+          Confirm on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ── PRODUCTS DATA with real Unsplash images ──
+    const products = [
+      { id: 1, name: 'Dried Mulberry', icon: '🫐', category: 'dried-fruit', price: 850, unit: '250g', badge: 'Bestseller', origin: 'Skardu', desc: 'Sweet wild mulberries sun-dried in Skardu. Rich in antioxidants and iron.', img: '/images/mulberry.png' },
+      { id: 2, name: 'Dried White Mulberry', icon: '🫐', category: 'dried-fruit', price: 850, unit: '250g', badge: 'Bestseller', origin: 'Skardu', desc: 'Sweet wild mulberries sun-dried in Skardu. Rich in antioxidants and iron.', img: '/images/whiteMulberry.png' },
+      { id: 3, name: 'Dried Cherry', icon: '🍒', category: 'dried-fruit', price: 1200, unit: '250g', badge: 'Premium', origin: 'Skardu', desc: 'Tart and sweet dried cherries from Skardu orchards. Perfect for snacking and baking.', img: '/images/cherry.png' },
+      { id: 4, name: 'Dried Apricot', icon: '🍑', category: 'dried-fruit', price: 750, unit: '300g', badge: 'Popular', origin: 'Skardu', desc: 'Naturally dried organic apricots. No added sugar — pure fruit of GB mountains.', img: '/images/apricot.png' },
+      { id: 5, name: 'Golden Raisin', icon: '🍇', category: 'dried-fruit', price: 1000, unit: '250g', badge: null, origin: 'Skardu', desc: 'Naturally dried organic Raisin . No added sugar — pure fruit of GB mountains.', img: '/images/DriedGraps.png' },
+      { id: 6, name: 'Dried Apricot with kernels', icon: '🍓', category: 'dried-fruit', price: 500, unit: '250g', badge: null, origin: 'Skardu', desc: 'Naturally dried organic apricots with apricot kernels.No added sugar — pure fruit of GB mountains.', img: '/images/apricotWithseed.png' },
+      { id: 7, name: 'Dried Plum (Alu Bukhara)', icon: '🟣', category: 'dried-fruit', price: 700, unit: '250g', badge: null, origin: 'Skardu', desc: 'Traditional dried plums with rich tangy flavour, beloved across Pakistan.', img: '/images/plum.png' },
+      { id: 8, name: 'Dried Apple', icon: '❤️', category: 'dried-fruit', price: 700, unit: '250g', badge: 'Superfood', origin: 'Skardu', desc: 'Nutrient-dense dried apple. Tangy, sweet and incredibly healthy.', img: '/images/dried_apple.png' },
+      { id: 9, name: 'Walnut (Akhrot)', icon: '🌰', category: 'nuts', price: 1400, unit: '500g', badge: 'Bestseller', origin: 'Skardu', desc: 'Premium Hunza walnuts with paper-thin shells. Rich in omega-3 and healthy fats.', img: '/images/walnut.png' },
+      { id: 10, name: 'Almond (Badam)', icon: '🫘', category: 'nuts', price: 1800, unit: '500g', badge: 'Premium', origin: 'Skardu', desc: 'Sweet wild almonds from the rocky slopes of GB. Superior to farmed varieties.', img: '/images/almond.png' },
+      { id: 11, name: 'Pine Nuts (Chilgoza)', icon: '🟤', category: 'nuts', price: 2800, unit: '200g', badge: 'Luxury', origin: 'Chilas', desc: 'Rare hand-harvested chilgoza pine nuts. A true delicacy of the Karakoram.', img: 'https://images.unsplash.com/photo-1609501676725-7186f017a4b7?w=500&q=80' },
+      { id: 12, name: 'Apricot Kernels', icon: '💛', category: 'nuts', price: 600, unit: '300g', badge: null, origin: 'Skardu', desc: 'Sweet Skardu apricot seeds — traditional local snack with mild almond flavour.', img: '/images/ApricotKernels.png' },
+      { id: 13, name: 'Dry Fig (Anjeer)', icon: '🟣', category: 'nuts', price: 900, unit: '250g', badge: null, origin: 'Skardu', desc: 'Mountain-grown dried figs bursting with natural sweetness and dietary fibre.', img: '/images/fig.png' },
+      { id: 14, name: 'Dandelion flowers', icon: '🌼', category: 'herbal', price: 650, unit: '100g', badge: 'New', origin: 'Skardu', desc: 'Wild dandelion flower hand-picked from meadows above 3000m. Detoxifying.', img: '/images/Dflower.png' },
+      { id: 15, name: 'Dandelion leaves', icon: '🌼', category: 'herbal', price: 650, unit: '100g', badge: 'New', origin: 'Skardu', desc: 'Wild dandelion leaves hand-picked from meadows above 3000m. Detoxifying.', img: '/images/Dleaves.png' },
+      { id: 16, name: 'Dandelion Roots', icon: '🌼', category: 'herbal', price: 650, unit: '100g', badge: 'New', origin: 'Skardu', desc: 'Wild dandelion Root hand-picked from meadows above 3000m. Detoxifying.', img: '/images/Droot.png' },
+      { id: 17, name: 'Dried Seabuckthron Berry', icon: '🌱', category: 'herbal', price: 750, unit: '80g', badge: 'Traditional', origin: 'Skardu', desc: 'Traditional Dried Seabuckthron berry — used for centuries in over the world  folk medicine.', img: '/images/SBdried.png' },
+      { id: 18, name: 'Seabuckthron Powder', icon: '🫖', category: 'herbal', price: 1000, unit: '80g', badge: 'Popular', origin: 'GB Selection', desc: 'Our signature blend of 7 mountain herbs — a daily wellness ritual in a cup.', img: '/images/SBpowder.png' },
+    ];
+
+    let cart = {};
+    let currentCategory = 'all';
+    let activeSearch = '';
+
+    // ── NAVIGATION ──
+    function goToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── SEARCH ──
+    function handleNavSearch() {
+      const q = document.getElementById('navSearch').value.trim().toLowerCase();
+      const dd = document.getElementById('searchDropdown');
+      if (!q) { dd.classList.remove('open'); return; }
+      const matches = products.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.origin.toLowerCase().includes(q) ||
+        p.desc.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q)
+      );
+      if (matches.length === 0) {
+        dd.innerHTML = '<div class="search-no-results">No products found for "' + q + '"</div>';
+      } else {
+        dd.innerHTML = matches.slice(0, 6).map(p => `
+      <div class="search-result-item" onclick="selectSearchProduct(${p.id})">
+        <div class="sri-icon">
+          <img src="${p.img}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+          <span style="display:none">${p.icon}</span>
+        </div>
+        <div class="sri-info">
+          <div class="sri-name">${p.name}</div>
+          <div class="sri-cat">📍 ${p.origin}</div>
+        </div>
+        <div class="sri-price">Rs.${p.price.toLocaleString()}</div>
+      </div>
+    `).join('');
+      }
+      dd.classList.add('open');
+    }
+
+    function selectSearchProduct(id) {
+      const p = products.find(x => x.id === id);
+      closeNavSearch();
+      document.getElementById('navSearch').value = '';
+      // Filter to product's category and scroll
+      currentCategory = p.category;
+      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+      const catMap = { 'all': 0, 'dried-fruit': 1, 'nuts': 2, 'herbal': 3 };
+      document.querySelectorAll('.cat-card')[catMap[p.category]].classList.add('active');
+      activeSearch = p.name.toLowerCase();
+      renderProducts();
+      goToSection('products');
+      setTimeout(() => { activeSearch = ''; renderProducts(); }, 3000);
+      showToast(p.icon + ' ' + p.name + ' — Rs.' + p.price.toLocaleString() + '/' + p.unit);
+    }
+
+    function closeNavSearch() {
+      document.getElementById('searchDropdown').classList.remove('open');
+    }
+
+    // ── PRODUCTS ──
+    function renderProducts() {
+      const grid = document.getElementById('productsGrid');
+      const count = document.getElementById('resultsCount');
+      const filtered = products.filter(p => {
+        const catMatch = currentCategory === 'all' || p.category === currentCategory;
+        const searchMatch = !activeSearch || p.name.toLowerCase().includes(activeSearch);
+        return catMatch && searchMatch;
+      });
+      count.textContent = 'Showing ' + filtered.length + ' product' + (filtered.length !== 1 ? 's' : '');
+      if (filtered.length === 0) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-light);">No products found.</div>';
+        return;
+      }
+      grid.innerHTML = filtered.map(p => `
+    <div class="product-card">
+      <div class="product-img">
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+        <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span class="emoji-fallback" style="display:none">${p.icon}</span>
+      </div>
+      <div class="product-body">
+        <div class="product-origin">📍 ${p.origin}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${p.desc}</div>
+        <div class="product-footer">
+          <div class="product-price">Rs. ${p.price.toLocaleString()} <span>/ ${p.unit}</span></div>
+          <button class="add-btn" onclick="addToCart(${p.id})">+ Add</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+    }
+
+    function filterCategory(cat, el) {
+      currentCategory = cat;
+      activeSearch = '';
+      document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      renderProducts();
+      goToSection('products');
+    }
+
+    // ── CART ──
+    function addToCart(id) {
+      const p = products.find(x => x.id === id);
+      if (!cart[id]) cart[id] = { ...p, qty: 0 };
+      cart[id].qty++;
+      updateCartUI();
+      showToast(p.icon + ' ' + p.name + ' added to cart!');
+    }
+
+    function updateCartUI() {
+      const total = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartCount').textContent = total;
+      const itemsDiv = document.getElementById('cartItems');
+      const footerDiv = document.getElementById('cartFooter');
+      const items = Object.values(cart).filter(i => i.qty > 0);
+      if (items.length === 0) {
+        itemsDiv.innerHTML = '<div class="empty-cart"><div class="empty-cart-icon">🛒</div><p>Your cart is empty</p></div>';
+        footerDiv.style.display = 'none'; return;
+      }
+      itemsDiv.innerHTML = items.map(i => `
+    <div class="cart-item">
+      <div class="cart-item-icon">
+        <img src="${i.img}" alt="${i.name}" onerror="this.style.display='none';this.parentElement.innerHTML='${i.icon}'">
+      </div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${i.name}</div>
+        <div class="cart-item-price">Rs. ${(i.price * i.qty).toLocaleString()}</div>
+      </div>
+      <div class="qty-ctrl">
+        <button class="qty-btn" onclick="changeQty(${i.id},-1)">−</button>
+        <span class="qty-num">${i.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${i.id},1)">+</button>
+      </div>
+    </div>
+  `).join('');
+      const cartTotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+      document.getElementById('cartTotal').textContent = 'Rs. ' + cartTotal.toLocaleString();
+      footerDiv.style.display = 'block';
+    }
+
+    function changeQty(id, delta) {
+      if (!cart[id]) return;
+      cart[id].qty += delta;
+      if (cart[id].qty <= 0) delete cart[id];
+      updateCartUI();
+    }
+
+    function openCart() { document.getElementById('cartOverlay').classList.add('open'); }
+    function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
+    function closeCartOutside(e) { if (e.target.id === 'cartOverlay') closeCart(); }
+
+    function openCheckout() {
+      closeCart();
+      const items = Object.values(cart).filter(i => i.qty > 0);
+      const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0);
+      const shipping = subtotal >= 2000 ? 0 : 200;
+      const total = subtotal + shipping;
+      document.getElementById('orderSummary').innerHTML = `
+    <div style="font-weight:700;font-size:0.9rem;margin-bottom:0.5rem;color:var(--forest);">Order Summary</div>
+    ${items.map(i => `<div class="order-row"><span>${i.icon} ${i.name} ×${i.qty}</span><span>Rs. ${(i.price * i.qty).toLocaleString()}</span></div>`).join('')}
+    <div class="order-row"><span>Shipping</span><span>${shipping === 0 ? '<span style="color:green">FREE</span>' : 'Rs.' + shipping}</span></div>
+    <div class="order-row total"><span>Total</span><span>Rs. ${total.toLocaleString()}</span></div>
+  `;
+      document.getElementById('checkoutModal').classList.add('open');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.remove('open');
+      document.getElementById('checkoutForm').style.display = 'block';
+      document.getElementById('successMsg').classList.remove('show');
+    }
+
+    function selectPayment(method, el) {
+      document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.payment-panel').forEach(p => p.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('panel-' + method).classList.add('active');
+    }
+
+    function placeOrder() {
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const addr = document.getElementById('custAddr').value.trim();
+      if (!name || !phone || !addr) { showToast('⚠️ Please fill all required fields'); return; }
+      document.getElementById('orderPhone').textContent = phone;
+      document.getElementById('checkoutForm').style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+      cart = {}; updateCartUI();
+    }
+
+    function orderViaWhatsApp() {
+      const items = Object.values(cart).filter(i => i.qty > 0);
+      if (items.length === 0) { showToast('Your cart is empty!'); return; }
+      const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+      const msg = 'Hello FAKHMUL! I\'d like to order:\n\n' +
+        items.map(i => '• ' + i.name + ' ×' + i.qty + ' — Rs.' + (i.price * i.qty).toLocaleString()).join('\n') +
+        '\n\n*Total: Rs.' + total.toLocaleString() + '*\n\nPlease confirm availability and delivery. Thank you!';
+      window.open('https://wa.me/+923151416996?text=' + encodeURIComponent(msg), '_blank');
+      closeCart();
+    }
+
+    function subscribeNL() {
+      const email = document.getElementById('nlEmail').value.trim();
+      if (!email) { showToast('Please enter your email'); return; }
+      showToast('🎉 Subscribed! Welcome to FAKHMUL family.');
+      document.getElementById('nlEmail').value = '';
+    }
+
+    function sendContactMsg() {
+      const name = document.getElementById('cfName').value.trim();
+      const contact = document.getElementById('cfContact').value.trim();
+      const msg = document.getElementById('cfMsg').value.trim();
+      if (!name || !contact || !msg) { showToast('⚠️ Please fill all fields'); return; }
+      const waMsg = 'Hello FAKHMUL!\n\nName: ' + name + '\nContact: ' + contact + '\nMessage: ' + msg;
+      window.open('https://wa.me/+923151416996?text=' + encodeURIComponent(waMsg), '_blank');
+      showToast('✅ Message sent via WhatsApp!');
+      document.getElementById('cfName').value = '';
+      document.getElementById('cfContact').value = '';
+      document.getElementById('cfMsg').value = '';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // INIT
+    renderProducts();
+  </script>
+</body>
+
+</html>

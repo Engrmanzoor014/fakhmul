@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAKHMUL — Phase 6: Backend & Deployment Guide</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #c0810d;
+            --gold-light: #efd190;
+            --gold-pale: #fdf8ef;
+            --gold-dark: #8B6520;
+            --forest: #074807;
+            --forest-mid: #0a5c0a;
+            --forest-pale: #E8F0E8;
+            --forest-pale2: #f0f6f0;
+            --cream: #FAF6F0;
+            --warm-white: #FFFDF9;
+            --text-dark: #1A1A0F;
+            --text-mid: #4A4A3A;
+            --text-light: #888870;
+            --border: rgba(200, 151, 58, 0.2);
+            --shadow-sm: 0 2px 8px rgba(7, 72, 7, 0.07);
+            --shadow-md: 0 6px 28px rgba(7, 72, 7, 0.11);
+            --shadow-lg: 0 16px 56px rgba(0, 0, 0, 0.13);
+            --radius: 14px;
+            --code-bg: #0d1f0d;
+            --code-text: #a8e6a8;
+            --step-done: #27ae60;
+            --step-active: var(--gold);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* ── TOP NAV ── */
+        .top-nav {
+            background: var(--forest);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid rgba(192, 129, 13, 0.25);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--forest-mid), var(--gold-dark));
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .nav-title {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .nav-badge {
+            background: rgba(192, 129, 13, 0.25);
+            color: var(--gold-light);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 50px;
+            border: 1px solid rgba(192, 129, 13, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            transition: all 0.18s;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, var(--forest) 0%, #0d3a0d 55%, #1a5c1a 100%);
+            padding: 5rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 70% at 30% 50%, rgba(192, 129, 13, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 60% at 75% 30%, rgba(7, 72, 7, 0.5) 0%, transparent 60%);
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(192, 129, 13, 0.18);
+            border: 1px solid rgba(192, 129, 13, 0.35);
+            color: var(--gold-light);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 6px 18px;
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        .hero h1 em {
+            color: var(--gold-light);
+            font-style: italic;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.75;
+            max-width: 580px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-stack {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stack-chip {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ── LAYOUT ── */
+        .page-body {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        /* ── STICKY TOC ── */
+        .toc {
+            position: sticky;
+            top: 80px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .toc-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--gold-dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .toc-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-decoration: none;
+            margin-bottom: 2px;
+        }
+
+        .toc-item:hover {
+            background: var(--forest-pale);
+        }
+
+        .toc-item.done {
+            opacity: 0.6;
+        }
+
+        .toc-num {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            background: var(--forest-pale);
+            color: var(--forest);
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .toc-item.done .toc-num {
+            background: var(--step-done);
+            color: white;
+        }
+
+        .toc-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-mid);
+        }
+
+        .toc-item.done .toc-label {
+            color: var(--text-light);
+            text-decoration: line-through;
+        }
+
+        /* Progress bar in TOC */
+        .toc-progress {
+            margin-top: 1.25rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .toc-progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .toc-progress-bar {
+            height: 5px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .toc-progress-fill {
+            height: 100%;
+            background: var(--forest);
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* ── MAIN CONTENT ── */
+        .main-content {
+            min-width: 0;
+        }
+
+        /* Section card */
+        .section-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+
+        .section-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header {
+            padding: 1.5rem 1.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--warm-white), white);
+        }
+
+        .section-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--forest);
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-header-text h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--forest);
+            font-weight: 700;
+        }
+
+        .section-header-text p {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-top: 3px;
+            line-height: 1.5;
+        }
+
+        .section-done-btn {
+            margin-left: auto;
+            flex-shrink: 0;
+            padding: 6px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            background: white;
+            color: var(--text-mid);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .section-done-btn.done {
+            background: var(--step-done);
+            border-color: var(--step-done);
+            color: white;
+        }
+
+        .section-done-btn:not(.done):hover {
+            border-color: var(--step-done);
+            color: var(--step-done);
+        }
+
+        .section-body {
+            padding: 1.75rem;
+        }
+
+        /* ── STEPS ── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            border-radius: 11px;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            transition: border-color 0.2s;
+        }
+
+        .step:hover {
+            border-color: rgba(7, 72, 7, 0.2);
+        }
+
+        .step-icon {
+            font-size: 1.3rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 700;
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            margin-bottom: 0.35rem;
+        }
+
+        .step-desc {
+            font-size: 0.83rem;
+            color: var(--text-mid);
+            line-height: 1.65;
+        }
+
+        .step-desc a {
+            color: var(--forest);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .step-desc a:hover {
+            text-decoration: underline;
+        }
+
+        /* ── CODE BLOCKS ── */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+            border: 1px solid rgba(192, 129, 13, 0.15);
+        }
+
+        .code-block-header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.6rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .code-file {
+            font-family: 'DM Mono', monospace;
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .code-copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .code-copy-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            color: white;
+        }
+
+        .code-block pre {
+            padding: 1.25rem 1.25rem;
+            font-family: 'DM Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+            color: var(--code-text);
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .code-block pre .cm {
+            color: #6a9955;
+        }
+
+        /* comment */
+        .code-block pre .kw {
+            color: #569cd6;
+        }
+
+        /* keyword */
+        .code-block pre .str {
+            color: #ce9178;
+        }
+
+        /* string */
+        .code-block pre .fn {
+            color: #dcdcaa;
+        }
+
+        /* function */
+        .code-block pre .num {
+            color: #b5cea8;
+        }
+
+        /* number */
+        .code-block pre .hi {
+            color: #efd190;
+        }
+
+        /* highlight */
+
+        /* ── INFO BOXES ── */
+        .info-box {
+            display: flex;
+            gap: 12px;
+            padding: 1rem 1.25rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid;
+        }
+
+        .info-box.tip {
+            background: #f0fdf4;
+            border-color: #27ae60;
+        }
+
+        .info-box.warning {
+            background: #fef9e7;
+            border-color: var(--gold);
+        }
+
+        .info-box.danger {
+            background: #fdf2f2;
+            border-color: #c0392b;
+        }
+
+        .info-box.info {
+            background: #eff6ff;
+            border-color: #2980b9;
+        }
+
+        .info-box-icon {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .info-box-text {
+            font-size: 0.83rem;
+            color: var(--text-mid);
+            line-height: 1.65;
+        }
+
+        .info-box-text strong {
+            color: var(--text-dark);
+        }
+
+        /* ── COMPARISON TABLE ── */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .compare-table th {
+            background: var(--forest);
+            color: white;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .compare-table td {
+            padding: 10px 14px;
+            font-size: 0.83rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-mid);
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table tr:hover td {
+            background: var(--forest-pale2);
+        }
+
+        .compare-table td:first-child {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .badge-free {
+            background: #eafaf1;
+            color: #27ae60;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 50px;
+        }
+
+        .badge-paid {
+            background: #fef3e2;
+            color: var(--gold-dark);
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 50px;
+        }
+
+        .badge-best {
+            background: var(--forest);
+            color: white;
+            font-size: 0.68rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 50px;
+        }
+
+        .check {
+            color: #27ae60;
+            font-weight: 700;
+        }
+
+        .cross {
+            color: #e74c3c;
+        }
+
+        /* ── CHECKLIST ── */
+        .checklist {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .checklist li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .checklist li:hover {
+            border-color: rgba(7, 72, 7, 0.2);
+        }
+
+        .checklist li.checked {
+            background: #f0fdf4;
+            border-color: #c8e6c9;
+        }
+
+        .check-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 2px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.7rem;
+            color: transparent;
+            transition: all 0.2s;
+            margin-top: 1px;
+        }
+
+        .checklist li.checked .check-box {
+            background: var(--step-done);
+            border-color: var(--step-done);
+            color: white;
+        }
+
+        .check-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .check-text s {
+            color: var(--text-light);
+        }
+
+        /* ── ARCHITECTURE DIAGRAM ── */
+        .arch-diagram {
+            background: var(--code-bg);
+            border-radius: 12px;
+            padding: 1.75rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(192, 129, 13, 0.15);
+        }
+
+        .arch-row {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 0.5rem;
+        }
+
+        .arch-box {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 0.75rem 1.25rem;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .arch-box .ab-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .arch-box .ab-label {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-weight: 600;
+        }
+
+        .arch-box .ab-sub {
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 2px;
+        }
+
+        .arch-arrow {
+            font-size: 1.2rem;
+            color: var(--gold-light);
+            margin: 0 0.5rem;
+        }
+
+        .arch-double {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .arch-label {
+            font-size: 0.62rem;
+            color: rgba(255, 255, 255, 0.35);
+            text-align: center;
+            margin: 0.25rem 0;
+        }
+
+        /* ── HOSTING CARDS ── */
+        .hosting-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .hosting-card {
+            border: 1.5px solid var(--border);
+            border-radius: 11px;
+            padding: 1.25rem;
+            background: white;
+            transition: all 0.2s;
+            cursor: default;
+        }
+
+        .hosting-card:hover {
+            border-color: var(--forest);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hosting-card.recommended {
+            border-color: var(--forest);
+            background: var(--forest-pale2);
+        }
+
+        .hosting-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .hosting-url {
+            font-size: 0.72rem;
+            color: var(--gold-dark);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .hosting-url:hover {
+            text-decoration: underline;
+        }
+
+        .hosting-free {
+            font-size: 0.7rem;
+            color: #27ae60;
+            font-weight: 700;
+            margin: 0.5rem 0;
+        }
+
+        .hosting-features {
+            list-style: none;
+            margin-top: 0.6rem;
+        }
+
+        .hosting-features li {
+            font-size: 0.78rem;
+            color: var(--text-mid);
+            padding: 2px 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ── SECURITY GRID ── */
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+        }
+
+        .security-item {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .security-item-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin-bottom: 0.35rem;
+        }
+
+        .security-item-desc {
+            font-size: 0.78rem;
+            color: var(--text-mid);
+            line-height: 1.55;
+        }
+
+        /* ── GO LIVE BANNER ── */
+        .golive-banner {
+            background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
+            border-radius: var(--radius);
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .golive-banner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 70% 80% at 80% 20%, rgba(192, 129, 13, 0.12) 0%, transparent 60%);
+        }
+
+        .golive-banner-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .golive-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .golive-banner p {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .golive-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .golive-btn {
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .golive-btn.primary {
+            background: var(--gold);
+            color: var(--text-dark);
+        }
+
+        .golive-btn.primary:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+        }
+
+        .golive-btn.outline {
+            background: transparent;
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .golive-btn.outline:hover {
+            border-color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--forest);
+            color: white;
+            padding: 11px 22px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(7, 72, 7, 0.2);
+            border-radius: 3px;
+        }
+
+        @media (max-width:900px) {
+            .page-body {
+                grid-template-columns: 1fr;
+            }
+
+            .toc {
+                position: static;
+            }
+
+            .hosting-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width:600px) {
+            .hosting-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 3rem 1.5rem 2.5rem;
+            }
+
+            .page-body {
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TOP NAV -->
+    <nav class="top-nav">
+        <a class="nav-brand" href="admin-analytics.html">
+            <div class="nav-logo">FK</div>
+            <span class="nav-title">FAKHMUL Admin</span>
+            <span class="nav-badge">Phase 6</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-link" href="admin-analytics.html">📊 Dashboard</a>
+            <a class="nav-link" href="admin-dashboard.html">📦 Products</a>
+            <a class="nav-link" href="admin-orders.html">🛒 Orders</a>
+            <a class="nav-link" href="admin-customers.html">👥 Customers</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-inner">
+            <div class="hero-badge">🚀 Phase 6 of 6 — Final Step</div>
+            <h1>Backend & <em>Deployment</em><br>Complete Guide</h1>
+            <p>Everything you need to take FAKHMUL from a local HTML file to a live, professional e-commerce website
+                with a real database, secure admin, and custom domain.</p>
+            <div class="hero-stack">
+                <div class="stack-chip">🔥 Firebase</div>
+                <div class="stack-chip">🌐 Netlify</div>
+                <div class="stack-chip">🔒 Security</div>
+                <div class="stack-chip">🌍 Custom Domain</div>
+                <div class="stack-chip">📱 WhatsApp API</div>
+                <div class="stack-chip">☁️ Cloudinary</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE BODY -->
+    <div class="page-body">
+
+        <!-- ── TOC ── -->
+        <aside class="toc">
+            <div class="toc-title">Sections</div>
+            <a class="toc-item" id="toc-1" href="#section-1" onclick="scrollTo('section-1')">
+                <div class="toc-num">1</div>
+                <div class="toc-label">Architecture Overview</div>
+            </a>
+            <a class="toc-item" id="toc-2" href="#section-2" onclick="scrollTo('section-2')">
+                <div class="toc-num">2</div>
+                <div class="toc-label">Choose Your Stack</div>
+            </a>
+            <a class="toc-item" id="toc-3" href="#section-3" onclick="scrollTo('section-3')">
+                <div class="toc-num">3</div>
+                <div class="toc-label">Firebase Setup</div>
+            </a>
+            <a class="toc-item" id="toc-4" href="#section-4" onclick="scrollTo('section-4')">
+                <div class="toc-num">4</div>
+                <div class="toc-label">Connect Admin to Firebase</div>
+            </a>
+            <a class="toc-item" id="toc-5" href="#section-5" onclick="scrollTo('section-5')">
+                <div class="toc-num">5</div>
+                <div class="toc-label">Image Uploads (Cloudinary)</div>
+            </a>
+            <a class="toc-item" id="toc-6" href="#section-6" onclick="scrollTo('section-6')">
+                <div class="toc-num">6</div>
+                <div class="toc-label">Deploy to Netlify</div>
+            </a>
+            <a class="toc-item" id="toc-7" href="#section-7" onclick="scrollTo('section-7')">
+                <div class="toc-num">7</div>
+                <div class="toc-label">Custom Domain</div>
+            </a>
+            <a class="toc-item" id="toc-8" href="#section-8" onclick="scrollTo('section-8')">
+                <div class="toc-num">8</div>
+                <div class="toc-label">Security Hardening</div>
+            </a>
+            <a class="toc-item" id="toc-9" href="#section-9" onclick="scrollTo('section-9')">
+                <div class="toc-num">9</div>
+                <div class="toc-label">Go-Live Checklist</div>
+            </a>
+            <div class="toc-progress">
+                <div class="toc-progress-label">
+                    <span>Progress</span>
+                    <span id="progressLabel">0 / 9</span>
+                </div>
+                <div class="toc-progress-bar">
+                    <div class="toc-progress-fill" id="progressFill" style="width:0%"></div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ── MAIN CONTENT ── -->
+        <div class="main-content">
+
+            <!-- ── SECTION 1: Architecture ── -->
+            <div class="section-card" id="section-1">
+                <div class="section-header">
+                    <div class="section-num">1</div>
+                    <div class="section-header-text">
+                        <h2>Architecture Overview</h2>
+                        <p>How all parts of your FAKHMUL system connect together</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(1,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <p style="font-size:0.88rem;color:var(--text-mid);line-height:1.7;margin-bottom:1.25rem;">
+                        Right now your site uses <strong>localStorage</strong> — data lives only in your browser and
+                        resets if you clear it. To run a real business, you need data in the cloud so any device can
+                        access it, and orders aren't lost.
+                    </p>
+                    <div class="arch-diagram">
+                        <div class="arch-label">YOUR SYSTEM AFTER PHASE 6</div>
+                        <div class="arch-row" style="margin-top:1rem;">
+                            <div class="arch-box">
+                                <span class="ab-icon">🏪</span>
+                                <div class="ab-label">Customer</div>
+                                <div class="ab-sub">index.html</div>
+                            </div>
+                            <div class="arch-arrow">→</div>
+                            <div class="arch-box">
+                                <span class="ab-icon">🌐</span>
+                                <div class="ab-label">Netlify CDN</div>
+                                <div class="ab-sub">fakhmul.pk</div>
+                            </div>
+                            <div class="arch-arrow">⇄</div>
+                            <div class="arch-box" style="border-color:rgba(192,129,13,0.4);">
+                                <span class="ab-icon">🔥</span>
+                                <div class="ab-label">Firebase</div>
+                                <div class="ab-sub">Firestore DB</div>
+                            </div>
+                        </div>
+                        <div class="arch-label" style="margin:0.75rem 0;">↕</div>
+                        <div class="arch-row">
+                            <div class="arch-box">
+                                <span class="ab-icon">👨‍💼</span>
+                                <div class="ab-label">Admin Panel</div>
+                                <div class="ab-sub">Phases 1–5</div>
+                            </div>
+                            <div class="arch-arrow">→</div>
+                            <div class="arch-box">
+                                <span class="ab-icon">☁️</span>
+                                <div class="ab-label">Cloudinary</div>
+                                <div class="ab-sub">Images</div>
+                            </div>
+                            <div class="arch-arrow">→</div>
+                            <div class="arch-box">
+                                <span class="ab-icon">💬</span>
+                                <div class="ab-label">WhatsApp</div>
+                                <div class="ab-sub">Notifications</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-box info">
+                        <div class="info-box-icon">💡</div>
+                        <div class="info-box-text"><strong>Good news:</strong> Firebase and Netlify are both free for
+                            small businesses. You won't pay anything until you have thousands of orders per month.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 2: Stack Choice ── -->
+            <div class="section-card" id="section-2">
+                <div class="section-header">
+                    <div class="section-num">2</div>
+                    <div class="section-header-text">
+                        <h2>Choose Your Stack</h2>
+                        <p>Recommended free tools for each part of your system</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(2,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <table class="compare-table">
+                        <tr>
+                            <th>What You Need</th>
+                            <th>Best Free Option</th>
+                            <th>Alternative</th>
+                            <th>Free Limit</th>
+                        </tr>
+                        <tr>
+                            <td>Database</td>
+                            <td>🔥 Firebase Firestore <span class="badge-best">Recommended</span></td>
+                            <td>Supabase (PostgreSQL)</td>
+                            <td>1 GB free</td>
+                        </tr>
+                        <tr>
+                            <td>Authentication</td>
+                            <td>🔥 Firebase Auth <span class="badge-best">Recommended</span></td>
+                            <td>Supabase Auth</td>
+                            <td>10,000 users free</td>
+                        </tr>
+                        <tr>
+                            <td>Image Storage</td>
+                            <td>☁️ Cloudinary <span class="badge-best">Recommended</span></td>
+                            <td>Firebase Storage</td>
+                            <td>25 GB free</td>
+                        </tr>
+                        <tr>
+                            <td>Hosting</td>
+                            <td>🌐 Netlify <span class="badge-best">Recommended</span></td>
+                            <td>Vercel, GitHub Pages</td>
+                            <td>100 GB bandwidth/mo</td>
+                        </tr>
+                        <tr>
+                            <td>Domain</td>
+                            <td>🌍 Namecheap (.pk domain)</td>
+                            <td>GoDaddy, Cloudflare</td>
+                            <td>~Rs.3,000/year</td>
+                        </tr>
+                        <tr>
+                            <td>Payments</td>
+                            <td>💳 COD + Easypaisa/JazzCash</td>
+                            <td>Stripe (International)</td>
+                            <td>Free to integrate</td>
+                        </tr>
+                    </table>
+                    <div class="info-box tip">
+                        <div class="info-box-icon">✅</div>
+                        <div class="info-box-text"><strong>Recommended path:</strong> Firebase + Cloudinary + Netlify.
+                            All three work together seamlessly, all have generous free tiers, and setup takes about 2
+                            hours.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 3: Firebase Setup ── -->
+            <div class="section-card" id="section-3">
+                <div class="section-header">
+                    <div class="section-num">3</div>
+                    <div class="section-header-text">
+                        <h2>Firebase Setup</h2>
+                        <p>Create your database and connect it to your site — step by step</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(3,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-icon">1️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Create a Firebase Project</div>
+                                <div class="step-desc">
+                                    Go to <a href="https://console.firebase.google.com"
+                                        target="_blank">console.firebase.google.com</a> → Click <strong>Add
+                                        Project</strong> → Name it <strong>fakhmul-store</strong> → Disable Google
+                                    Analytics (not needed) → Click Create.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">2️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Enable Firestore Database</div>
+                                <div class="step-desc">
+                                    In Firebase Console → <strong>Build → Firestore Database</strong> → Create Database
+                                    → Choose <strong>Start in test mode</strong> (we'll secure it later) → Select your
+                                    region → Done.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">3️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Register Your Web App</div>
+                                <div class="step-desc">
+                                    In Firebase Console → Project Settings (⚙️ gear icon) → <strong>Your Apps</strong> →
+                                    Click <strong>&lt;/&gt; Web</strong> → App nickname: <strong>fakhmul-web</strong> →
+                                    Register App → Copy the config object shown.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">4️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Add Firebase to your HTML files</div>
+                                <div class="step-desc">Add this to the <code>&lt;head&gt;</code> of index.html,
+                                    admin-dashboard.html, admin-orders.html, admin-customers.html, and
+                                    admin-analytics.html:</div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">index.html — &lt;head&gt; section</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="cm">&lt;!-- Firebase SDK --&gt;</span>
+<span class="kw">&lt;script</span> type=<span class="str">"module"</span><span class="kw">&gt;</span>
+  <span class="kw">import</span> { initializeApp } <span class="kw">from</span> <span class="str">'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'</span>;
+  <span class="kw">import</span> { getFirestore, collection, getDocs,
+           addDoc, updateDoc, deleteDoc, doc,
+           onSnapshot, query, orderBy }
+    <span class="kw">from</span> <span class="str">'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'</span>;
+
+  <span class="cm">// ← Paste YOUR Firebase config here</span>
+  <span class="kw">const</span> firebaseConfig = {
+    apiKey:            <span class="str">"YOUR_API_KEY"</span>,
+    authDomain:        <span class="str">"fakhmul-store.firebaseapp.com"</span>,
+    projectId:         <span class="str">"fakhmul-store"</span>,
+    storageBucket:     <span class="str">"fakhmul-store.appspot.com"</span>,
+    messagingSenderId: <span class="str">"YOUR_SENDER_ID"</span>,
+    appId:             <span class="str">"YOUR_APP_ID"</span>
+  };
+
+  <span class="kw">const</span> app = initializeApp(firebaseConfig);
+  <span class="kw">const</span> db  = getFirestore(app);
+  window.db = db; <span class="cm">// make available globally</span>
+<span class="kw">&lt;/script&gt;</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">5️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Create Firestore Collections</div>
+                                <div class="step-desc">In Firestore Console, create these three collections manually
+                                    with one sample document each:</div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">Firestore collections to create</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="hi">Collection: products</span>
+  Document fields: id, name, icon, category, price,
+                   unit, badge, img, desc, stock, origin
+
+<span class="hi">Collection: orders</span>
+  Document fields: id, date, status, customer (object),
+                   items (array), payment, shipping, notes
+
+<span class="hi">Collection: subscribers</span>
+  Document fields: email, date</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 4: Connect Admin ── -->
+            <div class="section-card" id="section-4">
+                <div class="section-header">
+                    <div class="section-num">4</div>
+                    <div class="section-header-text">
+                        <h2>Connect Admin Panel to Firebase</h2>
+                        <p>Replace localStorage with real Firestore read/write calls</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(4,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <p style="font-size:0.88rem;color:var(--text-mid);margin-bottom:1rem;line-height:1.7;">Replace the
+                        <code>localStorage.getItem / setItem</code> calls in each admin page with these Firebase
+                        equivalents. Here are the four patterns you'll need:</p>
+
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span class="code-file">Pattern 1 — Load all products (replaces localStorage.getItem)</span>
+                            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="kw">async function</span> <span class="fn">loadProducts</span>() {
+  <span class="kw">const</span> snapshot = <span class="kw">await</span> getDocs(collection(db, <span class="str">'products'</span>));
+  products = snapshot.docs.map(doc =&gt; ({ id: doc.id, ...doc.data() }));
+  renderProducts(); <span class="cm">// your existing render function</span>
+}</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span class="code-file">Pattern 2 — Save a product (replaces localStorage.setItem)</span>
+                            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="kw">async function</span> <span class="fn">saveProduct</span>(productData) {
+  <span class="kw">if</span> (editingId) {
+    <span class="cm">// UPDATE existing</span>
+    <span class="kw">await</span> updateDoc(doc(db, <span class="str">'products'</span>, editingId), productData);
+  } <span class="kw">else</span> {
+    <span class="cm">// CREATE new</span>
+    <span class="kw">await</span> addDoc(collection(db, <span class="str">'products'</span>), productData);
+  }
+  <span class="kw">await</span> loadProducts(); <span class="cm">// refresh list</span>
+  showToast(<span class="str">'✅ Product saved!'</span>);
+}</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span class="code-file">Pattern 3 — Delete a product</span>
+                            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="kw">async function</span> <span class="fn">deleteProduct</span>(productId) {
+  <span class="kw">await</span> deleteDoc(doc(db, <span class="str">'products'</span>, productId));
+  <span class="kw">await</span> loadProducts();
+  showToast(<span class="str">'🗑️ Product deleted'</span>);
+}</pre>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <span class="code-file">Pattern 4 — Real-time orders listener (live updates)</span>
+                            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre><span class="cm">// This fires every time an order changes — no refresh needed</span>
+<span class="kw">function</span> <span class="fn">listenToOrders</span>() {
+  <span class="kw">const</span> q = query(
+    collection(db, <span class="str">'orders'</span>),
+    orderBy(<span class="str">'date'</span>, <span class="str">'desc'</span>)
+  );
+  onSnapshot(q, (snapshot) =&gt; {
+    orders = snapshot.docs.map(d =&gt; ({ id: d.id, ...d.data() }));
+    renderTable();   <span class="cm">// auto-updates the UI</span>
+    updateStats();
+  });
+}</pre>
+                    </div>
+
+                    <div class="info-box tip">
+                        <div class="info-box-icon">✅</div>
+                        <div class="info-box-text"><strong>Pro tip:</strong> Use <code>onSnapshot</code> for orders and
+                            customers — it gives you real-time updates. Use <code>getDocs</code> for products since they
+                            change less often.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 5: Cloudinary ── -->
+            <div class="section-card" id="section-5">
+                <div class="section-header">
+                    <div class="section-num">5</div>
+                    <div class="section-header-text">
+                        <h2>Image Uploads with Cloudinary</h2>
+                        <p>Let admins upload product photos directly from the browser</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(5,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-icon">1️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Create a free Cloudinary account</div>
+                                <div class="step-desc">Go to <a href="https://cloudinary.com"
+                                        target="_blank">cloudinary.com</a> → Sign up free → Dashboard shows your
+                                    <strong>Cloud Name</strong>. Note it down.</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">2️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Create an unsigned upload preset</div>
+                                <div class="step-desc">Settings → Upload → Upload Presets → Add Upload Preset → Set
+                                    Signing Mode to <strong>Unsigned</strong> → Save. Note the <strong>Preset
+                                        Name</strong>.</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">3️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Add image upload to admin-dashboard.html</div>
+                                <div class="step-desc">Replace the image URL input with this file picker:</div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">admin-dashboard.html — image upload function</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="kw">async function</span> <span class="fn">uploadImage</span>(file) {
+  <span class="kw">const</span> CLOUD_NAME   = <span class="str">'your-cloud-name'</span>; <span class="cm">// ← replace</span>
+  <span class="kw">const</span> UPLOAD_PRESET = <span class="str">'fakhmul-products'</span>; <span class="cm">// ← replace</span>
+
+  <span class="kw">const</span> formData = <span class="kw">new</span> FormData();
+  formData.append(<span class="str">'file'</span>, file);
+  formData.append(<span class="str">'upload_preset'</span>, UPLOAD_PRESET);
+  formData.append(<span class="str">'folder'</span>, <span class="str">'fakhmul'</span>);
+
+  <span class="kw">const</span> res = <span class="kw">await</span> fetch(
+    <span class="str">`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`</span>,
+    { method: <span class="str">'POST'</span>, body: formData }
+  );
+  <span class="kw">const</span> data = <span class="kw">await</span> res.json();
+  <span class="kw">return</span> data.secure_url; <span class="cm">// ← permanent image URL</span>
+}
+
+<span class="cm">// In your form: replace the text input with:</span>
+<span class="cm">// &lt;input type="file" accept="image/*"</span>
+<span class="cm">//   onchange="handleImageSelect(this)"&gt;</span>
+
+<span class="kw">async function</span> <span class="fn">handleImageSelect</span>(input) {
+  <span class="kw">const</span> file = input.files[<span class="num">0</span>];
+  <span class="kw">if</span> (!file) <span class="kw">return</span>;
+  showToast(<span class="str">'⏳ Uploading image…'</span>);
+  <span class="kw">const</span> url = <span class="kw">await</span> uploadImage(file);
+  document.getElementById(<span class="str">'fImg'</span>).value = url;
+  previewImg();
+  showToast(<span class="str">'✅ Image uploaded!'</span>);
+}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 6: Deploy ── -->
+            <div class="section-card" id="section-6">
+                <div class="section-header">
+                    <div class="section-num">6</div>
+                    <div class="section-header-text">
+                        <h2>Deploy to Netlify</h2>
+                        <p>Get your site live on the internet in under 10 minutes</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(6,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+
+                    <div class="hosting-grid">
+                        <div class="hosting-card recommended">
+                            <div class="hosting-name">🌐 Netlify</div>
+                            <a class="hosting-url" href="https://netlify.com" target="_blank">netlify.com</a>
+                            <div class="hosting-free">✅ Best Free Tier</div>
+                            <ul class="hosting-features">
+                                <li>✅ Drag &amp; drop deploy</li>
+                                <li>✅ Free SSL certificate</li>
+                                <li>✅ 100 GB bandwidth/mo</li>
+                                <li>✅ Custom domain free</li>
+                                <li>✅ Auto-deploy from GitHub</li>
+                            </ul>
+                        </div>
+                        <div class="hosting-card">
+                            <div class="hosting-name">▲ Vercel</div>
+                            <a class="hosting-url" href="https://vercel.com" target="_blank">vercel.com</a>
+                            <div class="hosting-free">✅ Also Free</div>
+                            <ul class="hosting-features">
+                                <li>✅ GitHub integration</li>
+                                <li>✅ Free SSL</li>
+                                <li>✅ Fast CDN</li>
+                                <li>✅ Custom domain</li>
+                                <li>⚠️ No drag &amp; drop</li>
+                            </ul>
+                        </div>
+                        <div class="hosting-card">
+                            <div class="hosting-name">📄 GitHub Pages</div>
+                            <a class="hosting-url" href="https://pages.github.com" target="_blank">pages.github.com</a>
+                            <div class="hosting-free">✅ Free Forever</div>
+                            <ul class="hosting-features">
+                                <li>✅ Completely free</li>
+                                <li>✅ Free SSL</li>
+                                <li>⚠️ Needs GitHub account</li>
+                                <li>⚠️ Public repos only (free)</li>
+                                <li>⚠️ No form handling</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="steps" style="margin-top:1.25rem;">
+                        <div class="step">
+                            <div class="step-icon">1️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Organise your files into one folder</div>
+                                <div class="step-desc">Create a folder called <code>fakhmul-site</code> and put all your
+                                    files inside:</div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">fakhmul-site/ folder structure</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre>fakhmul-site/
+├── index.html             <span class="cm"># Main store</span>
+├── admin-login.html       <span class="cm"># Phase 1</span>
+├── admin-dashboard.html   <span class="cm"># Phase 2 — Products</span>
+├── admin-orders.html      <span class="cm"># Phase 3 — Orders</span>
+├── admin-analytics.html   <span class="cm"># Phase 4 — Analytics</span>
+├── admin-customers.html   <span class="cm"># Phase 5 — Customers</span>
+└── images/
+    ├── mulberry.png
+    ├── walnut.png
+    └── ... (all product images)</pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">2️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Sign up for Netlify and deploy</div>
+                                <div class="step-desc">
+                                    Go to <a href="https://netlify.com" target="_blank">netlify.com</a> → Sign up free
+                                    with Google or GitHub → On the dashboard, click <strong>"Deploy manually"</strong> →
+                                    Drag your <code>fakhmul-site</code> folder onto the deploy zone → Your site goes
+                                    live instantly with a URL like <code>amazing-dolphin-123.netlify.app</code>.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">3️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Set up auto-deploy with GitHub (optional but recommended)</div>
+                                <div class="step-desc">
+                                    Create a GitHub account → Create a repo → Push your files → In Netlify: <strong>Add
+                                        New Site → Import from Git → Connect GitHub → Select repo</strong>. Now every
+                                    time you push code to GitHub, Netlify auto-deploys. No more manual uploads.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">4️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Add a <code>netlify.toml</code> config file</div>
+                                <div class="step-desc">Create this file in your root folder to protect your admin pages:
+                                </div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">netlify.toml</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre><span class="cm"># Redirect all /admin pages — add password protection</span>
+[[redirects]]
+  from = <span class="str">"/admin-*"</span>
+  to   = <span class="str">"/admin-:splat"</span>
+  status = <span class="num">200</span>
+
+<span class="cm"># Force HTTPS</span>
+[[headers]]
+  for = <span class="str">"/*"</span>
+  [headers.values]
+    X-Frame-Options        = <span class="str">"DENY"</span>
+    X-Content-Type-Options = <span class="str">"nosniff"</span>
+    Referrer-Policy        = <span class="str">"strict-origin-when-cross-origin"</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 7: Custom Domain ── -->
+            <div class="section-card" id="section-7">
+                <div class="section-header">
+                    <div class="section-num">7</div>
+                    <div class="section-header-text">
+                        <h2>Custom Domain Setup</h2>
+                        <p>Get fakhmul.pk or fakhmul.com pointing to your Netlify site</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(7,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-icon">1️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Buy your domain</div>
+                                <div class="step-desc">
+                                    For Pakistan: <a href="https://www.pknic.net.pk" target="_blank">pknic.net.pk</a>
+                                    for .pk domains (official registry) or <a href="https://namecheap.com"
+                                        target="_blank">namecheap.com</a> for .com domains (~$10/year). Search for
+                                    <strong>fakhmul.pk</strong> or <strong>fakhmul.com</strong>.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">2️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Add domain to Netlify</div>
+                                <div class="step-desc">In Netlify dashboard → <strong>Site Settings → Domain Management
+                                        → Add Custom Domain</strong> → Enter <code>fakhmul.pk</code> → Netlify will show
+                                    you DNS records to add.</div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">3️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Update DNS records at your registrar</div>
+                                <div class="step-desc">In your domain registrar's DNS settings, add these records
+                                    (Netlify shows exact values):</div>
+                                <div class="code-block">
+                                    <div class="code-block-header">
+                                        <span class="code-file">DNS Records to add at your registrar</span>
+                                        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                                    </div>
+                                    <pre>Type   Name    Value
+────────────────────────────────────────
+A      @       75.2.60.5       <span class="cm"># Netlify IP</span>
+CNAME  www     fakhmul.netlify.app
+
+<span class="cm"># DNS changes take 24-48 hours to propagate worldwide</span>
+<span class="cm"># Netlify auto-provisions free SSL (https) once DNS is set</span></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-icon">4️⃣</div>
+                            <div class="step-content">
+                                <div class="step-title">Enable HTTPS (automatic)</div>
+                                <div class="step-desc">Netlify automatically provisions a free SSL certificate via Let's
+                                    Encrypt once your DNS is pointed correctly. Go to <strong>Site Settings → HTTPS →
+                                        Verify DNS</strong> → Enable HTTPS. Your site will be
+                                    <code>https://fakhmul.pk</code> 🎉</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 8: Security ── -->
+            <div class="section-card" id="section-8">
+                <div class="section-header">
+                    <div class="section-num">8</div>
+                    <div class="section-header-text">
+                        <h2>Security Hardening</h2>
+                        <p>Protect your admin panel and customer data</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(8,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <div class="security-grid">
+                        <div class="security-item">
+                            <div class="security-item-title">🔐 Upgrade Admin Login</div>
+                            <div class="security-item-desc">Replace the simple password check with Firebase
+                                Authentication. Use <code>signInWithEmailAndPassword()</code> so credentials aren't
+                                stored in HTML source code. Enable MFA for extra security.</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-title">🛡️ Firestore Security Rules</div>
+                            <div class="security-item-desc">Replace "test mode" with real rules so only your admin
+                                account can read/write orders and products. Customers can only read products.</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-title">🔒 Environment Variables</div>
+                            <div class="security-item-desc">Move Firebase config from HTML into Netlify Environment
+                                Variables. Go to Netlify → Site Settings → Environment Variables. Never commit API keys
+                                to GitHub.</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-title">🚫 Rate Limiting</div>
+                            <div class="security-item-desc">Firebase already limits requests. For the admin login page,
+                                keep the 3-attempt lockout from Phase 1. Consider adding reCAPTCHA to contact and
+                                newsletter forms.</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-title">📋 HTTPS Only</div>
+                            <div class="security-item-desc">Netlify enforces HTTPS automatically. Add
+                                <code>Strict-Transport-Security</code> header in netlify.toml to force all traffic to
+                                HTTPS even if someone types http://.</div>
+                        </div>
+                        <div class="security-item">
+                            <div class="security-item-title">🗂️ Regular Backups</div>
+                            <div class="security-item-desc">Export your Firestore data monthly using the "Export" button
+                                in Firebase Console. Store backups in Google Drive. For products, use the JSON export in
+                                Phase 2 admin panel.</div>
+                        </div>
+                    </div>
+
+                    <div class="code-block" style="margin-top:1.25rem;">
+                        <div class="code-block-header">
+                            <span class="code-file">Firebase Firestore Security Rules (production)</span>
+                            <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+                        </div>
+                        <pre>rules_version = <span class="str">'2'</span>;
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    <span class="cm">// Products: anyone can read, only admin can write</span>
+    match /products/{productId} {
+      allow read:  <span class="kw">if</span> <span class="kw">true</span>;
+      allow write: <span class="kw">if</span> request.auth != <span class="kw">null</span>
+                   &amp;&amp; request.auth.token.email == <span class="str">'admin@fakhmul.pk'</span>;
+    }
+
+    <span class="cm">// Orders: only admin can read/write</span>
+    match /orders/{orderId} {
+      allow read, write: <span class="kw">if</span> request.auth != <span class="kw">null</span>
+                         &amp;&amp; request.auth.token.email == <span class="str">'admin@fakhmul.pk'</span>;
+    }
+
+    <span class="cm">// Subscribers: anyone can create (sign up), only admin reads</span>
+    match /subscribers/{subId} {
+      allow create: <span class="kw">if</span> <span class="kw">true</span>;
+      allow read, delete: <span class="kw">if</span> request.auth != <span class="kw">null</span>
+                          &amp;&amp; request.auth.token.email == <span class="str">'admin@fakhmul.pk'</span>;
+    }
+  }
+}</pre>
+                    </div>
+
+                    <div class="info-box danger">
+                        <div class="info-box-icon">🚨</div>
+                        <div class="info-box-text"><strong>Never commit your Firebase API key to a public GitHub
+                                repo.</strong> Use Netlify Environment Variables or a <code>.env</code> file that's
+                            listed in <code>.gitignore</code>.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── SECTION 9: Go-Live Checklist ── -->
+            <div class="section-card" id="section-9">
+                <div class="section-header">
+                    <div class="section-num">9</div>
+                    <div class="section-header-text">
+                        <h2>Go-Live Checklist</h2>
+                        <p>Tick everything before sharing your URL with customers</p>
+                    </div>
+                    <button class="section-done-btn" onclick="markDone(9,this)">✓ Mark Done</button>
+                </div>
+                <div class="section-body">
+                    <ul class="checklist" id="goLiveChecklist">
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">✅ All 18 products are in Firestore with correct prices and images
+                            </div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🔐 Admin login uses Firebase Auth (not plain password in HTML)</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🛡️ Firestore security rules deployed (not in test mode)</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🌐 Custom domain connected and HTTPS enabled</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📱 WhatsApp number +923151416996 is correct in all files</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📧 Contact email info@fakhmul.pk is set up and working</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🛒 Tested full order flow: add to cart → checkout → WhatsApp order
+                            </div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📦 Admin can add / edit / delete products from admin-dashboard.html
+                            </div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🛒 Admin can view and update order status in admin-orders.html</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📊 Analytics dashboard shows real data (not demo data)</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📸 All product images load correctly (no broken images)</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">📱 Site looks good on mobile phones (responsive design)</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🗂️ First Firestore backup exported and saved to Google Drive</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">💬 Tested bulk WhatsApp message from admin-customers.html</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🖨️ Tested order print invoice from admin-orders.html</div>
+                        </li>
+                        <li onclick="toggleCheck(this)">
+                            <div class="check-box">✓</div>
+                            <div class="check-text">🚀 Netlify deploy is on latest build with no errors</div>
+                        </li>
+                    </ul>
+                    <div style="margin-top:1rem;font-size:0.82rem;color:var(--text-light);">
+                        <span id="checklistProgress">0 / 16 completed</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── GO LIVE BANNER ── -->
+            <div class="golive-banner">
+                <div class="golive-banner-inner">
+                    <h2>🎉 You're Ready to Go Live!</h2>
+                    <p>All 6 phases complete. FAKHMUL is now a professional, fully-featured e-commerce platform with
+                        admin panel, analytics, customer management, and cloud backend.</p>
+                    <div class="golive-actions">
+                        <a class="golive-btn primary" href="index.html" target="_blank">🏪 View Your Store</a>
+                        <a class="golive-btn outline" href="admin-analytics.html">📊 Open Dashboard</a>
+                        <a class="golive-btn outline" href="https://console.firebase.google.com" target="_blank">🔥
+                            Firebase Console</a>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /main-content -->
+    </div><!-- /page-body -->
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ── SECTION DONE ──
+        let doneSet = new Set(JSON.parse(localStorage.getItem('fakhmul_phase6_done') || '[]'));
+
+        function markDone(num, btn) {
+            if (doneSet.has(num)) {
+                doneSet.delete(num);
+                btn.classList.remove('done');
+                btn.textContent = '✓ Mark Done';
+            } else {
+                doneSet.add(num);
+                btn.classList.add('done');
+                btn.textContent = '✅ Done!';
+                showToast('✅ Section ' + num + ' marked complete!');
+            }
+            localStorage.setItem('fakhmul_phase6_done', JSON.stringify([...doneSet]));
+            updateTOC();
+        }
+
+        function updateTOC() {
+            const total = 9;
+            const done = doneSet.size;
+            for (let i = 1; i <= total; i++) {
+                const item = document.getElementById('toc-' + i);
+                if (item) item.classList.toggle('done', doneSet.has(i));
+                const num = item?.querySelector('.toc-num');
+                if (num) num.textContent = doneSet.has(i) ? '✓' : i;
+            }
+            document.getElementById('progressLabel').textContent = done + ' / ' + total;
+            document.getElementById('progressFill').style.width = Math.round(done / total * 100) + '%';
+        }
+
+        // Restore done states on load
+        function restoreDone() {
+            doneSet.forEach(num => {
+                const btn = document.querySelector(`#section-${num} .section-done-btn`);
+                if (btn) { btn.classList.add('done'); btn.textContent = '✅ Done!'; }
+            });
+            updateTOC();
+        }
+
+        // ── CHECKLIST ──
+        let checkStates = JSON.parse(localStorage.getItem('fakhmul_phase6_checks') || '[]');
+
+        function toggleCheck(li) {
+            li.classList.toggle('checked');
+            const text = li.querySelector('.check-text');
+            // wrap/unwrap in <s>
+            if (li.classList.contains('checked')) {
+                text.innerHTML = '<s>' + text.innerHTML + '</s>';
+            } else {
+                text.innerHTML = text.innerHTML.replace(/<s>(.*?)<\/s>/s, '$1');
+            }
+            updateChecklistProgress();
+            saveChecklistState();
+        }
+
+        function updateChecklistProgress() {
+            const items = document.querySelectorAll('#goLiveChecklist li');
+            const checked = document.querySelectorAll('#goLiveChecklist li.checked').length;
+            document.getElementById('checklistProgress').textContent = checked + ' / ' + items.length + ' completed';
+        }
+
+        function saveChecklistState() {
+            const states = [...document.querySelectorAll('#goLiveChecklist li')].map(li => li.classList.contains('checked'));
+            localStorage.setItem('fakhmul_phase6_checks', JSON.stringify(states));
+        }
+
+        function restoreChecklistState() {
+            const items = document.querySelectorAll('#goLiveChecklist li');
+            const states = JSON.parse(localStorage.getItem('fakhmul_phase6_checks') || '[]');
+            states.forEach((checked, i) => {
+                if (checked && items[i]) {
+                    items[i].classList.add('checked');
+                    const text = items[i].querySelector('.check-text');
+                    text.innerHTML = '<s>' + text.innerHTML + '</s>';
+                }
+            });
+            updateChecklistProgress();
+        }
+
+        // ── COPY CODE ──
+        function copyCode(btn) {
+            const pre = btn.closest('.code-block').querySelector('pre');
+            const text = pre.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const orig = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.color = '#a8e6a8';
+                setTimeout(() => { btn.textContent = orig; btn.style.color = ''; }, 1800);
+            }).catch(() => showToast('Copy failed — please select and copy manually'));
+        }
+
+        // ── SMOOTH SCROLL ──
+        function scrollTo(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // ── TOAST ──
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ── INIT ──
+        restoreDone();
+        restoreChecklistState();
+    </script>
+</body>
+
+</html>

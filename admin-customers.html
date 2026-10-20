@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FAKHMUL Admin — Customer Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c0810d;
+      --gold-light: #efd190;
+      --gold-pale: #fdf3e0;
+      --gold-dark: #8B6520;
+      --forest: #074807;
+      --forest-mid: #0a5c0a;
+      --forest-pale: #E8F0E8;
+      --forest-pale2: #f0f6f0;
+      --cream: #FAF6F0;
+      --warm-white: #FFFDF9;
+      --sidebar-bg: #051f05;
+      --sidebar-active: #0a3a0a;
+      --text-dark: #1A1A0F;
+      --text-mid: #4A4A3A;
+      --text-light: #888870;
+      --border: rgba(200,151,58,0.18);
+      --shadow-sm: 0 2px 8px rgba(7,72,7,0.08);
+      --shadow-md: 0 4px 24px rgba(7,72,7,0.12);
+      --shadow-lg: 0 12px 48px rgba(0,0,0,0.15);
+      --radius: 14px;
+      --error: #c0392b;
+      --success: #27ae60;
+
+      /* Tier colours */
+      --vip:      #c0810d;
+      --regular:  #2980b9;
+      --new:      #27ae60;
+      --inactive: #95a5a6;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar {
+      width: 240px; flex-shrink: 0;
+      background: var(--sidebar-bg);
+      display: flex; flex-direction: column;
+      position: fixed; top:0; left:0; bottom:0;
+      z-index: 100;
+      border-right: 1px solid rgba(192,129,13,0.1);
+    }
+    .sidebar-logo {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .logo-mark {
+      width:40px; height:40px;
+      background: linear-gradient(135deg, var(--forest-mid), var(--gold-dark));
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-family: 'Playfair Display', serif;
+      font-size: 0.9rem; font-weight: 700; flex-shrink: 0;
+    }
+    .logo-name { font-family: 'Playfair Display', serif; color: white; font-size: 1rem; font-weight: 700; }
+    .logo-sub  { font-size: 0.62rem; color: var(--gold-light); letter-spacing: 2px; text-transform: uppercase; }
+    .sidebar-section { padding: 1.25rem 0.75rem 0.5rem; }
+    .sidebar-section-label {
+      font-size: 0.62rem; color: rgba(255,255,255,0.3);
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 0 0.5rem; margin-bottom: 0.4rem;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      cursor: pointer; transition: all 0.18s;
+      text-decoration: none; margin-bottom: 2px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.06); }
+    .nav-item.active { background: var(--sidebar-active); border-left: 2px solid var(--gold); padding-left: 10px; }
+    .nav-icon  { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-label { font-size: 0.85rem; color: rgba(255,255,255,0.75); font-weight: 500; }
+    .nav-item.active .nav-label { color: white; }
+    .nav-badge {
+      margin-left: auto; background: var(--gold); color: white;
+      font-size: 0.65rem; font-weight: 700;
+      padding: 2px 7px; border-radius: 50px;
+    }
+    .nav-badge.red { background: #e74c3c; }
+    .sidebar-bottom {
+      margin-top: auto; padding: 1rem 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .logout-btn {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      cursor: pointer; width: 100%;
+      background: none; border: none;
+      font-family: 'DM Sans', sans-serif; transition: background 0.18s;
+    }
+    .logout-btn:hover { background: rgba(192,57,43,0.15); }
+    .logout-btn span { font-size: 0.85rem; color: rgba(255,255,255,0.5); }
+    .logout-btn:hover span { color: #e74c3c; }
+
+    /* ─── MAIN ─── */
+    .main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ─── TOPBAR ─── */
+    .topbar {
+      background: var(--warm-white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .page-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--forest); }
+    .page-sub   { font-size: 0.75rem; color: var(--text-light); }
+    .topbar-right { display: flex; align-items: center; gap: 0.75rem; }
+    .topbar-btn {
+      display: flex; align-items: center; gap: 5px;
+      border-radius: 8px; padding: 7px 13px;
+      font-size: 0.8rem; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+      text-decoration: none; border: none;
+    }
+    .topbar-btn.green  { background: #25D366; color: white; }
+    .topbar-btn.green:hover  { background: #1da851; }
+    .topbar-btn.forest { background: var(--forest-pale); color: var(--forest); }
+    .topbar-btn.forest:hover { background: var(--forest); color: white; }
+    .topbar-btn.gold   { background: var(--gold-pale); color: var(--gold-dark); }
+    .topbar-btn.gold:hover   { background: var(--gold); color: white; }
+    .admin-avatar {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--forest), var(--gold-dark));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.8rem; font-weight: 700;
+    }
+
+    /* ─── CONTENT ─── */
+    .content { padding: 1.75rem 2rem; flex: 1; }
+
+    /* ─── KPI ROW ─── */
+    .kpi-row {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .kpi-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem 1.25rem;
+      position: relative; overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+      animation: card-in 0.45s ease both;
+    }
+    .kpi-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .kpi-card:nth-child(1) { animation-delay: 0s; }
+    .kpi-card:nth-child(2) { animation-delay: 0.06s; }
+    .kpi-card:nth-child(3) { animation-delay: 0.12s; }
+    .kpi-card:nth-child(4) { animation-delay: 0.18s; }
+    .kpi-card:nth-child(5) { animation-delay: 0.24s; }
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .kpi-accent {
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .kpi-icon {
+      font-size: 1.4rem; margin-bottom: 0.6rem;
+    }
+    .kpi-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; color: var(--forest); line-height: 1;
+    }
+    .kpi-label { font-size: 0.72rem; color: var(--text-light); margin-top: 3px; }
+
+    /* ─── TAB SWITCHER ─── */
+    .tab-bar {
+      display: flex; gap: 0; background: white;
+      border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 5px; margin-bottom: 1.25rem; width: fit-content;
+    }
+    .tab-btn {
+      padding: 8px 18px; border-radius: 9px;
+      border: none; background: transparent;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      font-weight: 500; color: var(--text-mid);
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab-btn.active { background: var(--forest); color: white; }
+    .tab-btn .tab-count {
+      background: rgba(255,255,255,0.25); color: inherit;
+      font-size: 0.68rem; font-weight: 700;
+      padding: 1px 6px; border-radius: 50px;
+    }
+    .tab-btn:not(.active) .tab-count { background: var(--forest-pale); color: var(--forest); }
+
+    /* ─── TOOLBAR ─── */
+    .toolbar {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1.25rem;
+      display: flex; align-items: center; gap: 0.85rem;
+      flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .search-wrap { flex: 1; min-width: 200px; position: relative; }
+    .search-wrap input {
+      width: 100%; padding: 9px 38px 9px 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      outline: none; background: var(--cream); transition: border-color 0.2s;
+    }
+    .search-wrap input:focus { border-color: var(--forest); background: white; }
+    .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 0.85rem; pointer-events: none; }
+    .filter-select {
+      padding: 9px 14px;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      color: var(--text-mid); background: var(--cream);
+      outline: none; cursor: pointer; transition: border-color 0.2s;
+    }
+    .filter-select:focus { border-color: var(--forest); }
+    .bulk-wa-btn {
+      display: flex; align-items: center; gap: 6px;
+      background: #25D366; color: white; border: none;
+      border-radius: 8px; padding: 9px 16px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .bulk-wa-btn:hover { background: #1da851; transform: translateY(-1px); }
+    .bulk-wa-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ─── SEGMENT FILTERS ─── */
+    .segment-bar {
+      display: flex; gap: 0.5rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+    }
+    .seg-chip {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 50px;
+      border: 1.5px solid var(--border);
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+      background: white; color: var(--text-mid);
+    }
+    .seg-chip:hover { border-color: var(--forest); color: var(--forest); }
+    .seg-chip.active { background: var(--forest); color: white; border-color: var(--forest); }
+    .seg-chip .seg-count {
+      background: rgba(255,255,255,0.25); color: inherit;
+      font-size: 0.65rem; padding: 1px 5px; border-radius: 50px;
+    }
+    .seg-chip:not(.active) .seg-count { background: var(--forest-pale); color: var(--forest); }
+
+    /* ─── CUSTOMER GRID ─── */
+    .customers-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+
+    .customer-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem;
+      transition: all 0.22s; cursor: pointer;
+      position: relative; overflow: hidden;
+      animation: card-in 0.4s ease both;
+    }
+    .customer-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .customer-card.selected { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(7,72,7,0.1); }
+
+    .card-select-box {
+      position: absolute; top: 12px; right: 12px;
+      width: 20px; height: 20px; border-radius: 5px;
+      border: 2px solid var(--border); background: white;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.18s; font-size: 0.7rem;
+      color: transparent;
+    }
+    .customer-card.selected .card-select-box {
+      background: var(--forest); border-color: var(--forest); color: white;
+    }
+
+    .customer-card-top {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;
+    }
+    .cust-avatar {
+      width: 48px; height: 48px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: 700; color: white;
+      flex-shrink: 0;
+    }
+    .cust-name {
+      font-weight: 700; font-size: 0.95rem; color: var(--text-dark);
+    }
+    .cust-phone {
+      font-size: 0.76rem; color: var(--text-light); margin-top: 2px;
+    }
+    .cust-location {
+      font-size: 0.72rem; color: var(--text-light); margin-top: 1px;
+    }
+
+    .tier-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 50px;
+      font-size: 0.66rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      margin-top: 4px;
+    }
+    .tier-vip      { background: var(--gold-pale); color: var(--gold-dark); }
+    .tier-regular  { background: #ebf5fb; color: #2980b9; }
+    .tier-new      { background: #eafaf1; color: #27ae60; }
+    .tier-inactive { background: #f2f3f4; color: #7f8c8d; }
+
+    .customer-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5rem; margin-bottom: 0.85rem;
+    }
+    .cust-stat {
+      background: var(--cream); border-radius: 8px;
+      padding: 0.5rem 0.6rem; text-align: center;
+    }
+    .cust-stat-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem; font-weight: 700; color: var(--forest);
+    }
+    .cust-stat-label { font-size: 0.62rem; color: var(--text-light); margin-top: 1px; }
+
+    .customer-card-actions {
+      display: flex; gap: 6px;
+    }
+    .cust-action {
+      flex: 1; padding: 7px; border-radius: 8px;
+      border: 1.5px solid; font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+      transition: all 0.18s;
+    }
+    .cust-action.view  { border-color: var(--forest); color: var(--forest); background: transparent; }
+    .cust-action.view:hover  { background: var(--forest); color: white; }
+    .cust-action.wa    { border-color: #25D366; color: #25D366; background: transparent; }
+    .cust-action.wa:hover    { background: #25D366; color: white; }
+
+    .last-order-badge {
+      font-size: 0.7rem; color: var(--text-light);
+      margin-top: 0.6rem; padding-top: 0.6rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* ─── EMPTY STATE ─── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center; padding: 4rem 2rem;
+      color: var(--text-light);
+    }
+    .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* ─── SUBSCRIBER TABLE ─── */
+    .subscribers-view { display: none; }
+    .subscriber-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 0.75rem 0; border-bottom: 1px solid var(--border);
+      animation: card-in 0.35s ease both;
+    }
+    .subscriber-row:last-child { border-bottom: none; }
+    .sub-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #27ae60; flex-shrink: 0;
+    }
+    .sub-email { font-size: 0.88rem; font-weight: 500; flex: 1; }
+    .sub-date  { font-size: 0.75rem; color: var(--text-light); }
+    .sub-del   {
+      padding: 4px 10px; border-radius: 6px;
+      border: 1.5px solid var(--error); color: var(--error);
+      background: transparent; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 0.72rem;
+      transition: all 0.18s;
+    }
+    .sub-del:hover { background: var(--error); color: white; }
+
+    /* ─── CUSTOMER DETAIL MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 500; display: none;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(3px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .detail-modal {
+      background: white; border-radius: 20px;
+      width: min(700px, 96vw); max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modal-in 0.25s ease;
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform:scale(0.96) translateY(12px); }
+      to   { opacity:1; transform:scale(1)    translateY(0); }
+    }
+
+    .detail-header {
+      background: var(--forest);
+      border-radius: 20px 20px 0 0;
+      padding: 2rem 2rem 1.5rem;
+      position: relative;
+    }
+    /* decorative circles */
+    .detail-header::before {
+      content:''; position:absolute; top:-30px; right:-30px;
+      width:160px; height:160px; border-radius:50%;
+      background:rgba(192,129,13,0.1);
+    }
+    .detail-header::after {
+      content:''; position:absolute; bottom:-40px; right:60px;
+      width:100px; height:100px; border-radius:50%;
+      background:rgba(192,129,13,0.07);
+    }
+    .detail-header-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 1rem;
+      position: relative; z-index: 1;
+    }
+    .detail-avatar-row { display: flex; align-items: center; gap: 1rem; }
+    .detail-avatar {
+      width: 64px; height: 64px; border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; font-weight: 700; color: white;
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+    .detail-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700; color: white;
+    }
+    .detail-phone { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-top: 3px; }
+    .detail-addr  { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .modal-close {
+      background: rgba(255,255,255,0.15); border: none; color: white;
+      width: 32px; height: 32px; border-radius: 50%;
+      cursor: pointer; font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; position: relative; z-index: 1;
+      transition: background 0.18s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.25); }
+
+    .detail-kpis {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0; margin-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 1.25rem;
+      position: relative; z-index: 1;
+    }
+    .detail-kpi { text-align: center; }
+    .detail-kpi + .detail-kpi { border-left: 1px solid rgba(255,255,255,0.1); }
+    .detail-kpi-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 700; color: var(--gold-light);
+    }
+    .detail-kpi-label { font-size: 0.68rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+    .detail-body { padding: 1.75rem; }
+
+    .detail-section { margin-bottom: 1.75rem; }
+    .detail-section-title {
+      font-size: 0.68rem; font-weight: 700;
+      color: var(--gold-dark); text-transform: uppercase;
+      letter-spacing: 2px; margin-bottom: 1rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .detail-section-title::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Order history in modal */
+    .modal-order-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 0.75rem; border-radius: 10px;
+      background: var(--cream); margin-bottom: 0.5rem;
+      border: 1px solid var(--border);
+    }
+    .modal-order-id {
+      font-weight: 700; font-size: 0.85rem;
+      color: var(--forest); min-width: 70px;
+    }
+    .modal-order-items { flex: 1; font-size: 0.8rem; color: var(--text-mid); }
+    .modal-order-status {
+      font-size: 0.68rem; font-weight: 700;
+      padding: 3px 9px; border-radius: 50px;
+      text-transform: uppercase;
+    }
+    .modal-order-amt {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem; font-weight: 700; color: var(--forest);
+      min-width: 65px; text-align: right;
+    }
+
+    /* Favourite products */
+    .fav-products { display: flex; gap: 8px; flex-wrap: wrap; }
+    .fav-product-chip {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--forest-pale); color: var(--forest);
+      padding: 5px 12px; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 600;
+    }
+
+    /* Notes in modal */
+    .notes-area {
+      width: 100%; min-height: 80px; resize: vertical;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      padding: 10px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; background: var(--cream);
+      outline: none; transition: border-color 0.2s;
+    }
+    .notes-area:focus { border-color: var(--forest); background: white; }
+
+    .detail-footer {
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--border);
+      background: var(--cream);
+      border-radius: 0 0 20px 20px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .detail-footer-left  { display: flex; gap: 0.5rem; }
+    .detail-footer-right { display: flex; gap: 0.5rem; }
+    .btn {
+      padding: 9px 18px; border-radius: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      font-weight: 600; cursor: pointer; transition: all 0.18s; border: none;
+    }
+    .btn-ghost  { background: white; color: var(--text-mid); border: 1.5px solid var(--border); }
+    .btn-ghost:hover  { border-color: var(--text-mid); }
+    .btn-green  { background: #25D366; color: white; }
+    .btn-green:hover  { background: #1da851; }
+    .btn-forest { background: var(--forest); color: white; }
+    .btn-forest:hover { background: var(--forest-mid); }
+    .btn-danger { background: var(--error); color: white; }
+    .btn-danger:hover { background: #a93226; }
+    .btn-gold   { background: var(--gold); color: white; }
+    .btn-gold:hover   { background: var(--gold-dark); }
+
+    /* ─── BULK WA MODAL ─── */
+    .small-modal {
+      background: white; border-radius: 18px;
+      width: min(520px, 95vw); max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+      animation: modal-in 0.22s ease;
+    }
+    .small-modal-header {
+      background: #25D366; border-radius: 18px 18px 0 0;
+      padding: 1.5rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .small-modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: white; }
+    .small-modal-close {
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      width: 30px; height: 30px; border-radius: 50%;
+      cursor: pointer; font-size: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .small-modal-body { padding: 1.5rem; }
+    .template-options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+    .template-option {
+      padding: 10px 14px; border-radius: 9px;
+      border: 1.5px solid var(--border); cursor: pointer;
+      font-size: 0.83rem; color: var(--text-mid);
+      transition: all 0.18s; background: var(--cream);
+    }
+    .template-option.selected { border-color: #25D366; background: #f0fdf4; color: var(--text-dark); }
+    .template-option strong { color: var(--text-dark); display: block; margin-bottom: 2px; font-size: 0.82rem; }
+    .msg-textarea {
+      width: 100%; min-height: 120px; resize: vertical;
+      border: 1.5px solid var(--border); border-radius: 9px;
+      padding: 10px 14px; font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem; background: var(--cream);
+      outline: none; transition: border-color 0.2s;
+    }
+    .msg-textarea:focus { border-color: #25D366; background: white; }
+    .recipient-list {
+      max-height: 120px; overflow-y: auto;
+      background: var(--cream); border-radius: 8px;
+      padding: 0.6rem 0.9rem; margin-bottom: 1rem;
+      font-size: 0.78rem; color: var(--text-mid);
+      line-height: 1.8; border: 1px solid var(--border);
+    }
+    .small-modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 0.75rem;
+      background: var(--cream); border-radius: 0 0 18px 18px;
+    }
+
+    /* ─── TOAST ─── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--forest); color: white;
+      padding: 12px 22px; border-radius: 50px;
+      font-size: 0.88rem; font-weight: 500;
+      z-index: 9999; opacity: 0; pointer-events: none;
+      transition: all 0.3s; white-space: nowrap;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+    .toast.warn  { background: var(--gold-dark); }
+    .toast.green { background: #25D366; }
+
+    /* ─── SCROLLBAR ─── */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-thumb { background: rgba(7,72,7,0.2); border-radius: 3px; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) { .kpi-row { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px)  {
+      .sidebar { width: 200px; }
+      .main { margin-left: 200px; }
+      .kpi-row { grid-template-columns: repeat(3, 1fr); }
+      .detail-kpis { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    }
+    @media (max-width: 640px)  {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .customers-grid { grid-template-columns: 1fr; }
+      .content { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">FK</div>
+    <div>
+      <div class="logo-name">FAKHMUL</div>
+      <div class="logo-sub">Admin Panel</div>
+    </div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Main</div>
+    <a class="nav-item" href="admin-analytics.html">
+      <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+    </a>
+    <a class="nav-item" href="admin-dashboard.html">
+      <span class="nav-icon">📦</span><span class="nav-label">Products</span>
+      <span class="nav-badge" id="sidebarProd">18</span>
+    </a>
+    <a class="nav-item" href="admin-orders.html">
+      <span class="nav-icon">🛒</span><span class="nav-label">Orders</span>
+      <span class="nav-badge red" id="sidebarPending">0</span>
+    </a>
+    <a class="nav-item active" href="#">
+      <span class="nav-icon">👥</span><span class="nav-label">Customers</span>
+      <span class="nav-badge" id="sidebarCust">0</span>
+    </a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-section-label">Settings</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+  </div>
+  <div class="sidebar-bottom">
+    <button class="logout-btn" onclick="logout()">
+      <span style="font-size:1rem;">🚪</span><span>Log out</span>
+    </button>
+  </div>
+</aside>
+
+<!-- ─── MAIN ─── -->
+<main class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div>
+      <div class="page-title">Customer Management</div>
+      <div class="page-sub">Admin › Customers</div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn gold" onclick="exportCustomersCSV()">⬇️ Export CSV</button>
+      <button class="topbar-btn green" id="bulkWaTopBtn" onclick="openBulkWA()" disabled>💬 Bulk WhatsApp</button>
+      <a class="topbar-btn forest" href="index.html" target="_blank">🏪 Store</a>
+      <div class="admin-avatar">A</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- KPI Row -->
+    <div class="kpi-row" id="kpiRow">
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:var(--forest)"></div>
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-value" id="kpiTotal">0</div>
+        <div class="kpi-label">Total Customers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:var(--gold)"></div>
+        <div class="kpi-icon">⭐</div>
+        <div class="kpi-value" id="kpiVIP">0</div>
+        <div class="kpi-label">VIP Customers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:#27ae60"></div>
+        <div class="kpi-icon">🆕</div>
+        <div class="kpi-value" id="kpiNew">0</div>
+        <div class="kpi-label">New This Month</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:#2980b9"></div>
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-value" id="kpiAvgLTV">0</div>
+        <div class="kpi-label">Avg. Lifetime Value</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-accent" style="background:#16a085"></div>
+        <div class="kpi-icon">📧</div>
+        <div class="kpi-value" id="kpiSubscribers">0</div>
+        <div class="kpi-label">Newsletter Subs</div>
+      </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-customers" onclick="switchTab('customers')">
+        👥 Customers <span class="tab-count" id="tabCountCust">0</span>
+      </button>
+      <button class="tab-btn" id="tab-subscribers" onclick="switchTab('subscribers')">
+        📧 Subscribers <span class="tab-count" id="tabCountSubs">0</span>
+      </button>
+    </div>
+
+    <!-- ── CUSTOMERS VIEW ── -->
+    <div id="customersView">
+
+      <!-- Segment chips -->
+      <div class="segment-bar" id="segmentBar">
+        <div class="seg-chip active" onclick="setSegment('all', this)">
+          🌟 All <span class="seg-count" id="segAll">0</span>
+        </div>
+        <div class="seg-chip" onclick="setSegment('vip', this)">
+          ⭐ VIP <span class="seg-count" id="segVIP">0</span>
+        </div>
+        <div class="seg-chip" onclick="setSegment('regular', this)">
+          👤 Regular <span class="seg-count" id="segRegular">0</span>
+        </div>
+        <div class="seg-chip" onclick="setSegment('new', this)">
+          🆕 New <span class="seg-count" id="segNew">0</span>
+        </div>
+        <div class="seg-chip" onclick="setSegment('inactive', this)">
+          😴 Inactive <span class="seg-count" id="segInactive">0</span>
+        </div>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <input type="text" id="searchInput" placeholder="Search by name, phone, city…" oninput="renderCustomers()">
+          <span class="search-icon">🔍</span>
+        </div>
+        <select class="filter-select" id="sortSelect" onchange="renderCustomers()">
+          <option value="ltv-desc">Sort: Highest Value</option>
+          <option value="ltv-asc">Sort: Lowest Value</option>
+          <option value="orders-desc">Sort: Most Orders</option>
+          <option value="name-asc">Sort: Name A–Z</option>
+          <option value="recent">Sort: Most Recent</option>
+        </select>
+        <button class="bulk-wa-btn" id="bulkWaBtn" onclick="openBulkWA()" disabled>
+          💬 Message Selected (<span id="selectedCount">0</span>)
+        </button>
+      </div>
+
+      <!-- Grid -->
+      <div class="customers-grid" id="customersGrid"></div>
+    </div>
+
+    <!-- ── SUBSCRIBERS VIEW ── -->
+    <div class="subscribers-view" id="subscribersView">
+      <div class="toolbar">
+        <div class="search-wrap">
+          <input type="text" id="subSearchInput" placeholder="Search email…" oninput="renderSubscribers()">
+          <span class="search-icon">🔍</span>
+        </div>
+        <button class="topbar-btn green" onclick="exportSubscribersList()" style="border:none;">⬇️ Export Emails</button>
+      </div>
+      <div style="background:white;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;">
+        <div style="font-size:0.72rem;font-weight:700;color:var(--text-light);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:1rem;">Newsletter Subscribers</div>
+        <div id="subscribersList"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ─── CUSTOMER DETAIL MODAL ─── -->
+<div class="modal-overlay" id="detailModal">
+  <div class="detail-modal" id="detailContent"><!-- JS --></div>
+</div>
+
+<!-- ─── BULK WHATSAPP MODAL ─── -->
+<div class="modal-overlay" id="bulkWAModal">
+  <div class="small-modal">
+    <div class="small-modal-header">
+      <div class="small-modal-title">💬 Bulk WhatsApp Message</div>
+      <button class="small-modal-close" onclick="closeBulkWA()">✕</button>
+    </div>
+    <div class="small-modal-body">
+      <div style="font-size:0.78rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.6rem;">Recipients</div>
+      <div class="recipient-list" id="recipientList"></div>
+      <div style="font-size:0.78rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.6rem;">Message Template</div>
+      <div class="template-options" id="templateOptions">
+        <div class="template-option selected" onclick="selectTemplate(this,'promo')">
+          <strong>🎁 Seasonal Promotion</strong>
+          Hello [Name]! 🌿 FAKHMUL has exciting new products from Gilgit Baltistan's mountains. Visit us to discover fresh arrivals and seasonal discounts. Thank you for being a valued customer!
+        </div>
+        <div class="template-option" onclick="selectTemplate(this,'reorder')">
+          <strong>🔄 Reorder Reminder</strong>
+          Hello [Name]! 👋 It's been a while since your last FAKHMUL order. Your favourite mountain-fresh products are waiting! Order now and enjoy free delivery on orders over Rs.5,000.
+        </div>
+        <div class="template-option" onclick="selectTemplate(this,'feedback')">
+          <strong>⭐ Feedback Request</strong>
+          Hello [Name]! We hope you're enjoying your FAKHMUL order. We'd love to hear your feedback — it helps us serve you better. Thank you for choosing Gilgit Baltistan's finest! 🌿
+        </div>
+        <div class="template-option" onclick="selectTemplate(this,'custom')">
+          <strong>✏️ Custom Message</strong>
+          Write your own message below…
+        </div>
+      </div>
+      <div style="font-size:0.78rem;font-weight:600;color:var(--text-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:0.5rem;margin-top:0.75rem;">Message Preview / Edit</div>
+      <textarea class="msg-textarea" id="bulkMsgText"></textarea>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-top:4px;">Use [Name] to personalise each message. WhatsApp will open once per recipient.</div>
+    </div>
+    <div class="small-modal-footer">
+      <button class="btn btn-ghost" onclick="closeBulkWA()">Cancel</button>
+      <button class="btn btn-green" onclick="sendBulkWA()">💬 Send to All Recipients</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── AUTH GUARD ──
+if (!sessionStorage.getItem('fakhmul_admin')) window.location.href = 'admin-login.html';
+
+// ── DEMO ORDERS (fallback) ──
+const DEMO_ORDERS = [
+  { id:'ORD-001', date:'2025-05-01T09:30:00', status:'delivered', customer:{ name:'Fatima Malik', phone:'+92 300 1234567', address:'House 12, Gulberg III, Lahore' }, items:[{name:'Dried Mulberry',icon:'🫐',qty:2,price:850},{name:'Walnut (Akhrot)',icon:'🌰',qty:1,price:1400}], payment:'cod', shipping:0 },
+  { id:'ORD-002', date:'2025-05-03T14:15:00', status:'delivered', customer:{ name:'Ahmad Raza', phone:'+92 321 9876543', address:'Flat 5B, Clifton, Karachi' }, items:[{name:'Dried Apricot',icon:'🍑',qty:3,price:750},{name:'Seabuckthorn Powder',icon:'🫖',qty:2,price:1000}], payment:'easypaisa', shipping:200 },
+  { id:'ORD-003', date:'2025-05-05T11:00:00', status:'shipped',   customer:{ name:'Sara Hussain', phone:'+92 333 5556677', address:'Street 9, F-7/3, Islamabad' }, items:[{name:'Almond (Badam)',icon:'🫘',qty:1,price:1800},{name:'Pine Nuts (Chilgoza)',icon:'🟤',qty:1,price:2800}], payment:'jazzcash', shipping:0 },
+  { id:'ORD-004', date:'2025-05-07T08:45:00', status:'pending',   customer:{ name:'Usman Khan', phone:'+92 312 4443322', address:'Model Town, Block H, Lahore' }, items:[{name:'Dandelion flowers',icon:'🌼',qty:2,price:650}], payment:'cod', shipping:200 },
+  { id:'ORD-005', date:'2025-05-09T16:20:00', status:'confirmed', customer:{ name:'Zainab Iqbal', phone:'+92 345 7778899', address:'DHA Phase 4, Karachi' }, items:[{name:'Golden Raisin',icon:'🍇',qty:4,price:1000}], payment:'bank', shipping:0 },
+  { id:'ORD-006', date:'2025-05-11T10:10:00', status:'packed',    customer:{ name:'Ali Hassan', phone:'+92 300 9988776', address:'Bahria Town, Rawalpindi' }, items:[{name:'Dried Cherry',icon:'🍒',qty:2,price:1200}], payment:'easypaisa', shipping:200 },
+  { id:'ORD-007', date:'2025-05-12T13:30:00', status:'cancelled', customer:{ name:'Hina Baig', phone:'+92 321 1122334', address:'Johar Town, Lahore' }, items:[{name:'Pomegranate Seeds',icon:'❤️',qty:3,price:1100}], payment:'cod', shipping:200 },
+  { id:'ORD-008', date:'2025-05-13T09:00:00', status:'delivered', customer:{ name:'Fatima Malik', phone:'+92 300 1234567', address:'House 12, Gulberg III, Lahore' }, items:[{name:'Dried Mulberry',icon:'🫐',qty:1,price:850},{name:'Almond (Badam)',icon:'🫘',qty:2,price:1800}], payment:'card', shipping:0 },
+  { id:'ORD-009', date:'2025-05-14T15:45:00', status:'shipped',   customer:{ name:'Ahmad Raza', phone:'+92 321 9876543', address:'Flat 5B, Clifton, Karachi' }, items:[{name:'Walnut (Akhrot)',icon:'🌰',qty:2,price:1400}], payment:'jazzcash', shipping:0 },
+  { id:'ORD-010', date:'2025-05-15T12:20:00', status:'pending',   customer:{ name:'Bilal Chaudhry', phone:'+92 311 2233445', address:'Garden Town, Lahore' }, items:[{name:'Pine Nuts (Chilgoza)',icon:'🟤',qty:1,price:2800}], payment:'cod', shipping:200 },
+  { id:'ORD-011', date:'2025-05-15T17:00:00', status:'confirmed', customer:{ name:'Sana Mirza', phone:'+92 344 5566778', address:'E-11, Islamabad' }, items:[{name:'Dried Apricot',icon:'🍑',qty:2,price:750}], payment:'easypaisa', shipping:200 },
+  { id:'ORD-012', date:'2025-05-16T08:30:00', status:'pending',   customer:{ name:'Tariq Mehmood', phone:'+92 333 1122334', address:'Gulshan-e-Iqbal, Karachi' }, items:[{name:'Dried Cherry',icon:'🍒',qty:1,price:1200}], payment:'cod', shipping:200 },
+];
+
+const DEMO_SUBSCRIBERS = [
+  { email:'fatima.malik@gmail.com', date:'2025-03-12T10:00:00' },
+  { email:'ahmad.raza92@yahoo.com', date:'2025-03-18T14:30:00' },
+  { email:'mountain.lover@pk.com', date:'2025-04-01T09:15:00' },
+  { email:'sara.h@hotmail.com', date:'2025-04-10T11:00:00' },
+  { email:'healthy.living.pk@gmail.com', date:'2025-04-22T16:45:00' },
+  { email:'usman.k@gmail.com', date:'2025-05-02T08:30:00' },
+  { email:'zainab.iqbal@gmail.com', date:'2025-05-08T13:20:00' },
+  { email:'naturefan@outlook.com', date:'2025-05-10T20:00:00' },
+];
+
+// ── STATE ──
+let orders       = [];
+let subscribers  = [];
+let customers    = [];   // derived from orders
+let selected     = new Set();
+let activeSegment = 'all';
+let activeTab    = 'customers';
+let viewingCust  = null;
+let bulkTemplate = 'promo';
+
+const AVATAR_COLORS = [
+  '#074807','#c0810d','#2980b9','#8e44ad','#16a085','#c0392b',
+  '#1a5276','#117864','#6e2f1a','#1f618d',
+];
+function avatarColor(name) {
+  let hash = 0;
+  for (let c of name) hash += c.charCodeAt(0);
+  return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+}
+
+// ── STATUS HELPERS ──
+const STATUS_COLORS_BG = {
+  pending:'#fef3e2', confirmed:'#ebf5fb', packed:'#f5eef8',
+  shipped:'#e8f8f5', delivered:'#eafaf1', cancelled:'#fdedec'
+};
+const STATUS_COLORS_TEXT = {
+  pending:'#e67e22', confirmed:'#2980b9', packed:'#8e44ad',
+  shipped:'#16a085', delivered:'#27ae60', cancelled:'#c0392b'
+};
+const STATUS_ICONS = {
+  pending:'🕐', confirmed:'✅', packed:'📦', shipped:'🚚', delivered:'🎉', cancelled:'❌'
+};
+const STATUS_LABELS = {
+  pending:'Pending', confirmed:'Confirmed', packed:'Packed',
+  shipped:'Shipped', delivered:'Delivered', cancelled:'Cancelled'
+};
+
+// ── INIT ──
+function init() {
+  const savedOrders = localStorage.getItem('fakhmul_orders');
+  const savedSubs   = localStorage.getItem('fakhmul_subscribers');
+  orders      = savedOrders ? JSON.parse(savedOrders) : JSON.parse(JSON.stringify(DEMO_ORDERS));
+  subscribers = savedSubs   ? JSON.parse(savedSubs)   : JSON.parse(JSON.stringify(DEMO_SUBSCRIBERS));
+  buildCustomers();
+  renderAll();
+}
+
+// ── BUILD CUSTOMERS FROM ORDERS ──
+function buildCustomers() {
+  const map = {};
+  orders.forEach(o => {
+    const key = o.customer.phone;
+    if (!map[key]) {
+      map[key] = {
+        name:    o.customer.name,
+        phone:   o.customer.phone,
+        address: o.customer.address || '',
+        orders:  [],
+        ltv:     0,
+        firstOrderDate: o.date,
+        lastOrderDate:  o.date,
+        notes:   '',
+      };
+    }
+    map[key].orders.push(o);
+    if (o.status !== 'cancelled') map[key].ltv += orderTotal(o);
+    if (new Date(o.date) < new Date(map[key].firstOrderDate)) map[key].firstOrderDate = o.date;
+    if (new Date(o.date) > new Date(map[key].lastOrderDate))  map[key].lastOrderDate  = o.date;
+  });
+  customers = Object.values(map);
+
+  // Load saved notes
+  const savedNotes = JSON.parse(localStorage.getItem('fakhmul_customer_notes') || '{}');
+  customers.forEach(c => { c.notes = savedNotes[c.phone] || ''; });
+}
+
+function orderTotal(o) {
+  return (o.items||[]).reduce((s,i) => s + i.price*i.qty, 0) + (o.shipping||0);
+}
+
+// ── TIER ──
+function getTier(c) {
+  const activeOrders = c.orders.filter(o => o.status !== 'cancelled').length;
+  const daysSinceLast = (Date.now() - new Date(c.lastOrderDate)) / (1000*60*60*24);
+  if (activeOrders >= 3 || c.ltv >= 10000) return 'vip';
+  if (daysSinceLast > 90) return 'inactive';
+  if (activeOrders === 1) return 'new';
+  return 'regular';
+}
+const TIER_LABELS = { vip:'⭐ VIP', regular:'👤 Regular', new:'🆕 New', inactive:'😴 Inactive' };
+const TIER_CLASSES = { vip:'tier-vip', regular:'tier-regular', new:'tier-new', inactive:'tier-inactive' };
+
+// ── RENDER ALL ──
+function renderAll() {
+  updateKPIs();
+  updateSegmentCounts();
+  updateTabCounts();
+  updateSidebar();
+  renderCustomers();
+  renderSubscribers();
+}
+
+function updateSidebar() {
+  document.getElementById('sidebarCust').textContent    = customers.length;
+  document.getElementById('sidebarPending').textContent = orders.filter(o => o.status === 'pending').length;
+}
+
+// ── KPIs ──
+function updateKPIs() {
+  const now = new Date();
+  const newThisMonth = customers.filter(c => {
+    const d = new Date(c.firstOrderDate);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+
+  const vipCount = customers.filter(c => getTier(c) === 'vip').length;
+  const avgLTV   = customers.length > 0
+    ? Math.round(customers.reduce((s,c) => s+c.ltv, 0) / customers.length)
+    : 0;
+
+  animNum('kpiTotal',       customers.length);
+  animNum('kpiVIP',         vipCount);
+  animNum('kpiNew',         newThisMonth);
+  document.getElementById('kpiAvgLTV').textContent = 'Rs.' + avgLTV.toLocaleString();
+  animNum('kpiSubscribers', subscribers.length);
+}
+
+function animNum(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const dur = 700, start = performance.now();
+  (function step(now) {
+    const p = Math.min((now-start)/dur, 1);
+    el.textContent = Math.round(target * (1 - Math.pow(1-p, 3)));
+    if (p < 1) requestAnimationFrame(step);
+  })(start);
+}
+
+// ── SEGMENT COUNTS ──
+function updateSegmentCounts() {
+  const counts = { all:customers.length, vip:0, regular:0, new:0, inactive:0 };
+  customers.forEach(c => counts[getTier(c)]++);
+  document.getElementById('segAll').textContent      = counts.all;
+  document.getElementById('segVIP').textContent      = counts.vip;
+  document.getElementById('segRegular').textContent  = counts.regular;
+  document.getElementById('segNew').textContent      = counts.new;
+  document.getElementById('segInactive').textContent = counts.inactive;
+}
+
+function updateTabCounts() {
+  document.getElementById('tabCountCust').textContent = customers.length;
+  document.getElementById('tabCountSubs').textContent = subscribers.length;
+}
+
+// ── TAB SWITCH ──
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('customersView').style.display    = tab === 'customers'   ? 'block' : 'none';
+  document.getElementById('subscribersView').style.display  = tab === 'subscribers' ? 'block' : 'none';
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+}
+
+// ── SEGMENT FILTER ──
+function setSegment(seg, el) {
+  activeSegment = seg;
+  document.querySelectorAll('.seg-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderCustomers();
+}
+
+// ── RENDER CUSTOMERS ──
+function renderCustomers() {
+  const q    = document.getElementById('searchInput').value.trim().toLowerCase();
+  const sort = document.getElementById('sortSelect').value;
+
+  let list = customers.filter(c => {
+    const tier  = getTier(c);
+    const segOK = activeSegment === 'all' || tier === activeSegment;
+    const srchOK = !q || c.name.toLowerCase().includes(q) ||
+      c.phone.includes(q) || c.address.toLowerCase().includes(q);
+    return segOK && srchOK;
+  });
+
+  if (sort === 'ltv-desc')    list.sort((a,b) => b.ltv - a.ltv);
+  if (sort === 'ltv-asc')     list.sort((a,b) => a.ltv - b.ltv);
+  if (sort === 'orders-desc') list.sort((a,b) => b.orders.length - a.orders.length);
+  if (sort === 'name-asc')    list.sort((a,b) => a.name.localeCompare(b.name));
+  if (sort === 'recent')      list.sort((a,b) => new Date(b.lastOrderDate) - new Date(a.lastOrderDate));
+
+  const grid = document.getElementById('customersGrid');
+  if (list.length === 0) {
+    grid.innerHTML = `<div class="empty-state"><div class="empty-icon">👤</div><p>No customers found.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((c, i) => {
+    const tier  = getTier(c);
+    const color = avatarColor(c.name);
+    const isSelected = selected.has(c.phone);
+    const lastOrderDate = new Date(c.lastOrderDate).toLocaleDateString('en-PK',{day:'numeric',month:'short',year:'numeric'});
+    const completedOrders = c.orders.filter(o => o.status !== 'cancelled').length;
+
+    return `
+    <div class="customer-card ${isSelected ? 'selected' : ''}"
+         id="ccard-${c.phone.replace(/\+/g,'').replace(/\s/g,'')}"
+         style="animation-delay:${i*0.04}s"
+         onclick="toggleSelect('${c.phone}')">
+      <div class="card-select-box">✓</div>
+      <div class="customer-card-top">
+        <div class="cust-avatar" style="background:${color}">${c.name[0].toUpperCase()}</div>
+        <div style="flex:1;">
+          <div class="cust-name">${c.name}</div>
+          <div class="cust-phone">${c.phone}</div>
+          <div class="cust-location">${c.address ? '📍 ' + c.address.split(',').slice(-2).join(',').trim() : ''}</div>
+          <div class="tier-badge ${TIER_CLASSES[tier]}">${TIER_LABELS[tier]}</div>
+        </div>
+      </div>
+      <div class="customer-stats">
+        <div class="cust-stat">
+          <div class="cust-stat-val">${c.orders.length}</div>
+          <div class="cust-stat-label">Orders</div>
+        </div>
+        <div class="cust-stat">
+          <div class="cust-stat-val">${completedOrders}</div>
+          <div class="cust-stat-label">Completed</div>
+        </div>
+        <div class="cust-stat">
+          <div class="cust-stat-val" style="font-size:0.82rem;">Rs.${c.ltv >= 1000 ? (c.ltv/1000).toFixed(1)+'k' : c.ltv}</div>
+          <div class="cust-stat-label">Lifetime</div>
+        </div>
+      </div>
+      <div class="customer-card-actions" onclick="event.stopPropagation()">
+        <button class="cust-action view" onclick="openDetail('${c.phone}')">👁 Profile</button>
+        <button class="cust-action wa"   onclick="quickWA('${c.phone}','${c.name}')">💬 WhatsApp</button>
+      </div>
+      <div class="last-order-badge">🕐 Last order: ${lastOrderDate}</div>
+    </div>`;
+  }).join('');
+
+  updateBulkBtn();
+}
+
+// ── SELECT / DESELECT ──
+function toggleSelect(phone) {
+  if (selected.has(phone)) selected.delete(phone);
+  else selected.add(phone);
+  const safeId = phone.replace(/\+/g,'').replace(/\s/g,'');
+  const card   = document.getElementById('ccard-' + safeId);
+  if (card) card.classList.toggle('selected', selected.has(phone));
+  updateBulkBtn();
+}
+
+function updateBulkBtn() {
+  const count = selected.size;
+  document.getElementById('selectedCount').textContent = count;
+  const disabled = count === 0;
+  document.getElementById('bulkWaBtn').disabled   = disabled;
+  document.getElementById('bulkWaTopBtn').disabled = disabled;
+}
+
+// ── QUICK WA ──
+function quickWA(phone, name) {
+  const msg = `Hello ${name}! 👋 Thank you for shopping with FAKHMUL — Gilgit Baltistan's finest mountain products. How can we help you today? 🌿`;
+  const p   = phone.replace(/[^0-9]/g,'');
+  window.open(`https://wa.me/${p}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ── CUSTOMER DETAIL MODAL ──
+function openDetail(phone) {
+  viewingCust = phone;
+  const c = customers.find(x => x.phone === phone);
+  if (!c) return;
+
+  const tier   = getTier(c);
+  const color  = avatarColor(c.name);
+  const completedOrders = c.orders.filter(o => o.status !== 'cancelled');
+  const avgOrder = completedOrders.length > 0 ? Math.round(c.ltv / completedOrders.length) : 0;
+
+  // Favourite products
+  const prodCount = {};
+  completedOrders.forEach(o => (o.items||[]).forEach(it => {
+    prodCount[it.name] = (prodCount[it.name] || { icon:it.icon, count:0 });
+    prodCount[it.name].count++;
+  }));
+  const favs = Object.entries(prodCount).sort((a,b) => b[1].count - a[1].count).slice(0,5);
+
+  const ordersHtml = [...c.orders].sort((a,b) => new Date(b.date)-new Date(a.date)).map(o => `
+    <div class="modal-order-row">
+      <div class="modal-order-id">${o.id}</div>
+      <div class="modal-order-items">${(o.items||[]).map(i=>i.icon+' '+i.name).join(', ')}</div>
+      <span class="modal-order-status" style="background:${STATUS_COLORS_BG[o.status]};color:${STATUS_COLORS_TEXT[o.status]}">
+        ${STATUS_ICONS[o.status]} ${STATUS_LABELS[o.status]}
+      </span>
+      <div class="modal-order-amt">Rs.${orderTotal(o).toLocaleString()}</div>
+    </div>`).join('');
+
+  const favsHtml = favs.length > 0
+    ? `<div class="fav-products">${favs.map(([name,d])=>`<div class="fav-product-chip">${d.icon} ${name} <span style="opacity:0.6;font-size:0.7rem;">(×${d.count})</span></div>`).join('')}</div>`
+    : '<p style="font-size:0.83rem;color:var(--text-light);">No purchase data yet.</p>';
+
+  document.getElementById('detailContent').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-header-top">
+        <div class="detail-avatar-row">
+          <div class="detail-avatar" style="background:${color}">${c.name[0]}</div>
+          <div>
+            <div class="detail-name">${c.name}</div>
+            <div class="detail-phone">${c.phone}</div>
+            <div class="detail-addr">${c.address ? '📍 '+c.address : ''}</div>
+            <div style="margin-top:6px;"><span class="tier-badge ${TIER_CLASSES[tier]}">${TIER_LABELS[tier]}</span></div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="detail-kpis">
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">${c.orders.length}</div>
+          <div class="detail-kpi-label">Total Orders</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">Rs.${c.ltv.toLocaleString()}</div>
+          <div class="detail-kpi-label">Lifetime Value</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">Rs.${avgOrder.toLocaleString()}</div>
+          <div class="detail-kpi-label">Avg. Order</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">${completedOrders.length}</div>
+          <div class="detail-kpi-label">Completed</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section">
+        <div class="detail-section-title">🛒 Order History</div>
+        ${ordersHtml || '<p style="font-size:0.83rem;color:var(--text-light);">No orders yet.</p>'}
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">⭐ Favourite Products</div>
+        ${favsHtml}
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">📝 Admin Notes</div>
+        <textarea class="notes-area" id="custNotes" placeholder="Add internal notes about this customer…">${c.notes}</textarea>
+      </div>
+    </div>
+    <div class="detail-footer">
+      <div class="detail-footer-left">
+        <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
+      </div>
+      <div class="detail-footer-right">
+        <button class="btn btn-green" onclick="quickWA('${c.phone}','${c.name}')">💬 WhatsApp</button>
+        <button class="btn btn-forest" onclick="saveNotes('${c.phone}')">💾 Save Notes</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('detailModal').classList.add('open');
+}
+
+function closeDetail() { document.getElementById('detailModal').classList.remove('open'); viewingCust = null; }
+
+function saveNotes(phone) {
+  const notes = document.getElementById('custNotes')?.value || '';
+  const c = customers.find(x => x.phone === phone);
+  if (c) c.notes = notes;
+  const allNotes = JSON.parse(localStorage.getItem('fakhmul_customer_notes') || '{}');
+  allNotes[phone] = notes;
+  localStorage.setItem('fakhmul_customer_notes', JSON.stringify(allNotes));
+  showToast('📝 Notes saved!');
+}
+
+// ── BULK WHATSAPP MODAL ──
+const TEMPLATES = {
+  promo:    'Hello [Name]! 🌿 FAKHMUL has exciting new products from Gilgit Baltistan\'s mountains. Visit us to discover fresh arrivals and seasonal discounts. Thank you for being a valued customer!',
+  reorder:  'Hello [Name]! 👋 It\'s been a while since your last FAKHMUL order. Your favourite mountain-fresh products are waiting! Order now and enjoy free delivery on orders over Rs.5,000.',
+  feedback: 'Hello [Name]! We hope you\'re enjoying your FAKHMUL order. We\'d love to hear your feedback — it helps us serve you better. Thank you for choosing Gilgit Baltistan\'s finest! 🌿',
+  custom:   '',
+};
+
+function selectTemplate(el, key) {
+  bulkTemplate = key;
+  document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('bulkMsgText').value = TEMPLATES[key];
+}
+
+function openBulkWA() {
+  if (selected.size === 0) { showToast('⚠️ Select at least one customer first', 'warn'); return; }
+
+  const selectedCustomers = customers.filter(c => selected.has(c.phone));
+  document.getElementById('recipientList').innerHTML =
+    selectedCustomers.map(c => `<span style="font-weight:600;">${c.name}</span> (${c.phone})<br>`).join('');
+
+  document.getElementById('bulkMsgText').value = TEMPLATES['promo'];
+  bulkTemplate = 'promo';
+  document.querySelectorAll('.template-option').forEach((t,i) => t.classList.toggle('selected', i===0));
+
+  document.getElementById('bulkWAModal').classList.add('open');
+}
+
+function closeBulkWA() { document.getElementById('bulkWAModal').classList.remove('open'); }
+
+function sendBulkWA() {
+  const msg = document.getElementById('bulkMsgText').value.trim();
+  if (!msg) { showToast('⚠️ Please write a message', 'warn'); return; }
+
+  const selectedCustomers = customers.filter(c => selected.has(c.phone));
+  let delay = 0;
+  selectedCustomers.forEach(c => {
+    setTimeout(() => {
+      const personalised = msg.replace(/\[Name\]/g, c.name.split(' ')[0]);
+      const phone = c.phone.replace(/[^0-9]/g,'');
+      window.open(`https://wa.me/${phone}?text=${encodeURIComponent(personalised)}`, '_blank');
+    }, delay);
+    delay += 600; // stagger to avoid popup blocker
+  });
+
+  closeBulkWA();
+  showToast(`💬 Opening WhatsApp for ${selectedCustomers.length} customer${selectedCustomers.length>1?'s':''}`, 'green');
+  selected.clear();
+  updateBulkBtn();
+  renderCustomers();
+}
+
+// ── SUBSCRIBERS ──
+function renderSubscribers() {
+  const q = document.getElementById('subSearchInput')?.value.trim().toLowerCase() || '';
+  const list = subscribers.filter(s => !q || s.email.toLowerCase().includes(q));
+
+  document.getElementById('subscribersList').innerHTML = list.length === 0
+    ? '<p style="color:var(--text-light);font-size:0.85rem;padding:1rem 0;">No subscribers found.</p>'
+    : list.map((s, i) => `
+      <div class="subscriber-row" style="animation-delay:${i*0.03}s">
+        <div class="sub-dot"></div>
+        <div class="sub-email">${s.email}</div>
+        <div class="sub-date">${new Date(s.date).toLocaleDateString('en-PK',{day:'numeric',month:'short',year:'numeric'})}</div>
+        <button class="sub-del" onclick="deleteSubscriber('${s.email}')">Remove</button>
+      </div>`).join('');
+}
+
+function deleteSubscriber(email) {
+  if (!confirm(`Remove ${email} from newsletter?`)) return;
+  subscribers = subscribers.filter(s => s.email !== email);
+  localStorage.setItem('fakhmul_subscribers', JSON.stringify(subscribers));
+  updateTabCounts();
+  animNum('kpiSubscribers', subscribers.length);
+  renderSubscribers();
+  showToast('🗑️ Subscriber removed');
+}
+
+// ── EXPORT CSV ──
+function exportCustomersCSV() {
+  const rows = [['Name','Phone','Address','Orders','LTV (Rs.)','Tier','Last Order']];
+  customers.forEach(c => {
+    rows.push([
+      c.name, c.phone, c.address,
+      c.orders.length, c.ltv, getTier(c),
+      new Date(c.lastOrderDate).toLocaleDateString('en-PK'),
+    ]);
+  });
+  const csv  = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type:'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href:url, download:'fakhmul-customers.csv' });
+  a.click(); URL.revokeObjectURL(url);
+  showToast('⬇️ Customer list exported as CSV!');
+}
+
+function exportSubscribersList() {
+  const csv  = subscribers.map(s => s.email).join('\n');
+  const blob = new Blob([csv], { type:'text/plain' });
+  const url  = URL.createObjectURL(blob);
+  const a    = Object.assign(document.createElement('a'), { href:url, download:'fakhmul-subscribers.txt' });
+  a.click(); URL.revokeObjectURL(url);
+  showToast('⬇️ Subscriber emails exported!');
+}
+
+// ── TOAST ──
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type==='warn' ? ' warn' : type==='green' ? ' green' : '');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── LOGOUT ──
+function logout() {
+  if (confirm('Log out?')) {
+    sessionStorage.removeItem('fakhmul_admin');
+    window.location.href = 'admin-login.html';
+  }
+}
+
+// Close modals on overlay click / ESC
+document.getElementById('detailModal').addEventListener('click', e => { if(e.target.id==='detailModal') closeDetail(); });
+document.getElementById('bulkWAModal').addEventListener('click', e => { if(e.target.id==='bulkWAModal') closeBulkWA(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') { closeDetail(); closeBulkWA(); } });
+
+init();
+</script>
+</body>
+</html>

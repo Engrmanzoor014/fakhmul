@@ -1,0 +1,2603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAKHMUL Admin — Customer Management</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --gold: #b8780a;
+            --gold-mid: #d4961c;
+            --gold-light: #e8c56a;
+            --gold-pale: #faf3e0;
+            --gold-pale2: #f5ead0;
+            --forest: #0b3d0b;
+            --forest-mid: #145214;
+            --forest-light: #1a6b1a;
+            --forest-pale: #edf3ed;
+            --forest-pale2: #f4f8f4;
+            --cream: #faf8f4;
+            --warm-white: #fffef9;
+            --sidebar-bg: #080f08;
+            --sidebar-active: #122012;
+            --sidebar-border: rgba(184, 120, 10, 0.12);
+            --text-dark: #111408;
+            --text-mid: #3d3d2e;
+            --text-light: #7a7a62;
+            --text-muted: #a8a890;
+            --border: rgba(180, 140, 40, 0.14);
+            --border-strong: rgba(180, 140, 40, 0.26);
+            --shadow-sm: 0 1px 6px rgba(8, 50, 8, 0.06);
+            --shadow-md: 0 4px 20px rgba(8, 50, 8, 0.10);
+            --shadow-lg: 0 16px 56px rgba(0, 0, 0, 0.13);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --error: #a93226;
+            --success: #1e8449;
+            --wa: #059c3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 232px;
+            flex-shrink: 0;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            z-index: 100;
+            border-right: 1px solid var(--sidebar-border);
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem 1.25rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+
+        .logo-mark {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(145deg, var(--forest-mid) 0%, var(--gold) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .logo-mark svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .logo-name {
+            font-family: 'Cormorant Garamond', serif;
+            color: #fff;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+        }
+
+        .logo-sub {
+            font-size: 0.6rem;
+            color: var(--gold-light);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-top: 1px;
+        }
+
+        .sidebar-section {
+            padding: 1.25rem 0.75rem 0.4rem;
+        }
+
+        .sidebar-section-label {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 0 0.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 11px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.16s;
+            text-decoration: none;
+            margin-bottom: 2px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-item.active {
+            background: var(--sidebar-active);
+            border-left: 2px solid var(--gold);
+            padding-left: 9px;
+        }
+
+        .nav-icon {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            opacity: 0.55;
+        }
+
+        .nav-item.active .nav-icon,
+        .nav-item:hover .nav-icon {
+            opacity: 1;
+        }
+
+        .nav-label {
+            font-size: 0.83rem;
+            color: rgba(255, 255, 255, 0.65);
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label,
+        .nav-item:hover .nav-label {
+            color: #fff;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            background: var(--gold);
+            color: #fff;
+            font-size: 0.62rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 50px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .nav-badge.danger {
+            background: #c0392b;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 1rem 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 11px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        .sidebar-user:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .sidebar-user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--forest-mid), var(--gold));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .sidebar-user-name {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+        }
+
+        .sidebar-user-role {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 11px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            width: 100%;
+            background: none;
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            transition: background 0.16s;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.82rem;
+        }
+
+        .logout-btn:hover {
+            background: rgba(192, 57, 43, 0.12);
+            color: #e74c3c;
+        }
+
+        .logout-btn svg {
+            width: 15px;
+            height: 15px;
+        }
+
+        /* ── MAIN ── */
+        .main {
+            margin-left: 232px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: var(--warm-white);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .page-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            color: var(--forest);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+
+        .page-sub {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+        }
+
+        .topbar-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: var(--radius-sm);
+            padding: 7px 13px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.18s;
+            text-decoration: none;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+
+        .topbar-btn svg {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+        }
+
+        .topbar-btn.forest {
+            background: var(--forest-pale);
+            color: var(--forest);
+            border-color: var(--border);
+        }
+
+        .topbar-btn.forest:hover {
+            background: var(--forest);
+            color: #fff;
+            border-color: var(--forest);
+        }
+
+        .topbar-btn.gold {
+            background: var(--gold-pale);
+            color: var(--gold);
+            border-color: var(--border);
+        }
+
+        .topbar-btn.gold:hover {
+            background: var(--gold);
+            color: #fff;
+            border-color: var(--gold);
+        }
+
+        .topbar-btn.wa {
+            background: rgba(5, 156, 61, 0.1);
+            color: var(--wa);
+            border-color: rgba(5, 156, 61, 0.25);
+        }
+
+        .topbar-btn.wa:hover {
+            background: var(--wa);
+            color: #fff;
+            border-color: var(--wa);
+        }
+
+        .topbar-btn.wa:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* ── CONTENT ── */
+        .content {
+            padding: 1.75rem 2rem;
+            flex: 1;
+        }
+
+        /* ── KPI CARDS ── */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kpi-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.1rem 1.25rem;
+            position: relative;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+            animation: fadeUp 0.45s ease both;
+        }
+
+        .kpi-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .kpi-card:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .kpi-card:nth-child(2) {
+            animation-delay: 0.06s;
+        }
+
+        .kpi-card:nth-child(3) {
+            animation-delay: 0.12s;
+        }
+
+        .kpi-card:nth-child(4) {
+            animation-delay: 0.18s;
+        }
+
+        .kpi-card:nth-child(5) {
+            animation-delay: 0.24s;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+        }
+
+        .kpi-icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.7rem;
+        }
+
+        .kpi-icon-box svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        .kpi-icon-box.forest {
+            background: var(--forest-pale);
+        }
+
+        .kpi-icon-box.gold {
+            background: var(--gold-pale);
+        }
+
+        .kpi-icon-box.green {
+            background: #eafaf1;
+        }
+
+        .kpi-icon-box.blue {
+            background: #ebf5fb;
+        }
+
+        .kpi-icon-box.teal {
+            background: #e8f8f5;
+        }
+
+        .kpi-value {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--forest);
+            line-height: 1;
+        }
+
+        .kpi-label {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+
+        /* ── TAB BAR ── */
+        .tab-bar {
+            display: flex;
+            gap: 0;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 4px;
+            margin-bottom: 1.25rem;
+            width: fit-content;
+        }
+
+        .tab-btn {
+            padding: 8px 18px;
+            border-radius: 9px;
+            border: none;
+            background: transparent;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.83rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.18s;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .tab-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .tab-btn.active {
+            background: var(--forest);
+            color: #fff;
+        }
+
+        .tab-count {
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 50px;
+        }
+
+        .tab-btn.active .tab-count {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .tab-btn:not(.active) .tab-count {
+            background: var(--forest-pale);
+            color: var(--forest);
+        }
+
+        /* ── SEGMENT CHIPS ── */
+        .segment-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .seg-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: 1.5px solid var(--border);
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            background: #fff;
+            color: var(--text-mid);
+        }
+
+        .seg-chip svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .seg-chip:hover {
+            border-color: var(--forest);
+            color: var(--forest);
+        }
+
+        .seg-chip.active {
+            background: var(--forest);
+            color: #fff;
+            border-color: var(--forest);
+        }
+
+        .seg-count {
+            font-size: 0.62rem;
+            padding: 1px 5px;
+            border-radius: 50px;
+        }
+
+        .seg-chip.active .seg-count {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .seg-chip:not(.active) .seg-count {
+            background: var(--forest-pale);
+            color: var(--forest);
+        }
+
+        /* ── TOOLBAR ── */
+        .toolbar {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.85rem 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.25rem;
+        }
+
+        .search-wrap {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-wrap input {
+            width: 100%;
+            padding: 8px 36px 8px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.85rem;
+            outline: none;
+            background: var(--cream);
+            transition: border-color 0.18s;
+            color: var(--text-dark);
+        }
+
+        .search-wrap input:focus {
+            border-color: var(--forest);
+            background: #fff;
+        }
+
+        .search-icon-wrap {
+            position: absolute;
+            right: 11px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            display: flex;
+        }
+
+        .search-icon-wrap svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 14px;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.83rem;
+            color: var(--text-mid);
+            background: var(--cream);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.18s;
+        }
+
+        .filter-select:focus {
+            border-color: var(--forest);
+        }
+
+        .bulk-wa-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(5, 156, 61, 0.1);
+            color: var(--wa);
+            border: 1.5px solid rgba(5, 156, 61, 0.25);
+            border-radius: var(--radius-sm);
+            padding: 8px 15px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            white-space: nowrap;
+        }
+
+        .bulk-wa-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .bulk-wa-btn:hover {
+            background: var(--wa);
+            color: #fff;
+            border-color: var(--wa);
+        }
+
+        .bulk-wa-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .bulk-wa-btn:disabled:hover {
+            background: rgba(5, 156, 61, 0.1);
+            color: var(--wa);
+            border-color: rgba(5, 156, 61, 0.25);
+        }
+
+        /* ── CUSTOMER GRID ── */
+        .customers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .customer-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            transition: all 0.22s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeUp 0.4s ease both;
+        }
+
+        .customer-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .customer-card.selected {
+            border-color: var(--forest);
+            box-shadow: 0 0 0 3px rgba(11, 61, 11, 0.1);
+        }
+
+        .card-select-box {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 5px;
+            border: 2px solid var(--border);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+
+        .card-select-box svg {
+            width: 10px;
+            height: 10px;
+            color: transparent;
+        }
+
+        .customer-card.selected .card-select-box {
+            background: var(--forest);
+            border-color: var(--forest);
+        }
+
+        .customer-card.selected .card-select-box svg {
+            color: #fff;
+        }
+
+        .customer-card-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .cust-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .cust-name {
+            font-weight: 700;
+            font-size: 0.93rem;
+            color: var(--text-dark);
+        }
+
+        .cust-phone {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 2px;
+        }
+
+        .cust-location {
+            font-size: 0.71rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .cust-location svg {
+            width: 10px;
+            height: 10px;
+            flex-shrink: 0;
+        }
+
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 3px 9px;
+            border-radius: 50px;
+            font-size: 0.63rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 5px;
+        }
+
+        .tier-badge svg {
+            width: 9px;
+            height: 9px;
+            flex-shrink: 0;
+        }
+
+        .tier-vip {
+            background: var(--gold-pale2);
+            color: var(--gold);
+        }
+
+        .tier-regular {
+            background: #ebf5fb;
+            color: #2471a3;
+        }
+
+        .tier-new {
+            background: #eafaf1;
+            color: #1e8449;
+        }
+
+        .tier-inactive {
+            background: #f2f3f4;
+            color: #7f8c8d;
+        }
+
+        .customer-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .cust-stat {
+            background: var(--cream);
+            border-radius: var(--radius-sm);
+            padding: 0.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .cust-stat-val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--forest);
+        }
+
+        .cust-stat-label {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 1px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .customer-card-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .cust-action {
+            flex: 1;
+            padding: 7px;
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.73rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.18s;
+        }
+
+        .cust-action svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        .cust-action.view {
+            border: 1.5px solid var(--forest);
+            color: var(--forest);
+            background: transparent;
+        }
+
+        .cust-action.view:hover {
+            background: var(--forest);
+            color: #fff;
+        }
+
+        .cust-action.wa {
+            border: 1.5px solid var(--wa);
+            color: var(--wa);
+            background: transparent;
+        }
+
+        .cust-action.wa:hover {
+            background: var(--wa);
+            color: #fff;
+        }
+
+        .last-order-badge {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-top: 0.65rem;
+            padding-top: 0.65rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .last-order-badge svg {
+            width: 11px;
+            height: 11px;
+            flex-shrink: 0;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            opacity: 0.25;
+        }
+
+        /* ── SUBSCRIBERS VIEW ── */
+        .subscribers-view {
+            display: none;
+        }
+
+        .subscriber-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            animation: fadeUp 0.35s ease both;
+        }
+
+        .subscriber-row:last-child {
+            border-bottom: none;
+        }
+
+        .sub-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+            flex-shrink: 0;
+        }
+
+        .sub-email {
+            font-size: 0.86rem;
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .sub-date {
+            font-size: 0.73rem;
+            color: var(--text-muted);
+        }
+
+        .sub-del {
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1.5px solid var(--error);
+            color: var(--error);
+            background: transparent;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            transition: all 0.18s;
+        }
+
+        .sub-del:hover {
+            background: var(--error);
+            color: #fff;
+        }
+
+        /* ── DETAIL MODAL ── */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.52);
+            z-index: 500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .detail-modal {
+            background: #fff;
+            border-radius: 18px;
+            width: min(700px, 96vw);
+            max-height: 92vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.24s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96) translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .detail-header {
+            background: var(--forest);
+            border-radius: 18px 18px 0 0;
+            padding: 2rem 2rem 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-header::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(184, 120, 10, 0.08);
+        }
+
+        .detail-header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            right: 80px;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(184, 120, 10, 0.06);
+        }
+
+        .detail-header-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .detail-avatar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .detail-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #fff;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+
+        .detail-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .detail-phone {
+            font-size: 0.83rem;
+            color: rgba(255, 255, 255, 0.65);
+            margin-top: 3px;
+        }
+
+        .detail-addr {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .detail-addr svg {
+            width: 11px;
+            height: 11px;
+            flex-shrink: 0;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.12);
+            border: none;
+            color: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            transition: background 0.18s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.22);
+        }
+
+        .modal-close svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .detail-kpis {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .detail-kpi {
+            text-align: center;
+        }
+
+        .detail-kpi+.detail-kpi {
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-kpi-val {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+
+        .detail-kpi-label {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.45);
+            margin-top: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .detail-body {
+            padding: 1.75rem;
+        }
+
+        .detail-section {
+            margin-bottom: 1.75rem;
+        }
+
+        .detail-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-section-title svg {
+            width: 13px;
+            height: 13px;
+            flex-shrink: 0;
+        }
+
+        .detail-section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .modal-order-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.75rem;
+            border-radius: 10px;
+            background: var(--cream);
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .modal-order-id {
+            font-weight: 700;
+            font-size: 0.83rem;
+            color: var(--forest);
+            min-width: 72px;
+        }
+
+        .modal-order-items {
+            flex: 1;
+            font-size: 0.78rem;
+            color: var(--text-mid);
+        }
+
+        .modal-order-status {
+            font-size: 0.63rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .modal-order-amt {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--forest);
+            min-width: 65px;
+            text-align: right;
+        }
+
+        .fav-products {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+        }
+
+        .fav-product-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--forest-pale);
+            color: var(--forest);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+        }
+
+        .fav-product-chip svg {
+            width: 11px;
+            height: 11px;
+            flex-shrink: 0;
+        }
+
+        .notes-area {
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.86rem;
+            background: var(--cream);
+            outline: none;
+            transition: border-color 0.18s;
+            color: var(--text-dark);
+        }
+
+        .notes-area:focus {
+            border-color: var(--forest);
+            background: #fff;
+        }
+
+        .detail-footer {
+            padding: 1.25rem 1.75rem;
+            border-top: 1px solid var(--border);
+            background: var(--cream);
+            border-radius: 0 0 18px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-footer-left,
+        .detail-footer-right {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border-radius: var(--radius-sm);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.83rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .btn-ghost {
+            background: #fff;
+            color: var(--text-mid);
+            border: 1.5px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--text-mid);
+        }
+
+        .btn-wa {
+            background: var(--wa);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-wa:hover {
+            background: #047a30;
+        }
+
+        .btn-forest {
+            background: var(--forest);
+            color: #fff;
+            border: none;
+        }
+
+        .btn-forest:hover {
+            background: var(--forest-mid);
+        }
+
+        /* ── BULK WA MODAL ── */
+        .small-modal {
+            background: #fff;
+            border-radius: 16px;
+            width: min(520px, 95vw);
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.22s ease;
+        }
+
+        .small-modal-header {
+            background: var(--wa);
+            border-radius: 16px 16px 0 0;
+            padding: 1.4rem 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .small-modal-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.15rem;
+            color: #fff;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .small-modal-title svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .small-modal-close {
+            background: rgba(255, 255, 255, 0.18);
+            border: none;
+            color: #fff;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.18s;
+        }
+
+        .small-modal-close:hover {
+            background: rgba(255, 255, 255, 0.28);
+        }
+
+        .small-modal-close svg {
+            width: 13px;
+            height: 13px;
+        }
+
+        .small-modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-section-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.6rem;
+        }
+
+        .template-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .template-option {
+            padding: 10px 14px;
+            border-radius: 9px;
+            border: 1.5px solid var(--border);
+            cursor: pointer;
+            font-size: 0.81rem;
+            color: var(--text-mid);
+            transition: all 0.18s;
+            background: var(--cream);
+            line-height: 1.5;
+        }
+
+        .template-option.selected {
+            border-color: var(--wa);
+            background: #f0fdf4;
+            color: var(--text-dark);
+        }
+
+        .template-option strong {
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 3px;
+            font-size: 0.8rem;
+        }
+
+        .msg-textarea {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            border: 1.5px solid var(--border);
+            border-radius: 9px;
+            padding: 10px 14px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.86rem;
+            background: var(--cream);
+            outline: none;
+            transition: border-color 0.18s;
+            color: var(--text-dark);
+        }
+
+        .msg-textarea:focus {
+            border-color: var(--wa);
+            background: #fff;
+        }
+
+        .recipient-list {
+            max-height: 110px;
+            overflow-y: auto;
+            background: var(--cream);
+            border-radius: 8px;
+            padding: 0.6rem 0.9rem;
+            margin-bottom: 1rem;
+            font-size: 0.76rem;
+            color: var(--text-mid);
+            line-height: 1.8;
+            border: 1px solid var(--border);
+        }
+
+        .small-modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            background: var(--cream);
+            border-radius: 0 0 16px 16px;
+        }
+
+        /* ── TOAST ── */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--forest);
+            color: #fff;
+            padding: 11px 22px;
+            border-radius: 50px;
+            font-size: 0.82rem;
+            font-weight: 500;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            white-space: nowrap;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.18);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-4px);
+        }
+
+        .toast.warn {
+            background: var(--gold);
+        }
+
+        .toast.green {
+            background: var(--wa);
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(11, 61, 11, 0.18);
+            border-radius: 3px;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+            .kpi-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .kpi-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .detail-kpis {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .kpi-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .customers-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── HIDDEN SVG SPRITES ── -->
+    <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <symbol id="ic-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M17 8C8 10 5.9 16.17 3.82 19.34A3 3 0 0 0 6.14 23C11 23 15 21 15 16c0-2.5-1.5-4.5-3-6 4.5 0 8-2 8-7a8 8 0 0 0-3-6" />
+            </symbol>
+            <symbol id="ic-dashboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+            </symbol>
+            <symbol id="ic-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            </symbol>
+            <symbol id="ic-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </symbol>
+            <symbol id="ic-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </symbol>
+            <symbol id="ic-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+            </symbol>
+            <symbol id="ic-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </symbol>
+            <symbol id="ic-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+            </symbol>
+            <symbol id="ic-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+            </symbol>
+            <symbol id="ic-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </symbol>
+            <symbol id="ic-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </symbol>
+            <symbol id="ic-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="8 17 12 21 16 17" />
+                <line x1="12" y1="12" x2="12" y2="21" />
+                <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29" />
+            </symbol>
+            <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+            </symbol>
+            <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+            </symbol>
+            <symbol id="ic-star" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <polygon
+                    points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </symbol>
+            <symbol id="ic-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+            </symbol>
+            <symbol id="ic-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+            </symbol>
+            <symbol id="ic-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+            </symbol>
+            <symbol id="ic-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+            </symbol>
+            <symbol id="ic-new-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <line x1="19" y1="8" x2="19" y2="14" />
+                <line x1="22" y1="11" x2="16" y2="11" />
+            </symbol>
+            <symbol id="ic-revenue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+            </symbol>
+            <symbol id="ic-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                <polyline points="17 21 17 13 7 13 7 21" />
+                <polyline points="7 3 7 8 15 8" />
+            </symbol>
+            <symbol id="ic-package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" />
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                <line x1="12" y1="22.08" x2="12" y2="12" />
+            </symbol>
+            <symbol id="ic-inactive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+                <line x1="22" y1="2" x2="2" y2="22" />
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- ── SIDEBAR ── -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-mark">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <use href="#ic-leaf" />
+                </svg>
+            </div>
+            <div>
+                <div class="logo-name">FAKHMUL</div>
+                <div class="logo-sub">Admin Panel</div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">Main</div>
+            <a class="nav-item" href="admin-analytics.html">
+                <svg class="nav-icon" style="color:rgba(255,255,255,0.6)">
+                    <use href="#ic-dashboard" />
+                </svg>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item" href="admin-dashboard.html">
+                <svg class="nav-icon" style="color:rgba(255,255,255,0.6)">
+                    <use href="#ic-box" />
+                </svg>
+                <span class="nav-label">Products</span>
+                <span class="nav-badge" id="sidebarProd">18</span>
+            </a>
+            <a class="nav-item" href="admin-orders.html">
+                <svg class="nav-icon" style="color:rgba(255,255,255,0.6)">
+                    <use href="#ic-cart" />
+                </svg>
+                <span class="nav-label">Orders</span>
+                <span class="nav-badge danger" id="sidebarPending">0</span>
+            </a>
+            <a class="nav-item active" href="#">
+                <svg class="nav-icon" style="color:var(--gold-light)">
+                    <use href="#ic-users" />
+                </svg>
+                <span class="nav-label">Customers</span>
+                <span class="nav-badge" id="sidebarCust">0</span>
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-section-label">System</div>
+            <a class="nav-item" href="#">
+                <svg class="nav-icon" style="color:rgba(255,255,255,0.6)">
+                    <use href="#ic-settings" />
+                </svg>
+                <span class="nav-label">Settings</span>
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">A</div>
+                <div>
+                    <div class="sidebar-user-name">Administrator</div>
+                    <div class="sidebar-user-role">Super Admin</div>
+                </div>
+            </div>
+            <button class="logout-btn" onclick="logout()">
+                <svg>
+                    <use href="#ic-logout" />
+                </svg>
+                <span>Sign out</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- ── MAIN ── -->
+    <main class="main">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <div>
+                <div class="page-title">Customer Management</div>
+                <div class="page-sub">Admin › Customers</div>
+            </div>
+            <div class="topbar-right">
+                <button class="topbar-btn gold" onclick="exportCustomersCSV()">
+                    <svg>
+                        <use href="#ic-download" />
+                    </svg> Export CSV
+                </button>
+                <button class="topbar-btn wa" id="bulkWaTopBtn" onclick="openBulkWA()" disabled>
+                    <svg>
+                        <use href="#ic-chat" />
+                    </svg> Bulk WhatsApp
+                </button>
+                <a class="topbar-btn forest" href="index.html" target="_blank">
+                    <svg>
+                        <use href="#ic-store" />
+                    </svg> View Store
+                </a>
+            </div>
+        </div>
+
+        <div class="content">
+
+            <!-- KPI Row -->
+            <div class="kpi-row" id="kpiRow">
+                <div class="kpi-card">
+                    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--forest),var(--forest-light))">
+                    </div>
+                    <div class="kpi-icon-box forest"><svg style="color:var(--forest)">
+                            <use href="#ic-users" />
+                        </svg></div>
+                    <div class="kpi-value" id="kpiTotal">0</div>
+                    <div class="kpi-label">Total Customers</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-accent" style="background:linear-gradient(90deg,var(--gold),var(--gold-mid))"></div>
+                    <div class="kpi-icon-box gold"><svg style="color:var(--gold)">
+                            <use href="#ic-star" />
+                        </svg></div>
+                    <div class="kpi-value" id="kpiVIP">0</div>
+                    <div class="kpi-label">VIP Customers</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-accent" style="background:linear-gradient(90deg,#1e8449,#27ae60)"></div>
+                    <div class="kpi-icon-box green"><svg style="color:#1e8449">
+                            <use href="#ic-new-user" />
+                        </svg></div>
+                    <div class="kpi-value" id="kpiNew">0</div>
+                    <div class="kpi-label">New This Month</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-accent" style="background:linear-gradient(90deg,#2471a3,#3498db)"></div>
+                    <div class="kpi-icon-box blue"><svg style="color:#2471a3">
+                            <use href="#ic-revenue" />
+                        </svg></div>
+                    <div class="kpi-value" id="kpiAvgLTV">0</div>
+                    <div class="kpi-label">Avg. Lifetime Value</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-accent" style="background:linear-gradient(90deg,#148f77,#1abc9c)"></div>
+                    <div class="kpi-icon-box teal"><svg style="color:#148f77">
+                            <use href="#ic-mail" />
+                        </svg></div>
+                    <div class="kpi-value" id="kpiSubscribers">0</div>
+                    <div class="kpi-label">Newsletter Subs</div>
+                </div>
+            </div>
+
+            <!-- Tab Bar -->
+            <div class="tab-bar">
+                <button class="tab-btn active" id="tab-customers" onclick="switchTab('customers')">
+                    <svg>
+                        <use href="#ic-users" />
+                    </svg>
+                    Customers <span class="tab-count" id="tabCountCust">0</span>
+                </button>
+                <button class="tab-btn" id="tab-subscribers" onclick="switchTab('subscribers')">
+                    <svg>
+                        <use href="#ic-mail" />
+                    </svg>
+                    Subscribers <span class="tab-count" id="tabCountSubs">0</span>
+                </button>
+            </div>
+
+            <!-- ── CUSTOMERS VIEW ── -->
+            <div id="customersView">
+
+                <!-- Segment chips -->
+                <div class="segment-bar" id="segmentBar">
+                    <div class="seg-chip active" onclick="setSegment('all', this)">
+                        <svg>
+                            <use href="#ic-users" />
+                        </svg>
+                        All <span class="seg-count" id="segAll">0</span>
+                    </div>
+                    <div class="seg-chip" onclick="setSegment('vip', this)">
+                        <svg>
+                            <use href="#ic-star" />
+                        </svg>
+                        VIP <span class="seg-count" id="segVIP">0</span>
+                    </div>
+                    <div class="seg-chip" onclick="setSegment('regular', this)">
+                        <svg>
+                            <use href="#ic-user" />
+                        </svg>
+                        Regular <span class="seg-count" id="segRegular">0</span>
+                    </div>
+                    <div class="seg-chip" onclick="setSegment('new', this)">
+                        <svg>
+                            <use href="#ic-new-user" />
+                        </svg>
+                        New <span class="seg-count" id="segNew">0</span>
+                    </div>
+                    <div class="seg-chip" onclick="setSegment('inactive', this)">
+                        <svg>
+                            <use href="#ic-inactive" />
+                        </svg>
+                        Inactive <span class="seg-count" id="segInactive">0</span>
+                    </div>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="toolbar">
+                    <div class="search-wrap">
+                        <input type="text" id="searchInput" placeholder="Search by name, phone, city…"
+                            oninput="renderCustomers()">
+                        <span class="search-icon-wrap"><svg>
+                                <use href="#ic-search" />
+                            </svg></span>
+                    </div>
+                    <select class="filter-select" id="sortSelect" onchange="renderCustomers()">
+                        <option value="ltv-desc">Sort: Highest Value</option>
+                        <option value="ltv-asc">Sort: Lowest Value</option>
+                        <option value="orders-desc">Sort: Most Orders</option>
+                        <option value="name-asc">Sort: Name A–Z</option>
+                        <option value="recent">Sort: Most Recent</option>
+                    </select>
+                    <button class="bulk-wa-btn" id="bulkWaBtn" onclick="openBulkWA()" disabled>
+                        <svg>
+                            <use href="#ic-chat" />
+                        </svg>
+                        Message Selected (<span id="selectedCount">0</span>)
+                    </button>
+                </div>
+
+                <!-- Grid -->
+                <div class="customers-grid" id="customersGrid"></div>
+            </div>
+
+            <!-- ── SUBSCRIBERS VIEW ── -->
+            <div class="subscribers-view" id="subscribersView">
+                <div class="toolbar">
+                    <div class="search-wrap">
+                        <input type="text" id="subSearchInput" placeholder="Search email…"
+                            oninput="renderSubscribers()">
+                        <span class="search-icon-wrap"><svg>
+                                <use href="#ic-search" />
+                            </svg></span>
+                    </div>
+                    <button class="topbar-btn forest" onclick="exportSubscribersList()"
+                        style="border-color:var(--border);">
+                        <svg>
+                            <use href="#ic-download" />
+                        </svg> Export Emails
+                    </button>
+                </div>
+                <div
+                    style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem 1.5rem;">
+                    <div
+                        style="font-size:0.65rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:1rem;">
+                        Newsletter Subscribers</div>
+                    <div id="subscribersList"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- ── DETAIL MODAL ── -->
+    <div class="modal-overlay" id="detailModal">
+        <div class="detail-modal" id="detailContent"></div>
+    </div>
+
+    <!-- ── BULK WA MODAL ── -->
+    <div class="modal-overlay" id="bulkWAModal">
+        <div class="small-modal">
+            <div class="small-modal-header">
+                <div class="small-modal-title">
+                    <svg>
+                        <use href="#ic-chat" />
+                    </svg> Bulk WhatsApp Message
+                </div>
+                <button class="small-modal-close" onclick="closeBulkWA()">
+                    <svg>
+                        <use href="#ic-x" />
+                    </svg>
+                </button>
+            </div>
+            <div class="small-modal-body">
+                <div class="form-section-label" style="margin-bottom:0.5rem;">Recipients</div>
+                <div class="recipient-list" id="recipientList"></div>
+                <div class="form-section-label" style="margin-bottom:0.6rem;">Message Template</div>
+                <div class="template-options" id="templateOptions">
+                    <div class="template-option selected" onclick="selectTemplate(this,'promo')">
+                        <strong>Seasonal Promotion</strong>
+                        Hello [Name]! FAKHMUL has exciting new products from Gilgit Baltistan's mountains. Visit us to
+                        discover fresh arrivals and seasonal discounts. Thank you for being a valued customer!
+                    </div>
+                    <div class="template-option" onclick="selectTemplate(this,'reorder')">
+                        <strong>Reorder Reminder</strong>
+                        Hello [Name]! It's been a while since your last FAKHMUL order. Your favourite mountain-fresh
+                        products are waiting! Order now and enjoy free delivery on orders over Rs.5,000.
+                    </div>
+                    <div class="template-option" onclick="selectTemplate(this,'feedback')">
+                        <strong>Feedback Request</strong>
+                        Hello [Name]! We hope you're enjoying your FAKHMUL order. We'd love to hear your feedback — it
+                        helps us serve you better. Thank you for choosing Gilgit Baltistan's finest!
+                    </div>
+                    <div class="template-option" onclick="selectTemplate(this,'custom')">
+                        <strong>Custom Message</strong>
+                        Write your own message below…
+                    </div>
+                </div>
+                <div class="form-section-label" style="margin-top:0.75rem;margin-bottom:0.5rem;">Message Preview / Edit
+                </div>
+                <textarea class="msg-textarea" id="bulkMsgText"></textarea>
+                <div style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;">Use [Name] to personalise each
+                    message. WhatsApp will open once per recipient.</div>
+            </div>
+            <div class="small-modal-footer">
+                <button class="btn btn-ghost" onclick="closeBulkWA()">Cancel</button>
+                <button class="btn btn-wa" onclick="sendBulkWA()">
+                    <svg>
+                        <use href="#ic-chat" />
+                    </svg> Send to All Recipients
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ── AUTH GUARD ──
+        if (!sessionStorage.getItem('fakhmul_admin')) window.location.href = 'admin-login.html';
+
+        const DEMO_ORDERS = [
+            { id: 'ORD-001', date: '2025-05-01T09:30:00', status: 'delivered', customer: { name: 'Fatima Malik', phone: '+92 300 1234567', address: 'House 12, Gulberg III, Lahore' }, items: [{ name: 'Dried Mulberry', qty: 2, price: 850 }, { name: 'Walnut (Akhrot)', qty: 1, price: 1400 }], payment: 'cod', shipping: 0 },
+            { id: 'ORD-002', date: '2025-05-03T14:15:00', status: 'delivered', customer: { name: 'Ahmad Raza', phone: '+92 321 9876543', address: 'Flat 5B, Clifton, Karachi' }, items: [{ name: 'Dried Apricot', qty: 3, price: 750 }, { name: 'Seabuckthorn Powder', qty: 2, price: 1000 }], payment: 'easypaisa', shipping: 200 },
+            { id: 'ORD-003', date: '2025-05-05T11:00:00', status: 'shipped', customer: { name: 'Sara Hussain', phone: '+92 333 5556677', address: 'Street 9, F-7/3, Islamabad' }, items: [{ name: 'Almond (Badam)', qty: 1, price: 1800 }, { name: 'Pine Nuts (Chilgoza)', qty: 1, price: 2800 }], payment: 'jazzcash', shipping: 0 },
+            { id: 'ORD-004', date: '2025-05-07T08:45:00', status: 'pending', customer: { name: 'Usman Khan', phone: '+92 312 4443322', address: 'Model Town, Block H, Lahore' }, items: [{ name: 'Dandelion Flowers', qty: 2, price: 650 }], payment: 'cod', shipping: 200 },
+            { id: 'ORD-005', date: '2025-05-09T16:20:00', status: 'confirmed', customer: { name: 'Zainab Iqbal', phone: '+92 345 7778899', address: 'DHA Phase 4, Karachi' }, items: [{ name: 'Golden Raisin', qty: 4, price: 1000 }], payment: 'bank', shipping: 0 },
+            { id: 'ORD-006', date: '2025-05-11T10:10:00', status: 'packed', customer: { name: 'Ali Hassan', phone: '+92 300 9988776', address: 'Bahria Town, Rawalpindi' }, items: [{ name: 'Dried Cherry', qty: 2, price: 1200 }], payment: 'easypaisa', shipping: 200 },
+            { id: 'ORD-007', date: '2025-05-12T13:30:00', status: 'cancelled', customer: { name: 'Hina Baig', phone: '+92 321 1122334', address: 'Johar Town, Lahore' }, items: [{ name: 'Pomegranate Seeds', qty: 3, price: 1100 }], payment: 'cod', shipping: 200 },
+            { id: 'ORD-008', date: '2025-05-13T09:00:00', status: 'delivered', customer: { name: 'Fatima Malik', phone: '+92 300 1234567', address: 'House 12, Gulberg III, Lahore' }, items: [{ name: 'Dried Mulberry', qty: 1, price: 850 }, { name: 'Almond (Badam)', qty: 2, price: 1800 }], payment: 'card', shipping: 0 },
+            { id: 'ORD-009', date: '2025-05-14T15:45:00', status: 'shipped', customer: { name: 'Ahmad Raza', phone: '+92 321 9876543', address: 'Flat 5B, Clifton, Karachi' }, items: [{ name: 'Walnut (Akhrot)', qty: 2, price: 1400 }], payment: 'jazzcash', shipping: 0 },
+            { id: 'ORD-010', date: '2025-05-15T12:20:00', status: 'pending', customer: { name: 'Bilal Chaudhry', phone: '+92 311 2233445', address: 'Garden Town, Lahore' }, items: [{ name: 'Pine Nuts (Chilgoza)', qty: 1, price: 2800 }], payment: 'cod', shipping: 200 },
+            { id: 'ORD-011', date: '2025-05-15T17:00:00', status: 'confirmed', customer: { name: 'Sana Mirza', phone: '+92 344 5566778', address: 'E-11, Islamabad' }, items: [{ name: 'Dried Apricot', qty: 2, price: 750 }], payment: 'easypaisa', shipping: 200 },
+            { id: 'ORD-012', date: '2025-05-16T08:30:00', status: 'pending', customer: { name: 'Tariq Mehmood', phone: '+92 333 1122334', address: 'Gulshan-e-Iqbal, Karachi' }, items: [{ name: 'Dried Cherry', qty: 1, price: 1200 }], payment: 'cod', shipping: 200 },
+        ];
+
+        const DEMO_SUBSCRIBERS = [
+            { email: 'fatima.malik@gmail.com', date: '2025-03-12T10:00:00' },
+            { email: 'ahmad.raza92@yahoo.com', date: '2025-03-18T14:30:00' },
+            { email: 'mountain.lover@pk.com', date: '2025-04-01T09:15:00' },
+            { email: 'sara.h@hotmail.com', date: '2025-04-10T11:00:00' },
+            { email: 'healthy.living.pk@gmail.com', date: '2025-04-22T16:45:00' },
+            { email: 'usman.k@gmail.com', date: '2025-05-02T08:30:00' },
+            { email: 'zainab.iqbal@gmail.com', date: '2025-05-08T13:20:00' },
+            { email: 'naturefan@outlook.com', date: '2025-05-10T20:00:00' },
+        ];
+
+        let orders = [], subscribers = [], customers = [];
+        let selected = new Set();
+        let activeSegment = 'all', activeTab = 'customers', bulkTemplate = 'promo';
+
+        const AVATAR_COLORS = [
+            '#0b3d0b', '#b8780a', '#2471a3', '#7d3c98', '#148f77',
+            '#a93226', '#1a5276', '#117864', '#6e2f1a', '#1f618d',
+        ];
+
+        function avatarColor(name) {
+            let hash = 0;
+            for (let c of name) hash += c.charCodeAt(0);
+            return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+        }
+
+        const STATUS_BG = { pending: '#fef3e2', confirmed: '#ebf5fb', packed: '#f5eef8', shipped: '#e8f8f5', delivered: '#eafaf1', cancelled: '#fdedec' };
+        const STATUS_TEXT = { pending: '#d4831e', confirmed: '#2471a3', packed: '#7d3c98', shipped: '#148f77', delivered: '#1e8449', cancelled: '#a93226' };
+        const STATUS_LABELS = { pending: 'Pending', confirmed: 'Confirmed', packed: 'Packed', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+
+        function init() {
+            const savedOrders = localStorage.getItem('fakhmul_orders');
+            const savedSubs = localStorage.getItem('fakhmul_subscribers');
+            orders = savedOrders ? JSON.parse(savedOrders) : JSON.parse(JSON.stringify(DEMO_ORDERS));
+            subscribers = savedSubs ? JSON.parse(savedSubs) : JSON.parse(JSON.stringify(DEMO_SUBSCRIBERS));
+            buildCustomers();
+            renderAll();
+        }
+
+        function buildCustomers() {
+            const map = {};
+            orders.forEach(o => {
+                const key = o.customer.phone;
+                if (!map[key]) {
+                    map[key] = {
+                        name: o.customer.name, phone: o.customer.phone,
+                        address: o.customer.address || '',
+                        orders: [], ltv: 0,
+                        firstOrderDate: o.date, lastOrderDate: o.date, notes: '',
+                    };
+                }
+                map[key].orders.push(o);
+                if (o.status !== 'cancelled') map[key].ltv += orderTotal(o);
+                if (new Date(o.date) < new Date(map[key].firstOrderDate)) map[key].firstOrderDate = o.date;
+                if (new Date(o.date) > new Date(map[key].lastOrderDate)) map[key].lastOrderDate = o.date;
+            });
+            customers = Object.values(map);
+            const savedNotes = JSON.parse(localStorage.getItem('fakhmul_customer_notes') || '{}');
+            customers.forEach(c => { c.notes = savedNotes[c.phone] || ''; });
+        }
+
+        function orderTotal(o) { return (o.items || []).reduce((s, i) => s + i.price * i.qty, 0) + (o.shipping || 0); }
+
+        function getTier(c) {
+            const active = c.orders.filter(o => o.status !== 'cancelled').length;
+            const daysSince = (Date.now() - new Date(c.lastOrderDate)) / (1000 * 60 * 60 * 24);
+            if (active >= 3 || c.ltv >= 10000) return 'vip';
+            if (daysSince > 90) return 'inactive';
+            if (active === 1) return 'new';
+            return 'regular';
+        }
+
+        const TIER_LABELS = { vip: 'VIP', regular: 'Regular', new: 'New', inactive: 'Inactive' };
+        const TIER_CLASSES = { vip: 'tier-vip', regular: 'tier-regular', new: 'tier-new', inactive: 'tier-inactive' };
+        const TIER_ICONS = {
+            vip: '#ic-star',
+            regular: '#ic-user',
+            new: '#ic-new-user',
+            inactive: '#ic-inactive',
+        };
+
+        function renderAll() {
+            updateKPIs(); updateSegmentCounts(); updateTabCounts();
+            updateSidebar(); renderCustomers(); renderSubscribers();
+        }
+
+        function updateSidebar() {
+            document.getElementById('sidebarCust').textContent = customers.length;
+            document.getElementById('sidebarPending').textContent = orders.filter(o => o.status === 'pending').length;
+        }
+
+        function updateKPIs() {
+            const now = new Date();
+            const newThisMonth = customers.filter(c => {
+                const d = new Date(c.firstOrderDate);
+                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+            }).length;
+            const vipCount = customers.filter(c => getTier(c) === 'vip').length;
+            const avgLTV = customers.length > 0 ? Math.round(customers.reduce((s, c) => s + c.ltv, 0) / customers.length) : 0;
+            animNum('kpiTotal', customers.length);
+            animNum('kpiVIP', vipCount);
+            animNum('kpiNew', newThisMonth);
+            document.getElementById('kpiAvgLTV').textContent = 'Rs.' + avgLTV.toLocaleString();
+            animNum('kpiSubscribers', subscribers.length);
+        }
+
+        function animNum(id, target) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const dur = 700, start = performance.now();
+            (function step(now) {
+                const p = Math.min((now - start) / dur, 1);
+                el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3)));
+                if (p < 1) requestAnimationFrame(step);
+            })(start);
+        }
+
+        function updateSegmentCounts() {
+            const counts = { all: customers.length, vip: 0, regular: 0, new: 0, inactive: 0 };
+            customers.forEach(c => counts[getTier(c)]++);
+            document.getElementById('segAll').textContent = counts.all;
+            document.getElementById('segVIP').textContent = counts.vip;
+            document.getElementById('segRegular').textContent = counts.regular;
+            document.getElementById('segNew').textContent = counts.new;
+            document.getElementById('segInactive').textContent = counts.inactive;
+        }
+
+        function updateTabCounts() {
+            document.getElementById('tabCountCust').textContent = customers.length;
+            document.getElementById('tabCountSubs').textContent = subscribers.length;
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.getElementById('customersView').style.display = tab === 'customers' ? 'block' : 'none';
+            document.getElementById('subscribersView').style.display = tab === 'subscribers' ? 'block' : 'none';
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        function setSegment(seg, el) {
+            activeSegment = seg;
+            document.querySelectorAll('.seg-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            renderCustomers();
+        }
+
+        function renderCustomers() {
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+            const sort = document.getElementById('sortSelect').value;
+
+            let list = customers.filter(c => {
+                const segOK = activeSegment === 'all' || getTier(c) === activeSegment;
+                const srchOK = !q || c.name.toLowerCase().includes(q) || c.phone.includes(q) || c.address.toLowerCase().includes(q);
+                return segOK && srchOK;
+            });
+
+            if (sort === 'ltv-desc') list.sort((a, b) => b.ltv - a.ltv);
+            if (sort === 'ltv-asc') list.sort((a, b) => a.ltv - b.ltv);
+            if (sort === 'orders-desc') list.sort((a, b) => b.orders.length - a.orders.length);
+            if (sort === 'name-asc') list.sort((a, b) => a.name.localeCompare(b.name));
+            if (sort === 'recent') list.sort((a, b) => new Date(b.lastOrderDate) - new Date(a.lastOrderDate));
+
+            const grid = document.getElementById('customersGrid');
+
+            if (list.length === 0) {
+                grid.innerHTML = `<div class="empty-state">
+      <svg><use href="#ic-users"/></svg>
+      <p>No customers found.</p>
+    </div>`;
+                return;
+            }
+
+            grid.innerHTML = list.map((c, i) => {
+                const tier = getTier(c);
+                const color = avatarColor(c.name);
+                const isSel = selected.has(c.phone);
+                const lastDate = new Date(c.lastOrderDate).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' });
+                const completed = c.orders.filter(o => o.status !== 'cancelled').length;
+                const safeId = c.phone.replace(/\+/g, '').replace(/\s/g, '');
+                const cityPart = c.address ? c.address.split(',').slice(-2).join(',').trim() : '';
+
+                return `
+    <div class="customer-card ${isSel ? 'selected' : ''}"
+         id="ccard-${safeId}"
+         style="animation-delay:${i * 0.04}s"
+         onclick="toggleSelect('${c.phone}')">
+      <div class="card-select-box">
+        <svg><use href="#ic-check"/></svg>
+      </div>
+      <div class="customer-card-top">
+        <div class="cust-avatar" style="background:${color}">${c.name[0].toUpperCase()}</div>
+        <div style="flex:1;">
+          <div class="cust-name">${c.name}</div>
+          <div class="cust-phone">${c.phone}</div>
+          ${cityPart ? `<div class="cust-location"><svg><use href="#ic-map-pin"/></svg>${cityPart}</div>` : ''}
+          <div class="tier-badge ${TIER_CLASSES[tier]}">
+            <svg><use href="${TIER_ICONS[tier]}"/></svg>${TIER_LABELS[tier]}
+          </div>
+        </div>
+      </div>
+      <div class="customer-stats">
+        <div class="cust-stat">
+          <div class="cust-stat-val">${c.orders.length}</div>
+          <div class="cust-stat-label">Orders</div>
+        </div>
+        <div class="cust-stat">
+          <div class="cust-stat-val">${completed}</div>
+          <div class="cust-stat-label">Completed</div>
+        </div>
+        <div class="cust-stat">
+          <div class="cust-stat-val" style="font-size:0.85rem;">Rs.${c.ltv >= 1000 ? (c.ltv / 1000).toFixed(1) + 'k' : c.ltv}</div>
+          <div class="cust-stat-label">Lifetime</div>
+        </div>
+      </div>
+      <div class="customer-card-actions" onclick="event.stopPropagation()">
+        <button class="cust-action view" onclick="openDetail('${c.phone}')">
+          <svg><use href="#ic-eye"/></svg> Profile
+        </button>
+        <button class="cust-action wa" onclick="quickWA('${c.phone}','${c.name}')">
+          <svg><use href="#ic-chat"/></svg> WhatsApp
+        </button>
+      </div>
+      <div class="last-order-badge">
+        <svg><use href="#ic-clock"/></svg> Last order: ${lastDate}
+      </div>
+    </div>`;
+            }).join('');
+
+            updateBulkBtn();
+        }
+
+        function toggleSelect(phone) {
+            if (selected.has(phone)) selected.delete(phone);
+            else selected.add(phone);
+            const safeId = phone.replace(/\+/g, '').replace(/\s/g, '');
+            const card = document.getElementById('ccard-' + safeId);
+            if (card) card.classList.toggle('selected', selected.has(phone));
+            updateBulkBtn();
+        }
+
+        function updateBulkBtn() {
+            const count = selected.size;
+            document.getElementById('selectedCount').textContent = count;
+            const disabled = count === 0;
+            document.getElementById('bulkWaBtn').disabled = disabled;
+            document.getElementById('bulkWaTopBtn').disabled = disabled;
+        }
+
+        function quickWA(phone, name) {
+            const msg = `Hello ${name}! Thank you for shopping with FAKHMUL — Gilgit Baltistan's finest mountain products. How can we help you today?`;
+            const p = phone.replace(/[^0-9]/g, '');
+            window.open(`https://wa.me/${p}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function openDetail(phone) {
+            const c = customers.find(x => x.phone === phone);
+            if (!c) return;
+
+            const tier = getTier(c);
+            const color = avatarColor(c.name);
+            const completed = c.orders.filter(o => o.status !== 'cancelled');
+            const avgOrder = completed.length > 0 ? Math.round(c.ltv / completed.length) : 0;
+
+            const prodCount = {};
+            completed.forEach(o => (o.items || []).forEach(it => {
+                if (!prodCount[it.name]) prodCount[it.name] = 0;
+                prodCount[it.name]++;
+            }));
+            const favs = Object.entries(prodCount).sort((a, b) => b[1] - a[1]).slice(0, 5);
+
+            const ordersHtml = [...c.orders].sort((a, b) => new Date(b.date) - new Date(a.date)).map(o => `
+    <div class="modal-order-row">
+      <div class="modal-order-id">${o.id}</div>
+      <div class="modal-order-items">${(o.items || []).map(i => i.name).join(', ')}</div>
+      <span class="modal-order-status" style="background:${STATUS_BG[o.status]};color:${STATUS_TEXT[o.status]}">
+        ${STATUS_LABELS[o.status]}
+      </span>
+      <div class="modal-order-amt">Rs.${orderTotal(o).toLocaleString()}</div>
+    </div>`).join('');
+
+            const favsHtml = favs.length > 0
+                ? `<div class="fav-products">${favs.map(([name, count]) => `
+        <div class="fav-product-chip">
+          <svg><use href="#ic-package"/></svg>${name}
+          <span style="opacity:0.55;font-size:0.68rem;">(×${count})</span>
+        </div>`).join('')}</div>`
+                : '<p style="font-size:0.82rem;color:var(--text-muted);">No purchase data yet.</p>';
+
+            document.getElementById('detailContent').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-header-top">
+        <div class="detail-avatar-row">
+          <div class="detail-avatar" style="background:${color}">${c.name[0]}</div>
+          <div>
+            <div class="detail-name">${c.name}</div>
+            <div class="detail-phone">${c.phone}</div>
+            ${c.address ? `<div class="detail-addr"><svg width="11" height="11"><use href="#ic-map-pin"/></svg>${c.address}</div>` : ''}
+            <div style="margin-top:7px;"><span class="tier-badge ${TIER_CLASSES[tier]}">
+              <svg><use href="${TIER_ICONS[tier]}"/></svg>${TIER_LABELS[tier]}
+            </span></div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeDetail()">
+          <svg><use href="#ic-x"/></svg>
+        </button>
+      </div>
+      <div class="detail-kpis">
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">${c.orders.length}</div>
+          <div class="detail-kpi-label">Total Orders</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">Rs.${c.ltv.toLocaleString()}</div>
+          <div class="detail-kpi-label">Lifetime Value</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">Rs.${avgOrder.toLocaleString()}</div>
+          <div class="detail-kpi-label">Avg. Order</div>
+        </div>
+        <div class="detail-kpi">
+          <div class="detail-kpi-val">${completed.length}</div>
+          <div class="detail-kpi-label">Completed</div>
+        </div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <svg><use href="#ic-cart"/></svg> Order History
+        </div>
+        ${ordersHtml || '<p style="font-size:0.82rem;color:var(--text-muted);">No orders yet.</p>'}
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <svg><use href="#ic-star"/></svg> Favourite Products
+        </div>
+        ${favsHtml}
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">
+          <svg><use href="#ic-save"/></svg> Admin Notes
+        </div>
+        <textarea class="notes-area" id="custNotes" placeholder="Add internal notes about this customer…">${c.notes}</textarea>
+      </div>
+    </div>
+    <div class="detail-footer">
+      <div class="detail-footer-left">
+        <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
+      </div>
+      <div class="detail-footer-right">
+        <button class="btn btn-wa" onclick="quickWA('${c.phone}','${c.name}')">
+          <svg><use href="#ic-chat"/></svg> WhatsApp
+        </button>
+        <button class="btn btn-forest" onclick="saveNotes('${c.phone}')">
+          <svg><use href="#ic-save"/></svg> Save Notes
+        </button>
+      </div>
+    </div>
+  `;
+            document.getElementById('detailModal').classList.add('open');
+        }
+
+        function closeDetail() { document.getElementById('detailModal').classList.remove('open'); }
+
+        function saveNotes(phone) {
+            const notes = document.getElementById('custNotes')?.value || '';
+            const c = customers.find(x => x.phone === phone);
+            if (c) c.notes = notes;
+            const allNotes = JSON.parse(localStorage.getItem('fakhmul_customer_notes') || '{}');
+            allNotes[phone] = notes;
+            localStorage.setItem('fakhmul_customer_notes', JSON.stringify(allNotes));
+            showToast('Notes saved successfully');
+        }
+
+        const TEMPLATES = {
+            promo: "Hello [Name]! FAKHMUL has exciting new products from Gilgit Baltistan's mountains. Visit us to discover fresh arrivals and seasonal discounts. Thank you for being a valued customer!",
+            reorder: "Hello [Name]! It's been a while since your last FAKHMUL order. Your favourite mountain-fresh products are waiting! Order now and enjoy free delivery on orders over Rs.5,000.",
+            feedback: "Hello [Name]! We hope you're enjoying your FAKHMUL order. We'd love to hear your feedback — it helps us serve you better. Thank you for choosing Gilgit Baltistan's finest!",
+            custom: '',
+        };
+
+        function selectTemplate(el, key) {
+            bulkTemplate = key;
+            document.querySelectorAll('.template-option').forEach(t => t.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('bulkMsgText').value = TEMPLATES[key];
+        }
+
+        function openBulkWA() {
+            if (selected.size === 0) { showToast('Select at least one customer first', 'warn'); return; }
+            const sel = customers.filter(c => selected.has(c.phone));
+            document.getElementById('recipientList').innerHTML = sel.map(c =>
+                `<span style="font-weight:600;">${c.name}</span> (${c.phone})<br>`).join('');
+            document.getElementById('bulkMsgText').value = TEMPLATES['promo'];
+            bulkTemplate = 'promo';
+            document.querySelectorAll('.template-option').forEach((t, i) => t.classList.toggle('selected', i === 0));
+            document.getElementById('bulkWAModal').classList.add('open');
+        }
+
+        function closeBulkWA() { document.getElementById('bulkWAModal').classList.remove('open'); }
+
+        function sendBulkWA() {
+            const msg = document.getElementById('bulkMsgText').value.trim();
+            if (!msg) { showToast('Please write a message', 'warn'); return; }
+            const sel = customers.filter(c => selected.has(c.phone));
+            let delay = 0;
+            sel.forEach(c => {
+                setTimeout(() => {
+                    const personalised = msg.replace(/\[Name\]/g, c.name.split(' ')[0]);
+                    const phone = c.phone.replace(/[^0-9]/g, '');
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(personalised)}`, '_blank');
+                }, delay);
+                delay += 600;
+            });
+            closeBulkWA();
+            showToast(`Opening WhatsApp for ${sel.length} customer${sel.length > 1 ? 's' : ''}`, 'green');
+            selected.clear();
+            updateBulkBtn();
+            renderCustomers();
+        }
+
+        function renderSubscribers() {
+            const q = document.getElementById('subSearchInput')?.value.trim().toLowerCase() || '';
+            const list = subscribers.filter(s => !q || s.email.toLowerCase().includes(q));
+            document.getElementById('subscribersList').innerHTML = list.length === 0
+                ? '<p style="color:var(--text-muted);font-size:0.83rem;padding:1rem 0;">No subscribers found.</p>'
+                : list.map((s, i) => `
+      <div class="subscriber-row" style="animation-delay:${i * 0.03}s">
+        <div class="sub-dot"></div>
+        <div class="sub-email">${s.email}</div>
+        <div class="sub-date">${new Date(s.date).toLocaleDateString('en-PK', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+        <button class="sub-del" onclick="deleteSubscriber('${s.email}')">Remove</button>
+      </div>`).join('');
+        }
+
+        function deleteSubscriber(email) {
+            if (!confirm(`Remove ${email} from newsletter?`)) return;
+            subscribers = subscribers.filter(s => s.email !== email);
+            localStorage.setItem('fakhmul_subscribers', JSON.stringify(subscribers));
+            updateTabCounts();
+            animNum('kpiSubscribers', subscribers.length);
+            renderSubscribers();
+            showToast('Subscriber removed');
+        }
+
+        function exportCustomersCSV() {
+            const rows = [['Name', 'Phone', 'Address', 'Orders', 'LTV (Rs.)', 'Tier', 'Last Order']];
+            customers.forEach(c => rows.push([
+                c.name, c.phone, c.address,
+                c.orders.length, c.ltv, getTier(c),
+                new Date(c.lastOrderDate).toLocaleDateString('en-PK'),
+            ]));
+            const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = Object.assign(document.createElement('a'), { href: url, download: 'fakhmul-customers.csv' });
+            a.click(); URL.revokeObjectURL(url);
+            showToast('Customer list exported as CSV');
+        }
+
+        function exportSubscribersList() {
+            const csv = subscribers.map(s => s.email).join('\n');
+            const blob = new Blob([csv], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = Object.assign(document.createElement('a'), { href: url, download: 'fakhmul-subscribers.txt' });
+            a.click(); URL.revokeObjectURL(url);
+            showToast('Subscriber emails exported');
+        }
+
+        function showToast(msg, type = '') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast show' + (type === 'warn' ? ' warn' : type === 'green' ? ' green' : '');
+            clearTimeout(t._t);
+            t._t = setTimeout(() => t.classList.remove('show'), 3200);
+        }
+
+        function logout() {
+            if (confirm('Sign out of the admin panel?')) {
+                sessionStorage.removeItem('fakhmul_admin');
+                window.location.href = 'admin-login.html';
+            }
+        }
+
+        document.getElementById('detailModal').addEventListener('click', e => { if (e.target.id === 'detailModal') closeDetail(); });
+        document.getElementById('bulkWAModal').addEventListener('click', e => { if (e.target.id === 'bulkWAModal') closeBulkWA(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeDetail(); closeBulkWA(); } });
+
+        init();
+    </script>
+</body>
+
+</html>
